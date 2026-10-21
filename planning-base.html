@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://twzahlgorauretfhiban.supabase.co wss://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Planning partagé</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='2' width='14' height='13' rx='2' fill='none' stroke='%232a78d6' stroke-width='1.5'/><rect x='1' y='2' width='14' height='4' rx='1' fill='%232a78d6'/><rect x='4' y='8' width='3' height='2' fill='%232a78d6'/><rect x='9' y='8' width='3' height='2' fill='%23eb6834'/><rect x='4' y='11.5' width='3' height='2' fill='%232a78d6'/></svg>">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
+  --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
+  --accent:#2a78d6; --day:#cde2fb; --day-strong:#9ec5f4; --day-text:#0d366b;
+  --warn:#b25e00; --warn-bg:#fff1dc; --late:#c23a39; --late-bg:#fde6e5; --ok:#14865d;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
+    --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
+    --accent:#3987e5; --day:#173a66; --day-strong:#1c5cab; --day-text:#e6f0fc;
+    --warn:#f0a44b; --warn-bg:#3a2a12; --late:#f08080; --late-bg:#3d1f1f; --ok:#4cc999;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
+  --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
+  --accent:#3987e5; --day:#173a66; --day-strong:#1c5cab; --day-text:#e6f0fc;
+  --warn:#f0a44b; --warn-bg:#3a2a12; --late:#f08080; --late-bg:#3d1f1f; --ok:#4cc999;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1320px;margin:0 auto;padding:20px 16px 60px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+h2{font-size:15px;margin:0 0 2px}
+.sub{color:var(--text-2);font-size:13px}
+.muted{color:var(--muted)}
+nav.tabsnav{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
+nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+button,select,input{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}
+button:hover{background:var(--surface-2)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+select{min-width:120px;max-width:240px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--text-2)}
+label.chk{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--text-2);align-self:flex-end;padding-bottom:6px}
+label.chk input{width:16px;height:16px;padding:0}
+code{font:12px ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.drop{border:1.5px dashed var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.drop.over{border-color:var(--accent);background:var(--surface-2)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:12px}
+.chip.err{border-color:var(--late);color:var(--late)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted);display:inline-block}
+.dot.ok{background:#1baf7a}.dot.ko{background:#e34948}
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;margin:8px 0}
+.filters .card{padding:10px 14px}
+.weeknav{display:flex;align-items:flex-end;gap:4px}
+.weeknav button{padding:6px 9px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi .v{font-size:26px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--text-2);font-size:12px}
+.kpi .s{color:var(--muted);font-size:12px;margin-top:2px}
+.kpi.warn .v{color:var(--warn)} .kpi.late .v{color:var(--late)}
+.sec{margin-bottom:16px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.note{font-size:13px;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin-bottom:12px}
+.note b{color:var(--text)}
+/* charge par jour */
+.daysum{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:130px}
+.ds{display:flex;flex-direction:column;justify-content:flex-end;height:100%;text-align:center}
+.ds .bar{background:var(--accent);border-radius:4px 4px 0 0;margin:0 auto;width:min(100%,46px);min-height:2px}
+.ds .v{font-size:12px;color:var(--text-2);font-variant-numeric:tabular-nums;margin-bottom:3px}
+.ds .l{font-size:12px;color:var(--text-2);border-top:1px solid var(--border);padding-top:4px}
+.ds.we .bar{opacity:.55}
+/* blocs client */
+.client{margin-bottom:14px;padding:0;overflow:hidden}
+.client.excl{opacity:.6}
+.client-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.client-h .name{font-weight:650;font-size:15px}
+.client-h .stats{display:flex;gap:16px;font-size:13px;color:var(--text-2);font-variant-numeric:tabular-nums;flex-wrap:wrap}
+.client-h .stats b{color:var(--text)}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:999px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.late{background:var(--late-bg);color:var(--late)}
+.badge.mute{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+table.pl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+table.pl th,table.pl td{padding:6px 6px;border-bottom:1px solid var(--grid);vertical-align:middle;overflow-wrap:anywhere}
+table.pl th{font-size:11.5px;font-weight:600;color:var(--text-2);text-align:left;background:var(--surface)}
+table.pl th.d,table.pl td.d{text-align:center;padding:4px 2px}
+table.pl td.n,table.pl th.n{text-align:right;font-variant-numeric:tabular-nums}
+table.pl tr:last-child td{border-bottom:0}
+table.pl tbody tr:hover td{background:var(--surface-2)}
+.hc{display:inline-block;min-width:30px;padding:3px 0;border-radius:6px;font-variant-numeric:tabular-nums;font-size:12.5px;font-weight:600}
+.hc.on{background:var(--day);color:var(--day-text)}
+.hc.big{background:var(--day-strong);color:var(--day-text)}
+.hc.off{color:var(--muted);font-weight:400}
+.nm{font-weight:600}
+.small{font-size:12px;color:var(--text-2)}
+.fileWarn{font-size:11px;color:var(--warn)}
+/* évolution */
+table.evo{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+table.evo th,table.evo td{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+table.evo th:first-child,table.evo td:first-child{text-align:left}
+table.evo th{font-size:12px;color:var(--text-2)}
+table.evo th.cur{color:var(--accent)}
+table.evo td.cur{background:var(--surface-2);font-weight:600}
+table.evo tfoot td{font-weight:650;border-top:1px solid var(--border);border-bottom:0}
+.empty{color:var(--muted);padding:24px;text-align:center}
+.editbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;align-self:flex-end;margin-left:auto}
+#editBtn.on{background:#b25e00;border-color:#b25e00;color:#fff}
+.msg{font-size:13px;color:var(--text-2)}
+.msg:empty{display:none}
+.msg.ok{color:var(--ok)} .msg.err{color:var(--late);font-weight:600} .msg.busy{color:var(--warn)}
+.editnote{background:var(--warn-bg);color:var(--text);border:1px solid var(--warn);border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:13px}
+input.ed{width:100%;padding:3px 5px;font-size:12.5px;border-radius:6px;background:var(--surface);min-width:0}
+input.ed.num{text-align:center;padding:3px 0;font-weight:600;font-variant-numeric:tabular-nums}
+input.ed.mt{margin-top:3px}
+input.ed.date{padding:2px 2px;font-size:11.5px}
+input.ed:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+input.ed.saved{border-color:#1baf7a;box-shadow:0 0 0 2px rgba(27,175,122,.25)}
+input.ed.dirty{border-color:var(--warn)}
+tr.editing td{padding-top:4px;padding-bottom:4px}
+.print-only{display:none}
+@media (max-width:860px){
+  table.pl thead{display:none}
+  table.pl,table.pl tbody,table.pl tr,table.pl td{display:block;width:100%}
+  table.pl tr{padding:8px 12px;border-bottom:1px solid var(--grid)}
+  table.pl td{border:0;padding:2px 0}
+  table.pl td[data-l]::before{content:attr(data-l)" : ";color:var(--muted);font-size:12px}
+  table.pl td.days{display:flex;gap:4px;flex-wrap:wrap;padding:4px 0}
+  table.pl td.d{display:none}
+  table.pl td.n{text-align:left}
+  .daysum{height:110px;gap:4px}
+}
+@media (min-width:861px){ table.pl td.days{display:none} }
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  :root,:root[data-theme="dark"]{color-scheme:light;--bg:#fff;--surface:#fff;--surface-2:#f4f3f0;--border:#d9d7d0;--grid:#e9e7e2;--text:#0b0b0b;--text-2:#52514e;--muted:#85837d;--accent:#2a78d6;--day:#cde2fb;--day-strong:#9ec5f4;--day-text:#0d366b;--warn:#b25e00;--warn-bg:#fff1dc;--late:#c23a39;--late-bg:#fde6e5;--shadow:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-size:10.5px}
+  .wrap{max-width:none;padding:0}
+  .no-print,.filters,nav.tabsnav,header.top .row{display:none!important}
+  .print-only{display:block}
+  .card{box-shadow:none}
+  .client{break-inside:avoid}
+  .kpis{grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:8px}
+  .kpi{padding:8px}.kpi .v{font-size:18px}
+  table.pl th,table.pl td{padding:3px 4px}
+  .hc{min-width:24px;padding:1px 0}
+  #evoSec{break-before:page}
+  #daySec{display:none}
+}
+/* --- page connectée à la base --- */
+[hidden]{display:none!important}
+.login{max-width:420px;margin:40px auto}
+.login h2{font-size:18px;margin-bottom:4px}
+.login form{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.login input{width:100%}
+.userbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--text-2)}
+.userbar b{color:var(--text)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2)}
+.lock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px}
+.lock.open{background:var(--surface-2);color:var(--ok);border:1px solid var(--border)}
+.lock.closed{background:var(--warn-bg);color:var(--warn)}
+.weekbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-left:auto;align-self:flex-end}
+label.incl{display:inline-flex;gap:6px;align-items:center;font-size:12px;color:var(--text-2)}
+label.incl input{width:15px;height:15px;padding:0}
+input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--text);color:var(--surface);padding:9px 14px;border-radius:10px;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:20;max-width:min(92vw,560px)}
+.toast.err{background:var(--late);color:#fff}
+.toast:empty{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="tabsnav no-print"><a href="accueil.html">Accueil</a><a href="index.html">Actions commerciales</a><a href="marges.html">Marges &amp; ETP</a><a href="planning.html">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a></nav>
+  <header class="top">
+    <div>
+      <h1>Planning des intérimaires</h1>
+      <div class="sub" id="subtitle">Base partagée : les modifications sont visibles par toute l'équipe</div>
+      <div class="print-only sub" id="printScope"></div>
+    </div>
+    <div class="row no-print">
+      <div class="userbar" id="userbar" hidden>
+        <span class="status" id="live"><span class="dot" id="liveDot"></span><span id="liveTxt">Connexion…</span></span>
+        <span id="who"></span>
+        <button id="logoutBtn">Se déconnecter</button>
+      </div>
+      <button id="themeBtn">◐ Thème</button>
+    </div>
+  </header>
+
+  <!-- connexion -->
+  <div class="card login" id="loginCard" hidden>
+    <h2>Connexion</h2>
+    <div class="sub">Utilise le compte créé pour toi dans la base de l'agence.</div>
+    <form id="loginForm" autocomplete="on">
+      <label class="f">Adresse e-mail<input type="email" id="email" required autocomplete="username"></label>
+      <label class="f">Mot de passe<input type="password" id="password" required autocomplete="current-password"></label>
+      <button class="primary" type="submit" id="loginBtn">Se connecter</button>
+      <span class="msg" id="loginMsg" role="status" aria-live="polite"></span>
+    </form>
+  </div>
+
+  <div id="app" hidden>
+    <div class="filters">
+      <div class="card row">
+        <label class="f" id="agWrap">Agence<select id="fAgence"></select></label>
+        <div class="weeknav"><button id="prevW" title="Semaine précédente">‹</button><label class="f">Semaine<select id="fWeek"></select></label><button id="nextW" title="Semaine suivante">›</button></div>
+        <label class="f">Client<select id="fClient"></select></label>
+        <label class="f">Rechercher<input type="search" id="search" placeholder="Intérimaire, métier…" style="width:180px"></label>
+        <label class="chk"><input type="checkbox" id="showExcl"> Clients exclus (sans 1)</label>
+        <div class="weekbar no-print">
+          <span class="lock" id="lockBadge"></span>
+          <button id="lockBtn" hidden></button>
+          <button id="nextWeekBtn" hidden title="Copie les clients et les intérimaires encore en mission dans la semaine suivante">+ Préparer la semaine suivante</button>
+          <button id="editBtn" hidden>✎ Modifier</button>
+          <button id="xlsBtn" title="Télécharge la semaine affichée au format Excel">Excel</button>
+          <button id="pdfBtn">PDF</button>
+        </div>
+      </div>
+    </div>
+    <div id="main"><div class="empty">Chargement…</div></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="vendor/xlsx.full.min.js"></script>
+<script>
+/* =================== utilitaires =================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nf1 = new Intl.NumberFormat('fr-FR',{maximumFractionDigits:2});
+const nf2 = new Intl.NumberFormat('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:2});
+const MOIS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+const JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const DAYKEYS = ['lun','mar','mer','jeu','ven','sam','dim'];
+const ROLES = {admin:'Administrateur', responsable:'Responsable', commercial:'Commercial', lecture:'Lecture seule'};
+const lsGet = (k,d) => { try{ const v = localStorage.getItem(k); return v==null ? d : JSON.parse(v); }catch(e){ return d; } };
+const lsSet = (k,v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const parseD = s => { if (!s) return null; const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const isoD = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const fdate = d => d ? `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}` : '';
+const sameDay = (a,b) => a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+const hbase = () => (state.param && state.param.etp_heures_semaine) || 35;
+
+let toastT;
+function toast(msg, err){ const t = $('toast'); t.textContent = msg; t.className = 'toast' + (err ? ' err' : ''); clearTimeout(toastT); toastT = setTimeout(() => t.textContent = '', err ? 7000 : 2500); }
+function frError(e){
+  const m = (e && (e.message || e.error_description || e.msg)) || String(e);
+  if (/Invalid login credentials/i.test(m)) return 'Adresse e-mail ou mot de passe incorrect.';
+  if (/row-level security|permission denied|insufficient_privilege|Droits insuffisants/i.test(m)) return 'Action refusée : la semaine est verrouillée ou ton rôle ne le permet pas.';
+  if (/modifiée par quelqu/i.test(m)) return 'Cette ligne vient d\'être modifiée par quelqu\'un d\'autre : le planning a été rechargé, recommence la saisie.';
+  if (/heures_check|heures >= 0|<= 24/i.test(m)) return 'Les heures doivent être comprises entre 0 et 24.';
+  if (/hors de la semaine|jour/i.test(m) && /semaine/i.test(m)) return m;
+  if (/duplicate key|semaines_agence_id_annee_numero/i.test(m)) return 'Cette semaine existe déjà.';
+  if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'Connexion à la base impossible : vérifie ta connexion internet.';
+  return m;
+}
+
+/* =================== connexion à la base =================== */
+const CFG = window.PILOTAGE_SUPABASE || {};
+const sb = supabase.createClient(CFG.url, CFG.key, {auth:{persistSession:true, autoRefreshToken:true, storageKey:'pilotage-auth'}});
+
+const state = {
+  user: null, memberships: [], agence: null, role: null, param: null,
+  weeks: [], week: null, rows: [], clients: [],
+  F: {client:'', q:'', excl:false}, edit: false, channel: null, live: false
+};
+const canPlan = () => ['admin','responsable','commercial'].includes(state.role);
+const canManage = () => ['admin','responsable'].includes(state.role);
+const canEditWeek = () => state.week && canPlan() && (state.week.statut === 'ouverte' || canManage());
+
+async function onSession(session){
+  state.user = session ? session.user : null;
+  $('loginCard').hidden = !!state.user;
+  $('app').hidden = $('userbar').hidden = !state.user;
+  if (!state.user){ teardownLive(); return; }
+  await loadMemberships();
+}
+
+$('loginForm').onsubmit = async e => {
+  e.preventDefault();
+  $('loginBtn').disabled = true; setMsg('loginMsg', 'Connexion…', 'busy');
+  const {error} = await sb.auth.signInWithPassword({email: $('email').value.trim(), password: $('password').value});
+  $('loginBtn').disabled = false;
+  if (error){ setMsg('loginMsg', frError(error), 'err'); return; }
+  setMsg('loginMsg', '', ''); $('password').value = '';
+};
+$('logoutBtn').onclick = async () => { await sb.auth.signOut(); state.memberships = []; state.agence = null; };
+function setMsg(id, txt, cls){ const el = $(id); el.textContent = txt; el.className = 'msg ' + (cls || ''); }
+
+async function loadMemberships(){
+  const {data, error} = await sb.from('membres_agence').select('role, agence_id, agences(code, nom)').eq('profil_id', state.user.id);
+  if (error){ $('main').innerHTML = `<div class="card empty">${esc(frError(error))}</div>`; return; }
+  state.memberships = (data || []).sort((a,b) => (a.agences?.nom || '').localeCompare(b.agences?.nom || '', 'fr'));
+  if (!state.memberships.length){
+    $('who').innerHTML = `<b>${esc(state.user.email)}</b>`;
+    $('main').innerHTML = `<div class="card empty">Ton compte n'est rattaché à aucune agence. Demande à l'administrateur de t'ajouter.</div>`;
+    $('agWrap').hidden = true; return;
+  }
+  const saved = lsGet('pb-agence', null);
+  const m = state.memberships.find(x => x.agence_id === saved) || state.memberships[0];
+  $('fAgence').innerHTML = state.memberships.map(x => `<option value="${x.agence_id}">${esc(x.agences?.nom || x.agences?.code)}</option>`).join('');
+  $('agWrap').hidden = state.memberships.length < 2;
+  await selectAgence(m.agence_id);
+}
+
+async function selectAgence(id){
+  const m = state.memberships.find(x => x.agence_id === id); if (!m) return;
+  state.agence = id; state.role = m.role; lsSet('pb-agence', id);
+  $('fAgence').value = id;
+  $('who').innerHTML = `<b>${esc(state.user.email)}</b> · ${esc(ROLES[state.role] || state.role)}`;
+  const {data: par} = await sb.from('parametres').select('cle, valeur').eq('agence_id', id);
+  state.param = Object.fromEntries((par || []).map(p => [p.cle, Number(p.valeur)]));
+  await loadWeeks();
+  setupLive();
+}
+
+async function loadWeeks(keep){
+  const {data, error} = await sb.from('semaines').select('id, annee, numero, lundi, statut').eq('agence_id', state.agence).order('lundi');
+  if (error){ toast(frError(error), true); return; }
+  state.weeks = data || [];
+  if (!state.weeks.length){ state.week = null; renderWeeks(); $('main').innerHTML = `<div class="card empty">Aucune semaine de planning pour cette agence.</div>`; return; }
+  const today = new Date();
+  let w = keep && state.weeks.find(x => x.id === keep);
+  if (!w) w = state.weeks.find(x => { const l = parseD(x.lundi); return today >= l && today < addDays(l, 7); });
+  if (!w) w = [...state.weeks].reverse().find(x => parseD(x.lundi) <= today) || state.weeks[state.weeks.length-1];
+  state.week = w; renderWeeks(); await loadWeek();
+}
+
+function weekLabel(w){
+  const l = parseD(w.lundi), d = addDays(l, 6);
+  return `S${w.numero} · ${l.getDate()} ${l.getMonth()!==d.getMonth() ? MOIS[l.getMonth()]+' ' : ''}→ ${d.getDate()} ${MOIS[d.getMonth()]} ${d.getFullYear()}${w.statut === 'verrouillée' ? ' 🔒' : ''}`;
+}
+function renderWeeks(){
+  $('fWeek').innerHTML = state.weeks.map(w => `<option value="${w.id}">${esc(weekLabel(w))}</option>`).join('');
+  if (state.week) $('fWeek').value = state.week.id;
+  const i = state.weeks.findIndex(w => w.id === state.week?.id);
+  $('prevW').disabled = i <= 0; $('nextW').disabled = i < 0 || i >= state.weeks.length - 1;
+  renderWeekBar();
+}
+function renderWeekBar(){
+  const w = state.week;
+  const locked = w && w.statut === 'verrouillée';
+  $('lockBadge').className = 'lock ' + (locked ? 'closed' : 'open');
+  $('lockBadge').textContent = !w ? '' : locked ? '🔒 Semaine verrouillée' : 'Semaine ouverte';
+  $('lockBtn').hidden = !(w && canManage());
+  $('lockBtn').textContent = locked ? 'Déverrouiller' : 'Verrouiller la semaine';
+  const last = w && state.weeks[state.weeks.length-1].id === w.id;
+  $('nextWeekBtn').hidden = !(w && last && canPlan());
+  $('editBtn').hidden = !canEditWeek();
+  $('editBtn').classList.toggle('on', state.edit);
+  $('editBtn').textContent = state.edit ? '✓ Terminer les modifications' : '✎ Modifier';
+}
+
+async function loadWeek(){
+  if (!state.week) return;
+  const wid = state.week.id;
+  const [lines, cls] = await Promise.all([
+    sb.from('v_planning').select('*').eq('semaine_id', wid).order('ordre_client').order('client').order('ordre').order('interimaire'),
+    sb.from('semaine_clients').select('client_id, inclus, ordre, clients(nom)').eq('semaine_id', wid).order('ordre')
+  ]);
+  if (lines.error || cls.error){ toast(frError(lines.error || cls.error), true); return; }
+  if (state.week?.id !== wid) return;                     // une autre semaine a été choisie entre-temps
+  state.rows = lines.data || [];
+  state.clients = (cls.data || []).map(c => ({id: c.client_id, nom: c.clients?.nom || '?', inclus: c.inclus, ordre: c.ordre}));
+  render();
+}
+
+/* =================== temps réel =================== */
+let reloadT = null, pollT = null, pendingReload = false;
+function scheduleReload(){
+  clearTimeout(reloadT);
+  reloadT = setTimeout(async () => {
+    if (document.activeElement && document.activeElement.classList.contains('ed')){ pendingReload = true; return; }   // pas pendant une saisie
+    pendingReload = false;
+    await refreshWeeksQuiet(); await loadWeek();
+  }, 600);
+}
+async function refreshWeeksQuiet(){
+  const {data} = await sb.from('semaines').select('id, annee, numero, lundi, statut').eq('agence_id', state.agence).order('lundi');
+  if (!data) return;
+  state.weeks = data; const w = data.find(x => x.id === state.week?.id); if (w) state.week = w;
+  renderWeeks();
+}
+function setLive(on, txt){
+  state.live = on; $('liveDot').className = 'dot ' + (on ? 'ok' : '');
+  $('liveTxt').textContent = txt;
+}
+function teardownLive(){
+  if (state.channel){ sb.removeChannel(state.channel); state.channel = null; }
+  clearInterval(pollT); pollT = null;
+}
+function setupLive(){
+  teardownLive();
+  const ch = sb.channel('planning-' + state.agence);
+  for (const t of ['heures','lignes_planning','semaine_clients','semaines']) ch.on('postgres_changes', {event:'*', schema:'public', table:t}, scheduleReload);
+  ch.subscribe(status => {
+    if (status === 'SUBSCRIBED') setLive(true, 'En direct');
+    else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') setLive(false, 'Actualisation toutes les 30 s');
+  });
+  state.channel = ch;
+  setLive(false, 'Actualisation toutes les 30 s');
+  pollT = setInterval(() => { if (!state.live && !document.hidden) scheduleReload(); }, 30000);   // secours si le temps réel est indisponible
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && state.week) scheduleReload(); });
+document.addEventListener('focusout', e => { if (pendingReload && e.target.classList && e.target.classList.contains('ed')) setTimeout(() => { if (!(document.activeElement && document.activeElement.classList.contains('ed'))) scheduleReload(); }, 300); });
+
+/* =================== affichage =================== */
+function filteredRows(){
+  const q = state.F.q.trim().toLowerCase();
+  return state.rows.filter(r =>
+    (state.F.excl || r.client_inclus) &&
+    (!state.F.client || r.client_id === state.F.client) &&
+    (!q || [r.interimaire, r.metier, r.client, r.commentaire].some(v => (v||'').toLowerCase().includes(q))));
+}
+const dayVal = (r, i) => r[DAYKEYS[i]] == null ? null : Number(r[DAYKEYS[i]]);
+const rowTotal = r => DAYKEYS.reduce((s,k,i) => s + (dayVal(r,i) || 0), 0);
+
+function render(){
+  renderWeekBar();
+  const w = state.week; if (!w) return;
+  const lundi = parseD(w.lundi), days = [0,1,2,3,4,5,6].map(i => addDays(lundi, i)), today = new Date();
+  // filtre client
+  const cl = state.clients.filter(c => state.F.excl || c.inclus);
+  $('fClient').innerHTML = `<option value="">Tous (${cl.length})</option>` + cl.map(c => `<option value="${c.id}">${esc(c.nom)}${c.inclus ? '' : ' (exclu)'}</option>`).join('');
+  if (state.F.client && !cl.some(c => c.id === state.F.client)) state.F.client = '';
+  $('fClient').value = state.F.client;
+
+  const rows = filteredRows();
+  const incl = rows.filter(r => r.client_inclus);
+  const tot = incl.reduce((s,r) => s + rowTotal(r), 0);
+  const perDay = days.map((d,i) => incl.reduce((s,r) => s + (dayVal(r,i) || 0), 0));
+  const alerts = incl.filter(r => r.alerte_contrat).length;
+  const maxDay = Math.max(1, ...perDay);
+  const editing = state.edit && canEditWeek();
+  $('printScope').textContent = weekLabel(w) + ' · ' + ($('fAgence').selectedOptions[0]?.textContent || '');
+
+  let h = '';
+  if (editing) h += `<div class="editnote no-print"><b>Mode modification :</b> chaque saisie est enregistrée dans la base dès que tu quittes la case (ou Entrée), et apparaît chez tes collègues.${w.statut === 'verrouillée' ? ' <b>Semaine verrouillée</b> : seuls les responsables peuvent la modifier.' : ''}</div>`;
+  h += `<div class="kpis">
+    <div class="card kpi"><div class="v">${nf1.format(tot)}</div><div class="l">Heures</div><div class="s">clients suivis (1)</div></div>
+    <div class="card kpi"><div class="v">${nf2.format(tot / hbase())}</div><div class="l">ETP</div><div class="s">heures / ${hbase()} h</div></div>
+    <div class="card kpi"><div class="v">${new Set(incl.map(r => r.interimaire_id)).size}</div><div class="l">Intérimaires</div></div>
+    <div class="card kpi"><div class="v">${new Set(incl.map(r => r.client_id)).size}</div><div class="l">Clients</div></div>
+    <div class="card kpi ${alerts ? 'warn' : ''}"><div class="v">${alerts}</div><div class="l">Fins de contrat</div><div class="s">cette semaine ou dépassées</div></div>
+  </div>`;
+  h += `<div class="card sec" id="daySec"><div class="sec-h"><div><h2>Heures par jour</h2></div></div><div class="daysum">${perDay.map((v,i) =>
+      `<div class="ds ${i>4?'we':''}"><div class="v">${v ? nf1.format(v) : '–'}</div><div class="bar" style="height:${Math.round(v/maxDay*90)}%"></div><div class="l" ${sameDay(days[i],today)?'style="color:var(--accent);font-weight:600"':''}>${JOURS[i]} ${fdate(days[i])}</div></div>`).join('')}</div></div>`;
+
+  // blocs par client (dans l'ordre de la semaine)
+  const order = state.clients.map(c => c.id);
+  const byClient = new Map();
+  for (const r of rows){ if (!byClient.has(r.client_id)) byClient.set(r.client_id, []); byClient.get(r.client_id).push(r); }
+  const shown = state.clients.filter(c => byClient.has(c.id) || (!state.F.q && (state.F.excl || c.inclus) && (!state.F.client || state.F.client === c.id)));
+  if (!shown.length) h += `<div class="card empty">Aucune ligne pour ces filtres.</div>`;
+  const head = `<thead><tr><th style="width:14%">Intérimaire</th><th style="width:12%">Métier</th><th style="width:8%">Contrat</th><th style="width:12%">VM / commentaire</th><th style="width:9.5%">Début</th><th style="width:9.5%">Fin</th>${days.map((d,i) => `<th class="d" ${sameDay(d,today)?'style="color:var(--accent)"':''}>${JOURS[i]}<br><span class="muted" style="font-weight:400">${fdate(d)}</span></th>`).join('')}<th class="n" style="width:5.5%">Total</th><th class="n" style="width:5%">ETP</th></tr></thead>`;
+  for (const c of shown){
+    const rs = byClient.get(c.id) || [];
+    const ct = rs.reduce((s,r) => s + rowTotal(r), 0);
+    const ca = rs.filter(r => r.alerte_contrat).length;
+    const inclCtl = editing ? `<label class="incl no-print" title="Compter ce client dans les totaux (colonne « Client » = 1)"><input type="checkbox" data-incl="${c.id}" ${c.inclus?'checked':''}> Compté (1)</label>` : (c.inclus ? '' : '<span class="badge mute">exclu (sans 1)</span>');
+    h += `<div class="card client ${c.inclus?'':'excl'}"><div class="client-h"><div class="name">${esc(c.nom)} ${inclCtl}</div>
+      <div class="stats"><span><b>${rs.length}</b> intérimaire(s)</span><span><b>${nf1.format(ct)}</b> h</span><span><b>${nf2.format(ct/hbase())}</b> ETP</span>${ca?`<span class="badge warn">${ca} contrat(s) à surveiller</span>`:''}</div></div>`;
+    if (!rs.length){ h += `<div class="empty small">Aucun intérimaire cette semaine.</div></div>`; continue; }
+    h += `<table class="pl">${head}<tbody>`;
+    for (const r of rs){
+      const al = r.alerte_contrat ? `<span class="badge ${r.alerte_contrat === 'fin dépassée' ? 'late' : 'warn'}">${esc(r.alerte_contrat)}</span>` : '';
+      const t = rowTotal(r);
+      if (editing){
+        const inp = (f, v, cls='', type='text') => `<input class="ed ${cls}" type="${type}" data-id="${r.ligne_id}" data-f="${f}" value="${esc(v ?? '')}" aria-label="${f}">`;
+        const dcell = i => `<td class="d">${inp('d'+i, dayVal(r,i) == null ? '' : String(dayVal(r,i)).replace('.',','), 'num', 'text')}</td>`;
+        h += `<tr class="editing"><td><span class="nm">${esc(r.interimaire)}</span> ${al}</td><td>${inp('metier', r.metier)}</td><td>${inp('contrat', r.contrat)}</td>
+          <td>${inp('vm', r.vm)}${inp('commentaire', r.commentaire, 'mt')}</td><td>${inp('date_debut', r.date_debut, 'date', 'date')}</td><td>${inp('date_fin', r.date_fin, 'date', 'date')}</td>
+          ${days.map((d,i) => dcell(i)).join('')}<td class="n"><b>${nf1.format(t)}</b></td><td class="n">${nf2.format(t/hbase())}</td></tr>`;
+      } else {
+        const hc = i => { const v = dayVal(r,i); return v == null ? '<span class="hc off">·</span>' : `<span class="hc ${v>9?'big':v>0?'on':'off'}">${nf1.format(v)}</span>`; };
+        const vmc = [r.vm, r.commentaire].filter(Boolean).map(esc).join('<br>');
+        h += `<tr><td data-l="Intérimaire"><span class="nm">${esc(r.interimaire)}</span> ${al}</td><td data-l="Métier">${esc(r.metier||'')}</td><td data-l="Contrat">${esc(r.contrat||'')}</td>
+          <td data-l="VM / commentaire" class="small">${vmc}</td><td data-l="Début" class="small">${fdate(parseD(r.date_debut))}</td><td data-l="Fin" class="small">${fdate(parseD(r.date_fin))}</td>
+          ${days.map((d,i) => `<td class="d">${hc(i)}</td>`).join('')}<td class="days">${days.map((d,i) => dayVal(r,i)==null?'':`<span class="hc on" title="${JOURS[i]}">${JOURS[i]} ${nf1.format(dayVal(r,i))}</span>`).join('')}</td>
+          <td class="n" data-l="Total"><b>${nf1.format(t)}</b></td><td class="n" data-l="ETP">${nf2.format(t/hbase())}</td></tr>`;
+      }
+    }
+    h += `</tbody></table></div>`;
+  }
+  $('main').innerHTML = h;
+}
+
+/* =================== enregistrement =================== */
+const rowById = id => state.rows.find(r => r.ligne_id === id);
+async function saveField(input){
+  const r = rowById(input.dataset.id), f = input.dataset.f;
+  if (!r) return;
+  input.classList.remove('err');
+  const raw = input.value.trim();
+  try {
+    if (/^d\d$/.test(f)){
+      const i = +f.slice(1), jour = isoD(addDays(parseD(state.week.lundi), i));
+      if (raw === ''){
+        if (dayVal(r,i) == null) return;
+        const {error} = await sb.from('heures').delete().eq('ligne_id', r.ligne_id).eq('jour', jour);
+        if (error) throw error;
+        r[DAYKEYS[i]] = null;
+      } else {
+        const n = Number(raw.replace(',', '.').replace(/\s*h$/i, ''));
+        if (!isFinite(n) || n < 0 || n > 24) throw new Error('Les heures doivent être comprises entre 0 et 24.');
+        if (dayVal(r,i) === n) return;
+        const {error} = await sb.from('heures').upsert({ligne_id: r.ligne_id, jour, heures: Math.round(n*100)/100}, {onConflict: 'ligne_id,jour'});
+        if (error) throw error;
+        r[DAYKEYS[i]] = Math.round(n*100)/100;
+      }
+    } else {
+      const cur = r[f] ?? '';
+      if (raw === String(cur)) return;
+      const {data, error} = await sb.rpc('modifier_ligne', {p_id: r.ligne_id, p_version: r.version, p_valeurs: {[f]: raw === '' ? (/^date_/.test(f) ? null : '') : raw}});
+      if (error){ if (/modifiée par quelqu/.test(error.message)) { await loadWeek(); } throw error; }
+      r.version = data; r[f] = raw === '' ? null : raw;
+    }
+    input.defaultValue = input.value;
+    input.classList.remove('dirty'); input.classList.add('saved'); setTimeout(() => input.classList.remove('saved'), 1200);
+    updateTotalsInPlace(input);
+  } catch(e){
+    input.classList.add('err'); toast(frError(e), true);
+  }
+}
+// met à jour les totaux de la ligne sans reconstruire la page (garde le curseur dans la case suivante)
+function updateTotalsInPlace(input){
+  const r = rowById(input.dataset.id); if (!r) return;
+  const tr = input.closest('tr'); if (!tr) return;
+  const t = rowTotal(r), cells = tr.querySelectorAll('td.n');
+  if (cells[0]) cells[0].innerHTML = `<b>${nf1.format(t)}</b>`;
+  if (cells[1]) cells[1].textContent = nf2.format(t / hbase());
+  clearTimeout(updateTotalsInPlace.t);
+  updateTotalsInPlace.t = setTimeout(() => { if (!(document.activeElement && document.activeElement.classList.contains('ed'))) render(); }, 1500);
+}
+document.addEventListener('input', e => { const t = e.target; if (t.classList && t.classList.contains('ed')) t.classList.toggle('dirty', t.value !== t.defaultValue); });
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.classList && t.classList.contains('ed')) saveField(t);
+  if (t.dataset && t.dataset.incl) toggleIncl(t.dataset.incl, t.checked, t);
+});
+document.addEventListener('keydown', e => {
+  const t = e.target; if (!(t.classList && t.classList.contains('ed'))) return;
+  if (e.key === 'Enter'){ e.preventDefault(); const all = [...document.querySelectorAll('input.ed')]; const n = all[all.indexOf(t) + (e.shiftKey ? -1 : 1)]; t.blur(); if (n) n.focus(); }
+  if (e.key === 'Escape'){ t.value = t.defaultValue; t.classList.remove('dirty','err'); t.blur(); }
+});
+async function toggleIncl(clientId, on, box){
+  const {error} = await sb.from('semaine_clients').update({inclus: on}).eq('semaine_id', state.week.id).eq('client_id', clientId);
+  if (error){ box.checked = !on; toast(frError(error), true); return; }
+  const c = state.clients.find(x => x.id === clientId); if (c) c.inclus = on;
+  for (const r of state.rows) if (r.client_id === clientId) r.client_inclus = on;
+  toast(on ? 'Client compté dans les totaux.' : 'Client exclu des totaux.'); render();
+}
+
+/* =================== actions sur la semaine =================== */
+$('lockBtn').onclick = async () => {
+  const to = state.week.statut === 'verrouillée' ? 'ouverte' : 'verrouillée';
+  const {error} = await sb.from('semaines').update({statut: to}).eq('id', state.week.id);
+  if (error){ toast(frError(error), true); return; }
+  state.week.statut = to; renderWeeks(); render();
+  toast(to === 'verrouillée' ? 'Semaine verrouillée : seuls les responsables peuvent encore la modifier.' : 'Semaine déverrouillée.');
+};
+$('nextWeekBtn').onclick = async () => {
+  const w = state.week, nl = addDays(parseD(w.lundi), 7);
+  if (!confirmInline($('nextWeekBtn'), `Créer la semaine du ${fdate(nl)} ?`)) return;
+  const {data, error} = await sb.rpc('creer_semaine_suivante', {p_semaine: w.id});
+  if (error){ toast(frError(error), true); return; }
+  toast('Semaine suivante préparée : clients et intérimaires encore en mission copiés, heures à saisir.');
+  await loadWeeks(data);
+};
+// confirmation en deux clics (pas de boîte de dialogue du navigateur)
+function confirmInline(btn, label){
+  if (btn.dataset.armed){ delete btn.dataset.armed; btn.textContent = btn.dataset.txt; return true; }
+  btn.dataset.txt = btn.textContent; btn.dataset.armed = '1'; btn.textContent = label + ' Cliquer pour confirmer';
+  setTimeout(() => { if (btn.dataset.armed){ delete btn.dataset.armed; btn.textContent = btn.dataset.txt; } }, 5000);
+  return false;
+}
+$('editBtn').onclick = () => { state.edit = !state.edit; render(); };
+
+/* =================== filtres =================== */
+$('fAgence').onchange = e => selectAgence(e.target.value);
+$('fWeek').onchange = e => { state.week = state.weeks.find(w => w.id === e.target.value); renderWeeks(); loadWeek(); };
+$('prevW').onclick = () => { const i = state.weeks.findIndex(w => w.id === state.week.id); if (i > 0){ state.week = state.weeks[i-1]; renderWeeks(); loadWeek(); } };
+$('nextW').onclick = () => { const i = state.weeks.findIndex(w => w.id === state.week.id); if (i < state.weeks.length-1){ state.week = state.weeks[i+1]; renderWeeks(); loadWeek(); } };
+$('fClient').onchange = e => { state.F.client = e.target.value; render(); };
+$('search').oninput = e => { state.F.q = e.target.value; render(); };
+$('showExcl').onchange = e => { state.F.excl = e.target.checked; render(); };
+
+/* =================== exports =================== */
+$('pdfBtn').onclick = () => { const ed = state.edit; state.edit = false; render(); setTimeout(() => { window.print(); state.edit = ed; render(); }, 50); };
+$('xlsBtn').onclick = () => {
+  const w = state.week; if (!w) return;
+  const lundi = parseD(w.lundi);
+  const aoa = [[`Planning ${$('fAgence').selectedOptions[0]?.textContent || ''} — ${weekLabel(w).replace(' 🔒','')}`], [],
+    ['Client', 'Compté (1)', 'Intérimaire', 'Métier', 'Contrat', 'VM', 'Commentaire', 'Début', 'Fin', ...JOURS.map((j,i) => `${j} ${fdate(addDays(lundi,i))}`), 'Total heures', 'ETP']];
+  for (const r of filteredRows()){
+    const t = rowTotal(r);
+    aoa.push([r.client, r.client_inclus ? 1 : '', r.interimaire, r.metier || '', r.contrat || '', r.vm || '', r.commentaire || '',
+      r.date_debut ? parseD(r.date_debut) : '', r.date_fin ? parseD(r.date_fin) : '', ...DAYKEYS.map((k,i) => dayVal(r,i) ?? ''), t, Math.round(t/hbase()*100)/100]);
+  }
+  const ws = XLSX.utils.aoa_to_sheet(aoa, {cellDates:true, dateNF:'dd/mm/yyyy'});
+  ws['!cols'] = [{wch:26},{wch:9},{wch:24},{wch:22},{wch:14},{wch:10},{wch:22},{wch:11},{wch:11},...JOURS.map(() => ({wch:9})),{wch:11},{wch:7}];
+  const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, `S${w.numero}`);
+  XLSX.writeFile(wb, `Planning ${($('fAgence').selectedOptions[0]?.textContent || '').trim()} S${w.numero} ${w.annee}.xlsx`);
+};
+
+/* =================== thème + démarrage =================== */
+$('themeBtn').onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = cur==='dark' ? 'light' : 'dark';
+  try{ localStorage.setItem('stats-theme', document.documentElement.dataset.theme); }catch(e){}
+};
+try{ const t = localStorage.getItem('stats-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){}
+
+if (!CFG.url || !CFG.key){
+  $('main').innerHTML = ''; $('loginCard').hidden = false;
+  setMsg('loginMsg', 'Configuration manquante (supabase-config.js).', 'err');
+} else {
+  let first = true;
+  sb.auth.onAuthStateChange((ev, session) => {
+    if (ev === 'TOKEN_REFRESHED' || ev === 'USER_UPDATED') return;
+    if (ev === 'INITIAL_SESSION' || ev === 'SIGNED_IN' || ev === 'SIGNED_OUT'){
+      if (ev === 'SIGNED_IN' && !first && state.user && session && session.user.id === state.user.id) return;   // même compte, onglet revenu au premier plan
+      first = false;
+      setTimeout(() => onSession(session), 0);           // hors du verrou interne de supabase-js
+    }
+  });
+}
+</script>
+</body>
+</html>
