@@ -257,7 +257,8 @@ let datasets = [];                 // {name, mtime, rows, error}
 let F = {mois:'', groupe:'', com:'', dossier:'', client:'', gc:''};
 let ETP_BASE = lsGet('marges-etp', 151.67);
 let ATTRIB = lsGet('marges-attrib', 'contrat');
-let groups = lsGet('marges-agences', []);   // [{id, name, members:[nom commercial]}]
+let groups = [];                            // [{id, name, members:[nom commercial]}] : table regroupements_marges de la base
+try{ localStorage.removeItem('marges-agences'); }catch(e){}   // ancien enregistrement dans le navigateur, abandonné
 let dim = lsGet('marges-dim', 'dossier');
 let metric = lsGet('marges-metric', 'ca');
 let sortKey = 'metric', sortDir = -1, showAll = false;
@@ -453,12 +454,17 @@ function splitBar(a){
 function renderGroups(rows){
   $('groupsSec').style.display = '';
   if (!groups.length){
-    $('groups').innerHTML = `<div class="card empty" style="grid-column:1/-1">Aucune agence définie. Crée une agence en choisissant ses commerciaux, ou clique sur « Créer une agence par fichier ».</div>`;
+    $('groups').innerHTML = `<div class="card empty" style="grid-column:1/-1">Aucune agence définie. Crée une agence en choisissant ses commerciaux, ou clique sur « Créer les agences depuis les fichiers ». Les agences sont enregistrées dans la base et partagées entre responsables.</div>`;
     return;
   }
   const total = agg(rows);
   $('groups').innerHTML = groups.map(g=>{
     const v = rows.filter(r => g.members.includes(comOf(r))), a = agg(v);
+    if (!a.lignes) return `<div class="card grp" style="opacity:.65" data-grp="${esc(g.id)}">
+      <div class="row" style="justify-content:space-between"><span class="name">${esc(g.name)}</span><span class="muted" style="font-size:12px">${g.members.length} commercial(aux)</span></div>
+      <div class="muted" style="font-size:13px;margin:6px 0">Aucune donnée dans les fichiers chargés${F.mois||F.com||F.dossier||F.client||F.gc ? ' (ou filtrée)' : ''}.</div>
+      <div class="members">${esc(g.members.join(', ') || 'aucun commercial')}</div>
+      <div class="acts"><button data-gedit="${esc(g.id)}">Modifier</button><button class="danger" data-gdel="${esc(g.id)}">Supprimer</button></div></div>`;
     return `<div class="card grp ${F.groupe===g.id?'sel':''}" data-grp="${esc(g.id)}">
       <div class="row" style="justify-content:space-between"><span class="name">${esc(g.name)}</span><span class="muted" style="font-size:12px">${g.members.length} commercial(aux)</span></div>
       <div class="big">${eur(a.ca)} <span class="sub" style="font-size:13px;font-weight:400">CA${total.ca?` · ${nf0.format(a.ca/total.ca*100)} %`:''}</span></div>
@@ -671,25 +677,44 @@ async function restoreFolder(){
 function addFiles(files){ for (const f of files) manual.set(f.name, f); lastSig=''; sync(); }
 
 /* =================== agences =================== */
-function saveGroups(){ lsSet('marges-agences', groups); }
+const DB = () => window.PilotageAuth && window.PilotageAuth.sb;
+const fromRow = r => ({id: r.id, name: r.nom, members: r.membres || []});
+async function loadGroups(){
+  const {data, error} = await DB().from('regroupements_marges').select('id, nom, membres').order('nom');
+  if (error){ groupsMsg('Agences non chargées : ' + error.message, 'err'); return; }
+  groups = (data || []).map(fromRow);
+  if (F.groupe && !groupById(F.groupe)) F.groupe = '';
+  render();
+}
+async function dbSaveGroup(g){            // création (sans id) ou mise à jour
+  const row = {nom: g.name, membres: g.members};
+  const q = g.id ? DB().from('regroupements_marges').update(row).eq('id', g.id).select('id, nom, membres').single()
+                 : DB().from('regroupements_marges').insert(row).select('id, nom, membres').single();
+  const {data, error} = await q;
+  if (error) throw error;
+  return fromRow(data);
+}
 function setMsg(id, txt, kind){ const el = $(id); if (!el) return; el.textContent = txt; el.className = 'msg' + (kind ? ' ' + kind : ''); }
 let msgTimer = null;
 function groupsMsg(txt, kind){ setMsg('groupsMsg', txt, kind); clearTimeout(msgTimer); if (txt) msgTimer = setTimeout(() => setMsg('groupsMsg',''), 6000); }
-function saveEditor(){
+async function saveEditor(){
   const name = ($('gName').value || '').trim();
   const members = [...document.querySelectorAll('.editor input[type=checkbox]:checked')].map(x=>x.value);
   if (!name){ setMsg('gMsg', 'Donne un nom à l\'agence.', 'err'); $('gName').focus(); return; }
   if (!members.length){ setMsg('gMsg', allRows().length ? 'Coche au moins un commercial.' : 'Importe d\'abord un export de marges pour choisir les commerciaux.', 'err'); return; }
   const isNew = !editing.id;
-  if (editing.id){ const g = groupById(editing.id); g.name = name; g.members = members; }
-  else groups.push({id:'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), name, members});
-  saveGroups(); editing = null; renderEditor(); render();
+  $('gSave').disabled = true; setMsg('gMsg', 'Enregistrement…');
+  let saved;
+  try { saved = await dbSaveGroup({id: editing.id, name, members}); }
+  catch(e){ $('gSave').disabled = false; setMsg('gMsg', 'Enregistrement impossible : ' + e.message, 'err'); return; }
+  if (isNew) groups.push(saved); else groups = groups.map(g => g.id === saved.id ? saved : g);
+  editing = null; renderEditor(); render();
   groupsMsg(isNew ? `Agence « ${name} » créée (${members.length} commercial(aux)).` : `Agence « ${name} » mise à jour.`, 'ok');
 }
 // deux ensembles de commerciaux appartiennent à la même agence s'ils partagent au moins la moitié du plus petit
 // (un commercial présent dans deux agences ne suffit pas à les fusionner)
 const sameAgency = (a, b) => { const B = new Set(b); const n = a.filter(x => B.has(x)).length; return n > 0 && n * 2 >= Math.min(a.length, b.length); };
-function autoGroups(){
+async function autoGroups(){
   if (!datasets.some(d=>d.rows.length)){ groupsMsg('Importe d\'abord un export de marges.', 'err'); return; }
   // 1. regrouper les fichiers d'une même agence (un export par mois et par agence → une seule agence)
   let clusters = datasets.filter(d=>d.rows.length).map(d => ({members: uniqSorted(d.rows, comOf), files: [d.name.replace(/\.csv$/i,'').replace(/^.*\//,'')]}));
@@ -708,18 +733,23 @@ function autoGroups(){
     const g = groups.find(g => sameAgency(g.members, c.members));
     if (g){
       const add = c.members.filter(m => !g.members.includes(m));
-      if (add.length){ g.members = g.members.concat(add); updated.push(`${g.name} (+${add.length})`); }
+      if (add.length){ updated.push({g, members: g.members.concat(add), label: `${g.name} (+${add.length})`}); }
       continue;
     }
     // nom proposé : noms de famille des commerciaux (à renommer ensuite, ex. « Pau »)
     const last = c.members.map(m => (m.split(' ').find(w => w.length > 1 && w === w.toUpperCase()) || m));
     const name = last.slice(0,3).join(' + ') + (last.length > 3 ? ` + ${last.length-3}` : '');
-    created.push({id:'g'+Date.now().toString(36)+created.length, name, members: c.members, source: c.files.join(', ')});
+    created.push({id: null, name, members: c.members});
   }
   if (!created.length && !updated.length){ groupsMsg('Ces agences existent déjà (mêmes commerciaux).', 'err'); return; }
-  groups = groups.concat(created); saveGroups(); render();
+  groupsMsg('Enregistrement…');
+  try {
+    for (const c of created) groups.push(await dbSaveGroup(c));
+    for (const u of updated){ const s2 = await dbSaveGroup({id: u.g.id, name: u.g.name, members: u.members}); groups = groups.map(g => g.id === s2.id ? s2 : g); }
+  } catch(e){ groupsMsg('Enregistrement impossible : ' + e.message, 'err'); render(); return; }
+  render();
   groupsMsg([created.length ? `${created.length} agence(s) créée(s) — clique sur « Modifier » pour les renommer.` : '',
-             updated.length ? `Commerciaux ajoutés : ${updated.join(', ')}.` : ''].filter(Boolean).join(' '), 'ok');
+             updated.length ? `Commerciaux ajoutés : ${updated.map(u => u.label).join(', ')}.` : ''].filter(Boolean).join(' '), 'ok');
 }
 
 /* =================== événements =================== */
@@ -737,6 +767,8 @@ $('fileInput').onchange = e => { addFiles([...e.target.files]); e.target.value='
 $('dirInput').onchange = e => { snapshotFiles = [...e.target.files]; dirHandle = null; lastSig=''; cache.clear(); $('folder').textContent = (snapshotFiles[0]?.webkitRelativePath||'').split('/')[0] || 'dossier'; e.target.value=''; sync(); };
 $('newGroup').onclick = () => { editing = {id:null, name:'', members: F.com ? [F.com] : []}; renderEditor(); groupsMsg(''); };
 $('autoGroups').onclick = autoGroups;
+if (window.PilotageAuth) window.PilotageAuth.ready.then(loadGroups);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && !editing && window.PilotageAuth) loadGroups(); });
 $('pdfBtn').onclick = () => { render(); setTimeout(() => window.print(), 50); };
 $('pptxBtn').onclick = () => window.exportMargesPptx && window.exportMargesPptx();
 $('themeBtn').onclick = () => {
@@ -754,7 +786,11 @@ document.addEventListener('click', e => {
   const gd = t.closest('[data-gdel]'); if (gd){
     const g = groupById(gd.dataset.gdel);
     if (gd.dataset.armed !== '1'){ gd.dataset.armed = '1'; gd.textContent = 'Confirmer la suppression'; setTimeout(() => { if (gd.isConnected){ gd.dataset.armed = ''; gd.textContent = 'Supprimer'; } }, 4000); return; }
-    groups = groups.filter(x=>x.id!==g.id); if (F.groupe===g.id) F.groupe=''; saveGroups(); render(); groupsMsg(`Agence « ${g.name} » supprimée.`, 'ok'); return; }
+    DB().from('regroupements_marges').delete().eq('id', g.id).then(({error}) => {
+      if (error){ groupsMsg('Suppression impossible : ' + error.message, 'err'); return; }
+      groups = groups.filter(x=>x.id!==g.id); if (F.groupe===g.id) F.groupe=''; render(); groupsMsg(`Agence « ${g.name} » supprimée.`, 'ok');
+    });
+    return; }
   const gr = t.closest('[data-grp]'); if (gr){ F.groupe = F.groupe===gr.dataset.grp ? '' : gr.dataset.grp; render(); return; }
   const dm = t.closest('[data-dim]'); if (dm){ dim = dm.dataset.dim; lsSet('marges-dim', dim); showAll=false; render(); return; }
   const mt = t.closest('[data-metric]'); if (mt){ metric = mt.dataset.metric; lsSet('marges-metric', metric); sortKey='metric'; sortDir=-1; render(); return; }
