@@ -184,7 +184,7 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav no-print"><a href="accueil.html">Accueil</a><a href="index.html">Actions commerciales</a><a href="marges.html">Marges &amp; ETP</a><a href="planning.html">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a></nav>
+  <nav class="tabsnav no-print" id="nav" hidden><a href="accueil.html">Accueil</a><a href="index.html">Actions commerciales</a><a href="marges.html">Marges &amp; ETP</a><a href="planning.html">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a></nav>
   <header class="top">
     <div>
       <h1>Planning des intérimaires</h1>
@@ -289,6 +289,7 @@ async function onSession(session){
   state.user = session ? session.user : null;
   $('loginCard').hidden = !!state.user;
   $('app').hidden = $('userbar').hidden = !state.user;
+  updateNav();
   if (!state.user){ teardownLive(); return; }
   await loadMemberships();
 }
@@ -308,6 +309,7 @@ async function loadMemberships(){
   const {data, error} = await sb.from('membres_agence').select('role, agence_id, agences(code, nom)').eq('profil_id', state.user.id);
   if (error){ $('main').innerHTML = `<div class="card empty">${esc(frError(error))}</div>`; return; }
   state.memberships = (data || []).sort((a,b) => (a.agences?.nom || '').localeCompare(b.agences?.nom || '', 'fr'));
+  updateNav();
   if (!state.memberships.length){
     $('who').innerHTML = `<b>${esc(state.user.email)}</b>`;
     $('main').innerHTML = `<div class="card empty">Ton compte n'est rattaché à aucune agence. Demande à l'administrateur de t'ajouter.</div>`;
@@ -320,6 +322,12 @@ async function loadMemberships(){
   await selectAgence(m.agence_id);
 }
 
+// les autres outils (statistiques, marges) ne sont proposés qu'aux responsables et administrateurs ;
+// simple confort d'affichage : ces pages travaillent sur des fichiers locaux, la base n'y est pas exposée
+function updateNav(){
+  const mgr = !!state.user && state.memberships.some(m => m.role === 'admin' || m.role === 'responsable');
+  $('nav').hidden = !mgr;
+}
 async function selectAgence(id){
   const m = state.memberships.find(x => x.agence_id === id); if (!m) return;
   state.agence = id; state.role = m.role; lsSet('pb-agence', id);
