@@ -1,6 +1,6 @@
 # Statistiques commerciales
 
-👉 **Page d'accueil : https://alastorzaul.github.io/dominorh/accueil.html** — présentation des outils, mise en place du dossier SharePoint synchronisé, questions fréquentes, et adresses à mettre en lien depuis SharePoint (composant « Liens rapides »).
+👉 **Page d'accueil : https://dominorh.github.io/pilotage/accueil.html** — présentation des outils, mise en place du dossier SharePoint synchronisé, questions fréquentes, et adresses à mettre en lien depuis SharePoint (composant « Liens rapides »).
 
 Trois outils, dans le navigateur, sans installation :
 
@@ -10,7 +10,7 @@ Trois outils, dans le navigateur, sans installation :
 
 Tableau de bord des actions commerciales **par agence et par commercial**, construit à partir des exports Excel (tableau croisé : *Type d'action → Agence → Commercial → Candidat/Client → Cible → année*).
 
-👉 **Utiliser l'outil : https://alastorzaul.github.io/dominorh/**
+👉 **Utiliser l'outil : https://dominorh.github.io/pilotage/**
 
 ## Comment ça marche
 
@@ -37,7 +37,7 @@ Un filtre **Semaine** et un graphique **Évolution par semaine** (cliquable) per
 
 ## Marges & ETP (`marges.html`)
 
-👉 **https://alastorzaul.github.io/dominorh/marges.html**
+👉 **https://dominorh.github.io/pilotage/marges.html**
 
 À partir des exports CSV de marges (`Marges_AAAAMMJJ….csv`, séparateur `;`, encodage Windows ou UTF-8) :
 
@@ -51,7 +51,7 @@ Un filtre **Semaine** et un graphique **Évolution par semaine** (cliquable) per
 
 ## Planning (`planning.html`)
 
-👉 **https://alastorzaul.github.io/dominorh/planning.html**
+👉 **https://dominorh.github.io/pilotage/planning.html**
 
 Lit le planning Excel de l'agence (ex. `Planning_agence_DAX.xlsx`) : chaque **onglet de semaine** (`S42`, `S43`…) avec une ligne par client, puis ses intérimaires et leurs heures du lundi au dimanche. Les autres onglets (Besoins, KPI, anciens plannings `s38`…) sont ignorés.
 
