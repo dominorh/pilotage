@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Planning intérimaires</title>
@@ -162,10 +162,13 @@ tr.editing td{padding-top:4px;padding-bottom:4px}
   #daySec{display:none}
 }
 </style>
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="responsable"></script>
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav no-print"><a href="accueil.html">Accueil</a><a href="index.html">Actions commerciales</a><a href="marges.html">Marges &amp; ETP</a><a href="planning.html" class="on">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a></nav>
+  <nav class="tabsnav no-print"><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable" class="on">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a></nav>
   <header class="top">
     <div>
       <h1 id="title">Planning des intérimaires</h1>

@@ -181,10 +181,13 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
 .toast.err{background:var(--late);color:#fff}
 .toast:empty{display:none}
 </style>
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="membre" data-chip="non"></script>
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav no-print" id="nav" hidden><a href="accueil.html">Accueil</a><a href="index.html">Actions commerciales</a><a href="marges.html">Marges &amp; ETP</a><a href="planning.html">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a></nav>
+  <nav class="tabsnav no-print" id="nav"><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a></nav>
   <header class="top">
     <div>
       <h1>Planning des intérimaires</h1>
@@ -200,18 +203,6 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
       <button id="themeBtn">◐ Thème</button>
     </div>
   </header>
-
-  <!-- connexion -->
-  <div class="card login" id="loginCard" hidden>
-    <h2>Connexion</h2>
-    <div class="sub">Utilise le compte créé pour toi dans la base de l'agence.</div>
-    <form id="loginForm" autocomplete="on">
-      <label class="f">Adresse e-mail<input type="email" id="email" required autocomplete="username"></label>
-      <label class="f">Mot de passe<input type="password" id="password" required autocomplete="current-password"></label>
-      <button class="primary" type="submit" id="loginBtn">Se connecter</button>
-      <span class="msg" id="loginMsg" role="status" aria-live="polite"></span>
-    </form>
-  </div>
 
   <div id="app" hidden>
     <div class="filters">
@@ -236,8 +227,6 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="supabase-config.js"></script>
-<script src="vendor/supabase.js"></script>
 <script src="vendor/xlsx.full.min.js"></script>
 <script>
 /* =================== utilitaires =================== */
@@ -273,8 +262,7 @@ function frError(e){
 }
 
 /* =================== connexion à la base =================== */
-const CFG = window.PILOTAGE_SUPABASE || {};
-const sb = supabase.createClient(CFG.url, CFG.key, {auth:{persistSession:true, autoRefreshToken:true, storageKey:'pilotage-auth'}});
+const sb = window.PilotageAuth.sb;          // client partagé créé par auth.js (même session que l'accueil)
 
 const state = {
   user: null, memberships: [], agence: null, role: null, param: null,
@@ -287,29 +275,18 @@ const canEditWeek = () => state.week && canPlan() && (state.week.statut === 'ouv
 
 async function onSession(session){
   state.user = session ? session.user : null;
-  $('loginCard').hidden = !!state.user;
   $('app').hidden = $('userbar').hidden = !state.user;
-  updateNav();
   if (!state.user){ teardownLive(); return; }
   await loadMemberships();
 }
 
-$('loginForm').onsubmit = async e => {
-  e.preventDefault();
-  $('loginBtn').disabled = true; setMsg('loginMsg', 'Connexion…', 'busy');
-  const {error} = await sb.auth.signInWithPassword({email: $('email').value.trim(), password: $('password').value});
-  $('loginBtn').disabled = false;
-  if (error){ setMsg('loginMsg', frError(error), 'err'); return; }
-  setMsg('loginMsg', '', ''); $('password').value = '';
-};
-$('logoutBtn').onclick = async () => { await sb.auth.signOut(); state.memberships = []; state.agence = null; };
+$('logoutBtn').onclick = async () => { teardownLive(); await sb.auth.signOut(); };   // auth.js renvoie vers l'accueil
 function setMsg(id, txt, cls){ const el = $(id); el.textContent = txt; el.className = 'msg ' + (cls || ''); }
 
 async function loadMemberships(){
   const {data, error} = await sb.from('membres_agence').select('role, agence_id, agences(code, nom)').eq('profil_id', state.user.id);
   if (error){ $('main').innerHTML = `<div class="card empty">${esc(frError(error))}</div>`; return; }
   state.memberships = (data || []).sort((a,b) => (a.agences?.nom || '').localeCompare(b.agences?.nom || '', 'fr'));
-  updateNav();
   if (!state.memberships.length){
     $('who').innerHTML = `<b>${esc(state.user.email)}</b>`;
     $('main').innerHTML = `<div class="card empty">Ton compte n'est rattaché à aucune agence. Demande à l'administrateur de t'ajouter.</div>`;
@@ -322,12 +299,6 @@ async function loadMemberships(){
   await selectAgence(m.agence_id);
 }
 
-// les autres outils (statistiques, marges) ne sont proposés qu'aux responsables et administrateurs ;
-// simple confort d'affichage : ces pages travaillent sur des fichiers locaux, la base n'y est pas exposée
-function updateNav(){
-  const mgr = !!state.user && state.memberships.some(m => m.role === 'admin' || m.role === 'responsable');
-  $('nav').hidden = !mgr;
-}
 async function selectAgence(id){
   const m = state.memberships.find(x => x.agence_id === id); if (!m) return;
   state.agence = id; state.role = m.role; lsSet('pb-agence', id);
@@ -636,20 +607,8 @@ $('themeBtn').onclick = () => {
 };
 try{ const t = localStorage.getItem('stats-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){}
 
-if (!CFG.url || !CFG.key){
-  $('main').innerHTML = ''; $('loginCard').hidden = false;
-  setMsg('loginMsg', 'Configuration manquante (supabase-config.js).', 'err');
-} else {
-  let first = true;
-  sb.auth.onAuthStateChange((ev, session) => {
-    if (ev === 'TOKEN_REFRESHED' || ev === 'USER_UPDATED') return;
-    if (ev === 'INITIAL_SESSION' || ev === 'SIGNED_IN' || ev === 'SIGNED_OUT'){
-      if (ev === 'SIGNED_IN' && !first && state.user && session && session.user.id === state.user.id) return;   // même compte, onglet revenu au premier plan
-      first = false;
-      setTimeout(() => onSession(session), 0);           // hors du verrou interne de supabase-js
-    }
-  });
-}
+// démarrage : auth.js a vérifié la session et le rattachement (sinon redirection vers l'accueil)
+window.PilotageAuth.ready.then(info => onSession({user: info.user}));
 </script>
 </body>
 </html>

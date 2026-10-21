@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Outils de pilotage</title>
@@ -59,8 +59,7 @@ button:hover,.btn:hover{background:var(--surface-2)}
 .banner .ic{font-weight:700}
 .banner.ok .ic{color:var(--ok)} .banner.warn .ic{color:var(--warn)}
 /* outils */
-.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
-@media (max-width:900px){.tools{grid-template-columns:1fr}}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:28px}
 .tool{display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
 .tool .tag{display:flex;align-items:center;gap:10px}
 .tool .ico{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;flex:none}
@@ -105,27 +104,69 @@ details ul{padding-left:18px}
 .copied{color:var(--ok);font-size:12.5px}
 .admin ol{margin:8px 0 0;padding-left:20px;color:var(--text-2);font-size:14px}
 .admin ol li{margin:4px 0}
+[hidden]{display:none!important}
+/* connexion */
+.login{max-width:420px;margin:10px auto 28px}
+.login form{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+.login label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--text-2)}
+.login input{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 12px}
+.login input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.login button.primary{background:var(--accent);border-color:var(--accent);color:#fff;justify-content:center;padding:10px 14px}
+.msg{font-size:13.5px;color:var(--text-2);min-height:1em}
+.msg.err{color:#c23a39;font-weight:600}
+.userbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13.5px;color:var(--text-2)}
+.userbar b{color:var(--text)}
+.tool.base .ico{background:color-mix(in srgb,var(--c-plan) 14%,transparent);color:var(--c-plan)}
+.tool .role{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 footer{color:var(--muted);font-size:12.5px;margin-top:28px;text-align:center}
 footer a{color:var(--text-2)}
 </style>
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="public" data-chip="non"></script>
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav"><a href="accueil.html" class="on">Accueil</a><a href="index.html">Actions commerciales</a><a href="marges.html">Marges &amp; ETP</a><a href="planning.html">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a></nav>
+  <nav class="tabsnav" id="nav" hidden><a href="accueil.html" class="on">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a></nav>
 
   <header class="hero">
     <div>
       <h1>Outils de pilotage de l'agence</h1>
-      <p class="lead">Planning des intérimaires, marges et ETP, actions commerciales : trois tableaux de bord qui lisent directement les fichiers du dossier SharePoint de l'agence et se mettent à jour tout seuls.</p>
+      <p class="lead">Planning des intérimaires, marges et ETP, actions commerciales. Connecte-toi avec le compte que l'agence t'a créé : tu verras les outils auxquels ton rôle donne accès.</p>
     </div>
-    <button id="themeBtn" type="button">◐ Thème</button>
+    <div class="userbar"><span id="who" hidden></span><button id="logoutBtn" type="button" hidden>Se déconnecter</button><button id="themeBtn" type="button">◐ Thème</button></div>
   </header>
 
-  <div id="browserBanner"></div>
+  <section class="card login" id="loginSec" hidden>
+    <h2>Connexion</h2>
+    <div class="lead" style="font-size:14px">Adresse e-mail et mot de passe fournis par l'agence.</div>
+    <form id="loginForm" autocomplete="on">
+      <label>Adresse e-mail<input type="email" id="email" required autocomplete="username"></label>
+      <label>Mot de passe<input type="password" id="password" required autocomplete="current-password"></label>
+      <button class="primary" type="submit" id="loginBtn">Se connecter</button>
+      <span class="msg" id="loginMsg" role="status" aria-live="polite"></span>
+    </form>
+  </section>
+
+  <div id="content" hidden>
+  <div id="browserBanner" data-acces="responsable"></div>
+  <div class="card" id="noAgency" hidden style="margin-bottom:20px">Ton compte n'est rattaché à aucune agence. Demande à l'administrateur de t'ajouter.</div>
 
   <section class="tools" aria-label="Outils">
-    <article class="card tool plan">
-      <div class="tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 13h3M14 13h3M7 17h3"/></svg></span><h3>Planning des intérimaires</h3></div>
+    <article class="card tool base" data-acces="membre">
+      <div class="tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 13h3M14 13h3M7 17h3"/></svg></span><h3>Planning partagé</h3></div>
+      <p>Le planning de l'agence dans la base commune : chaque modification est visible tout de suite par l'équipe.</p>
+      <ul>
+        <li>Saisie des heures et des contrats en ligne (selon ton rôle)</li>
+        <li>Semaines verrouillables par les responsables</li>
+        <li>Export Excel et PDF</li>
+      </ul>
+      <div class="actions"><a class="btn primary" href="planning-base.html">Ouvrir le planning partagé</a></div>
+      <div class="src">Aucun fichier à choisir : tout est dans la base de l'agence</div>
+    </article>
+
+    <article class="card tool plan" data-acces="responsable">
+      <div class="tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 13h3M14 13h3M7 17h3"/></svg></span><h3>Planning (Excel)</h3></div>
       <p>Les intérimaires par client, semaine par semaine, avec les heures du lundi au dimanche.</p>
       <ul>
         <li>Filtres semaine, client, métier</li>
@@ -137,7 +178,7 @@ footer a{color:var(--text-2)}
       <div class="src">Fichier : planning Excel de l'agence (onglets <code>S42</code>, <code>S43</code>…)</div>
     </article>
 
-    <article class="card tool marge">
+    <article class="card tool marge" data-acces="responsable">
       <div class="tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h7M4 18h13"/><path d="M17 4v4M14 6h6" /></svg></span><h3>Marges &amp; ETP</h3></div>
       <p>CA, marge, taux de marge et ETP par dossier, par commercial et par agence.</p>
       <ul>
@@ -150,7 +191,7 @@ footer a{color:var(--text-2)}
       <div class="src">Fichiers : exports CSV de marges (<code>Marges_….csv</code>)</div>
     </article>
 
-    <article class="card tool act">
+    <article class="card tool act" data-acces="responsable">
       <div class="tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><h3>Actions commerciales</h3></div>
       <p>Les actions par agence, par commercial, par type et par semaine.</p>
       <ul>
@@ -164,7 +205,7 @@ footer a{color:var(--text-2)}
     </article>
   </section>
 
-  <div class="grid2">
+  <div class="grid2" data-acces="responsable">
     <section class="card">
       <h2>Première utilisation (une seule fois par poste)</h2>
       <ol class="steps">
@@ -187,7 +228,7 @@ footer a{color:var(--text-2)}
     <section class="card">
       <h2>Questions fréquentes</h2>
       <details><summary>Mes données partent-elles sur internet ?</summary>
-        <p>Non. Les fichiers sont lus par ton navigateur, sur ton poste. La page ne peut rien envoyer : elle interdit toute connexion réseau. Seule la page vide est hébergée en ligne.</p></details>
+        <p>Non. Les fichiers Excel et CSV sont lus par ton navigateur, sur ton poste, et ne sont jamais envoyés. La page se connecte uniquement à la base de l'agence, pour vérifier ton compte (et, pour le planning partagé, lire et enregistrer le planning).</p></details>
       <details><summary>Les chiffres ne sont pas à jour</summary>
         <ul><li>Regarde la ligne « Version la plus récente reçue » sous l'état de la surveillance : si l'heure est ancienne, c'est OneDrive qui n'a pas encore synchronisé.</li>
         <li>Vérifie que l'icône OneDrive (barre des tâches) n'est pas en pause, puis clique sur <b>↻ Relire maintenant</b>.</li>
@@ -203,11 +244,12 @@ footer a{color:var(--text-2)}
     </section>
   </div>
 
-  <section class="card admin">
+  <section class="card admin" data-acces="responsable">
     <h2>Pour ajouter ces outils sur une page SharePoint</h2>
     <p class="lead" style="font-size:14px">À faire une fois, par une personne qui peut modifier une page du site SharePoint (pas besoin d'être administrateur).</p>
     <div class="copyrow"><span class="lbl">Page d'accueil (conseillé)</span><code data-path="accueil.html"></code><button type="button" data-copy="accueil.html">Copier</button></div>
-    <div class="copyrow"><span class="lbl">Planning</span><code data-path="planning.html"></code><button type="button" data-copy="planning.html">Copier</button></div>
+    <div class="copyrow"><span class="lbl">Planning partagé</span><code data-path="planning-base.html"></code><button type="button" data-copy="planning-base.html">Copier</button></div>
+    <div class="copyrow"><span class="lbl">Planning (Excel)</span><code data-path="planning.html"></code><button type="button" data-copy="planning.html">Copier</button></div>
     <div class="copyrow"><span class="lbl">Marges &amp; ETP</span><code data-path="marges.html"></code><button type="button" data-copy="marges.html">Copier</button></div>
     <div class="copyrow"><span class="lbl">Actions commerciales</span><code data-path="index.html"></code><button type="button" data-copy="index.html">Copier</button></div>
     <span class="copied" id="copied" role="status" aria-live="polite"></span>
@@ -217,14 +259,57 @@ footer a{color:var(--text-2)}
       <li><b>Ajouter des liens</b> → colle l'adresse copiée ci-dessus, donne un titre (« Outils de pilotage »). Dans les options du lien, garde « Ouvrir dans un nouvel onglet ».</li>
       <li><b>Republier</b> la page.</li>
     </ol>
-    <p class="lead" style="font-size:13px;margin-top:10px">Ne pas utiliser le composant « Incorporer » : à l'intérieur d'une page SharePoint, le navigateur bloque le choix du dossier, les outils ne pourraient pas lire les fichiers.</p>
+    <p class="lead" style="font-size:13px;margin-top:10px">Chaque personne se connecte ensuite sur la page d'accueil avec son compte. Ne pas utiliser le composant « Incorporer » : à l'intérieur d'une page SharePoint, le navigateur bloque le choix du dossier, les outils ne pourraient pas lire les fichiers.</p>
   </section>
+  </div>
 
   <footer>Outils sans installation · les fichiers restent sur le poste et dans SharePoint · <a href="https://github.com/dominorh/pilotage">code source</a></footer>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
+/* =================== connexion =================== */
+const sb = window.PilotageAuth.sb;
+function frErr(e){
+  const m = (e && (e.message || e.error_description)) || String(e);
+  if (/Invalid login credentials/i.test(m)) return 'Adresse e-mail ou mot de passe incorrect.';
+  if (/Email not confirmed/i.test(m)) return 'Compte pas encore confirmé : demande à l\'administrateur.';
+  if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'Connexion à la base impossible : vérifie ta connexion internet.';
+  return m;
+}
+// page demandée avant la connexion (uniquement une page de ce site)
+function suite(){
+  const s = new URLSearchParams(location.search).get('suite') || '';
+  return /^[a-z][a-z0-9-]*\.html(?:[?#][^\s]*)?$/i.test(s) && !/^accueil\.html/i.test(s) ? s : '';
+}
+function show(info){
+  const logged = !!info.user;
+  $('loginSec').hidden = logged; $('content').hidden = !logged; $('nav').hidden = !logged;
+  $('who').hidden = $('logoutBtn').hidden = !logged;
+  if (!logged){ setTimeout(() => $('email').focus(), 50); return; }
+  const roles = [...new Set(info.memberships.map(m => ({admin:'administrateur', responsable:'responsable', commercial:'commercial', lecture:'lecture seule'}[m.role] || m.role)))];
+  $('who').innerHTML = `<b>${info.user.email.replace(/[<>&"]/g, '')}</b>${roles.length ? ' · ' + roles.join(', ') : ''}`;
+  const member = info.memberships.length > 0;
+  document.querySelectorAll('[data-acces]').forEach(el => {
+    const ok = el.dataset.acces === 'responsable' ? info.isManager : el.dataset.acces === 'membre' ? member : true;
+    el.hidden = !ok; if (el.tagName === 'A') el.style.display = ok ? '' : 'none';
+  });
+  $('noAgency').hidden = member;
+}
+window.PilotageAuth.ready.then(info => {
+  if (info.user && suite() && info.memberships.length){ location.replace(suite()); return; }
+  show(info);
+});
+$('loginForm').onsubmit = async e => {
+  e.preventDefault();
+  const msg = $('loginMsg'); msg.className = 'msg'; msg.textContent = 'Connexion…'; $('loginBtn').disabled = true;
+  const {error} = await sb.auth.signInWithPassword({email: $('email').value.trim(), password: $('password').value});
+  $('loginBtn').disabled = false;
+  if (error){ msg.className = 'msg err'; msg.textContent = frErr(error); return; }
+  location.replace(suite() || 'accueil.html');      // recharge : auth.js relit la session et les droits
+};
+$('logoutBtn').onclick = async () => { await sb.auth.signOut(); location.replace('accueil.html'); };
+
 // navigateur compatible ?
 (function(){
   const ok = 'showDirectoryPicker' in window;
