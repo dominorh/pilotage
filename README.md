@@ -23,6 +23,7 @@ vers la page de garde, puis ramène à l'outil après la connexion.
 | **Actions commerciales** | [`actions.html`](./actions.html) | exports Excel des actions, lus sur le poste | responsables, administrateurs |
 | **Planning (Excel)** | [`planning.html`](./planning.html) | planning Excel de l'agence, lu sur le poste | responsables, administrateurs |
 | **Gestion des comptes** | [`comptes.html`](./comptes.html) | comptes et rôles (base de données) | administrateurs |
+| **Gestion des agences** | [`agences.html`](./agences.html) | agences et bases ETP (base de données) | administrateurs |
 | **Générateur de propositions commerciales** | [`proposition_commerciale_domino.html`](./proposition_commerciale_domino.html) | saisie dans la page | tous les comptes |
 | **Calculateur pédagogique de marge** | [`calculateur_marge_pedagogique.html`](./calculateur_marge_pedagogique.html) | saisie dans la page | tous les comptes |
 | **Comparateur chauffeur PL / TP** | [`comparateur_remuneration_chauffeur_TP.html`](./comparateur_remuneration_chauffeur_TP.html) | saisie dans la page | tous les comptes |
@@ -67,6 +68,15 @@ Réservée aux administrateurs, pour les agences qu'ils administrent :
 - **Comptes sans agence** (créés dans Supabase sans rattachement) : à rattacher ou supprimer.
 - Contrôles faits par la base à chaque action : on n'agit que sur ses agences, pas sur son propre compte, et **une agence garde toujours au moins un administrateur**.
 - Création, mot de passe et suppression passent par la fonction serveur Supabase `gerer-comptes` (la clé secrète ne quitte jamais Supabase). Sans elle, la page affiche un avertissement et le reste fonctionne.
+
+## Gestion des agences (`agences.html`)
+
+Réservée aux administrateurs, pour les agences qu'ils administrent :
+
+- **Créer une agence** (code de 2 à 10 lettres ou chiffres, nom) : son créateur en devient administrateur.
+- **Modifier** le code, le nom et les bases ETP (heures / semaine pour le planning, heures / mois pour les marges).
+- **Comptes de l'agence** : ouvre la gestion des comptes avec cette agence présélectionnée.
+- **Supprimer** : directement si l'agence est vide ; sinon la page indique ce qui sera effacé et demande de retaper le code de l'agence. Un administrateur ne peut pas supprimer la dernière agence qu'il administre.
 
 ## Planning partagé (`planning-base.html`)
 
@@ -189,6 +199,7 @@ auth.js                     contrôle d'accès commun (session, rôles, redirect
 supabase-config.js          adresse de la base et clé publishable
 planning-base.html          Planning partagé (base de données)
 comptes.html                Gestion des comptes (administrateurs)
+agences.html                Gestion des agences (administrateurs)
 planning.html               Planning (Excel)
 marges.html                 Marges & ETP
 export-marges-pptx.js       génération de la présentation PowerPoint (marges)

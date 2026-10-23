@@ -107,7 +107,7 @@ button.danger.armed{background:#c23a39;border-color:#c23a39;color:#fff}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav"><a class="brandmark" href="index.html" title="Retour à la page de garde">Domino <i>RH</i></a><a href="index.html">Accueil</a><a href="planning-base.html">Planning (base)</a><a href="actions.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="comptes.html" class="on" data-acces="admin">Comptes</a></nav>
+  <nav class="tabsnav"><a class="brandmark" href="index.html" title="Retour à la page de garde">Domino <i>RH</i></a><a href="index.html">Accueil</a><a href="planning-base.html">Planning (base)</a><a href="actions.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="comptes.html" class="on" data-acces="admin">Comptes</a><a href="agences.html" data-acces="admin">Agences</a></nav>
 
   <header class="hero">
     <div>
@@ -331,6 +331,8 @@ window.PilotageAuth.ready.then(async info => {
   const opts = adminAgences.map(a => `<option value="${a.agence_id}">${esc(a.agence)}</option>`).join('');
   $('aAgence').innerHTML = opts;
   $('fAgence').innerHTML = `<option value="">Toutes</option>` + opts;
+  const pre = new URLSearchParams(location.search).get('agence');
+  if (pre && adminAgences.some(x => x.agence_id === pre)){ F.agence = pre; $('fAgence').value = pre; $('aAgence').value = pre; }
   await Promise.all([detectFn(), load()]);
   render();
 });

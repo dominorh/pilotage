@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Gestion des agences</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M2 15V6l6-4 6 4v9z' fill='%23142469'/><rect x='6.5' y='9' width='3' height='6' fill='%23ed4018'/></svg>">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
+  --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
+  --accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b; --c-plan:#142469; --c-marge:#ed4018; --c-act:#142469;
+  --warn:#b25e00; --warn-bg:#fff1dc; --ok:#14865d; --ok-bg:#e3f5ec;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
+    --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
+    --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --c-plan:#8494dd; --c-marge:#f26a4b; --c-act:#8494dd;
+    --warn:#f0a44b; --warn-bg:#3a2a12; --ok:#4cc999; --ok-bg:#16332a;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
+  --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
+  --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --c-plan:#8494dd; --c-marge:#f26a4b; --c-act:#8494dd;
+  --warn:#f0a44b; --warn-bg:#3a2a12; --ok:#4cc999; --ok-bg:#16332a;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 16px 64px}
+.brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
+.brandmark i{font-style:normal;color:var(--brand-orange)}
+nav.tabsnav a.brandmark{border:0;border-radius:0;background:none;text-decoration:none;padding:4px 12px 4px 0;color:var(--accent);font-size:12.5px}
+nav.tabsnav a.brandmark:hover{opacity:.8}
+nav.tabsnav{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
+nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
+nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+header.hero{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+h1{font-size:28px;line-height:1.2;margin:0 0 6px;letter-spacing:-.015em}
+h2{font-size:18px;margin:0 0 12px;letter-spacing:-.01em}
+h3{font-size:15px;margin:0 0 4px}
+.lead{color:var(--text-2);margin:0;max-width:62ch}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+button,.btn{font:inherit;font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+button:hover,.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
+.btn.primary:hover{filter:brightness(1.06)}
+
+footer{color:var(--muted);font-size:12.5px;margin-top:28px;text-align:center}
+[hidden]{display:none!important}
+.sub{color:var(--text-2);font-size:13.5px}
+.muted{color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--text-2)}
+input,select{font:inherit;font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 10px}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+button.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
+button.small{font-size:12.5px;padding:5px 10px}
+button.danger{color:#c23a39}
+button.danger.armed{background:#c23a39;border-color:#c23a39;color:#fff}
+.sec{margin-bottom:18px}
+.note{font-size:13.5px;border-radius:10px;padding:10px 14px;margin-bottom:16px}
+.note.warn{background:var(--warn-bg)}
+.note.ok{background:var(--ok-bg)}
+.note b{white-space:nowrap}
+.secret{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--ok-bg);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:14px}
+.secret code{font:600 17px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.04em;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 10px}
+.list{display:grid;gap:10px}
+.acct{display:grid;grid-template-columns:minmax(200px,1.2fr) minmax(260px,2fr) auto;gap:14px;align-items:start;padding:14px 16px}
+@media (max-width:860px){.acct{grid-template-columns:1fr}}
+.acct .nm{font-weight:650}
+.acct .em{font-size:13px;color:var(--text-2);overflow-wrap:anywhere}
+.acct .meta{font-size:12px;color:var(--muted);margin-top:4px}
+.acct.off{opacity:.6}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px}
+.chip .ag{min-width:150px;font-weight:600}
+.chip select{padding:4px 8px;font-size:13px}
+.addag{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:2px}
+.addag select{padding:4px 8px;font-size:12.5px}
+.acts{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+@media (max-width:860px){.acts{flex-direction:row;flex-wrap:wrap}}
+.badge{display:inline-block;font-size:11px;font-weight:650;padding:1px 8px;border-radius:999px;background:var(--surface-2);color:var(--text-2);border:1px solid var(--border);vertical-align:1px}
+.badge.me{background:var(--accent);color:#fff;border-color:var(--accent)}
+.badge.off{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 18px;font-size:13px;color:var(--text-2);margin-top:6px}
+.legend b{color:var(--text)}
+.empty{color:var(--muted);text-align:center;padding:18px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--text);color:var(--surface);padding:9px 14px;border-radius:10px;font-size:13.5px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:20;max-width:min(92vw,560px)}
+.toast.err{background:#c23a39;color:#fff}
+.toast:empty{display:none}
+</style>
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="admin"></script>
+</head>
+<body>
+<div class="wrap">
+  <nav class="tabsnav"><a class="brandmark" href="index.html" title="Retour à la page de garde">Domino <i>RH</i></a><a href="index.html">Accueil</a><a href="planning-base.html">Planning (base)</a><a href="actions.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="comptes.html" data-acces="admin">Comptes</a><a href="agences.html" class="on" data-acces="admin">Agences</a></nav>
+
+  <header class="hero">
+    <div>
+      <h1>Gestion des agences</h1>
+      <p class="lead">Créer une agence, la renommer, régler sa base de calcul des ETP ou la supprimer. Tu vois ici les agences dont tu es administrateur ; celle que tu crées t'est rattachée comme administrateur.</p>
+    </div>
+    <button id="themeBtn" type="button">◐ Thème</button>
+  </header>
+
+  <section class="card sec">
+    <h2>Créer une agence</h2>
+    <form id="addForm" class="row" autocomplete="off">
+      <label class="f">Code<input id="aCode" placeholder="MDM" maxlength="10" required style="width:110px;text-transform:uppercase"></label>
+      <label class="f" style="flex:1;min-width:220px">Nom<input id="aNom" placeholder="ex. Agence de Mont-de-Marsan" required></label>
+      <button class="primary" type="submit" id="aBtn">Créer l'agence</button>
+    </form>
+    <p class="sub" style="margin:10px 0 0">Code : 2 à 10 lettres ou chiffres, utilisé dans les exports et la reprise du planning (ex. DAX, PAU). Base ETP par défaut : 35 h par semaine, 151,67 h par mois.</p>
+  </section>
+
+  <section class="sec">
+    <h2>Tes agences</h2>
+    <div class="list" id="list"><div class="card empty">Chargement…</div></div>
+  </section>
+
+  <footer>Les droits sont vérifiés par la base à chaque action. Une agence qui contient des données ne peut être supprimée qu'après confirmation par son code, et tu restes toujours administrateur d'au moins une agence.</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nf = new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 2});
+let toastT;
+function toast(msg, err){ const t = $('toast'); t.textContent = msg; t.className = 'toast' + (err ? ' err' : ''); clearTimeout(toastT); toastT = setTimeout(() => t.textContent = '', err ? 9000 : 3000); }
+const fr = e => {
+  const m = (e && e.message) || String(e);
+  if (/permission denied|42501/i.test(m)) return 'Action refusée : réservée aux administrateurs de cette agence.';
+  if (/Failed to fetch|NetworkError/i.test(m)) return 'Connexion à la base impossible.';
+  if (/stats_agences|creer_agence|Could not find the function/i.test(m)) return 'La base n\'a pas encore la gestion des agences : exécuter 07_mise_a_jour_gestion_agences.sql dans Supabase.';
+  return m;
+};
+const num = v => { const n = Number(String(v).replace(',', '.')); return isFinite(n) && n > 0 ? n : null; };
+let sb, agences = [], editing = null, deleting = null;
+
+async function load(){
+  const {data, error} = await sb.rpc('stats_agences');
+  if (error){ $('list').innerHTML = `<div class="card empty">${esc(fr(error))}</div>`; return; }
+  agences = data || []; render();
+}
+const plural = (n, s, p) => `${n} ${n > 1 ? (p || s + 's') : s}`;
+function render(){
+  if (!agences.length){ $('list').innerHTML = '<div class="card empty">Aucune agence administrée.</div>'; return; }
+  const seule = agences.length === 1;
+  $('list').innerHTML = agences.map(a => {
+    const vide = !(a.semaines + a.clients + a.interimaires + a.imports);
+    const stats = `${plural(a.membres, 'compte')} dont ${plural(a.administrateurs, 'administrateur')} · ${plural(a.semaines, 'semaine')} de planning${a.derniere_semaine ? ` (dernière : ${esc(a.derniere_semaine)})` : ''} · ${plural(a.clients, 'client')} · ${plural(a.interimaires, 'intérimaire')} · ${plural(a.imports, 'import')}`;
+    if (editing === a.id) return `<div class="card acct" style="grid-template-columns:1fr">
+      <form class="row" data-edit="${a.id}">
+        <label class="f">Code<input name="code" value="${esc(a.code)}" maxlength="10" required style="width:110px;text-transform:uppercase"></label>
+        <label class="f" style="flex:1;min-width:200px">Nom<input name="nom" value="${esc(a.nom)}" required></label>
+        <label class="f">Base ETP planning (h / semaine)<input name="sem" value="${esc(nf.format(a.etp_heures_semaine ?? 35))}" style="width:120px"></label>
+        <label class="f">Base ETP marges (h / mois)<input name="mois" value="${esc(nf.format(a.etp_heures_mois ?? 151.67))}" style="width:120px"></label>
+        <button class="primary" type="submit">Enregistrer</button><button type="button" data-cancel="1">Annuler</button>
+      </form></div>`;
+    const del = deleting === a.id ? `<div class="note warn" style="margin:10px 0 0;grid-column:1/-1">
+        <b>Supprimer ${esc(a.nom)} et TOUTES ses données ?</b> ${stats}, plus les missions, besoins, commerciaux et le journal.
+        Les comptes ne sont pas supprimés, ils perdent seulement l'accès à cette agence. <b>Cette action est définitive.</b>
+        <div class="row" style="margin-top:10px"><label class="f">Retape le code « ${esc(a.code)} » pour confirmer<input data-confirm="${a.id}" autocomplete="off" style="width:160px;text-transform:uppercase"></label>
+        <button class="danger armed" data-dodel="${a.id}">Supprimer définitivement</button><button data-cancel="1">Annuler</button></div></div>` : '';
+    return `<div class="card acct" style="grid-template-columns:minmax(220px,1.3fr) minmax(220px,2fr) auto">
+      <div><div class="nm">${esc(a.nom)} <span class="badge">${esc(a.code)}</span></div>
+        <div class="meta">Créée le ${new Date(a.created_at).toLocaleDateString('fr-FR')}</div></div>
+      <div class="em">${stats}<div class="meta">Base ETP : ${nf.format(a.etp_heures_semaine ?? 35)} h / semaine (planning) · ${nf.format(a.etp_heures_mois ?? 151.67)} h / mois (marges)</div></div>
+      <div class="acts"><a class="btn" style="font-size:12.5px;padding:5px 10px;justify-content:center" href="comptes.html?agence=${a.id}">Comptes de l'agence</a>
+        <button class="small" data-modif="${a.id}">Modifier</button>
+        <button class="small danger" data-del="${a.id}" ${seule ? 'disabled title="C\'est la seule agence que tu administres"' : ''}>${vide ? 'Supprimer' : 'Supprimer…'}</button></div>
+      ${del}</div>`;
+  }).join('');
+}
+
+$('addForm').onsubmit = async e => {
+  e.preventDefault();
+  $('aBtn').disabled = true;
+  const {error} = await sb.rpc('creer_agence', {p_code: $('aCode').value, p_nom: $('aNom').value});
+  $('aBtn').disabled = false;
+  if (error){ toast(fr(error), true); return; }
+  toast(`Agence ${$('aCode').value.toUpperCase()} créée : tu en es administrateur. Ajoute ses comptes depuis « Comptes de l'agence ».`);
+  $('addForm').reset(); await load();
+};
+
+document.addEventListener('submit', async e => {
+  const f = e.target; if (!f.dataset.edit) return;
+  e.preventDefault();
+  const sem = num(f.sem.value), mois = num(f.mois.value);
+  if (!sem || !mois){ toast('Bases ETP : nombres positifs attendus (ex. 35 et 151,67).', true); return; }
+  const {error} = await sb.rpc('modifier_agence', {p_agence: f.dataset.edit, p_code: f.code.value, p_nom: f.nom.value, p_etp_semaine: sem, p_etp_mois: mois});
+  if (error){ toast(fr(error), true); return; }
+  editing = null; toast('Agence mise à jour.'); await load();
+});
+
+document.addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.cancel){ editing = deleting = null; render(); return; }
+  if (t.dataset.modif){ editing = t.dataset.modif; deleting = null; render(); return; }
+  if (t.dataset.del){
+    const a = agences.find(x => x.id === t.dataset.del);
+    const vide = !(a.semaines + a.clients + a.interimaires + a.imports);
+    if (!vide){ deleting = a.id; editing = null; render(); document.querySelector(`[data-confirm="${a.id}"]`).focus(); return; }
+    if (!t.classList.contains('armed')){ t.classList.add('armed'); t.textContent = 'Confirmer la suppression'; setTimeout(() => { if (t.isConnected){ t.classList.remove('armed'); t.textContent = 'Supprimer'; } }, 4000); return; }
+    const {error} = await sb.rpc('supprimer_agence', {p_agence: a.id, p_confirmation: null});
+    if (error){ toast(fr(error), true); return; }
+    toast(`Agence ${a.code} supprimée.`); await load(); return;
+  }
+  if (t.dataset.dodel){
+    const a = agences.find(x => x.id === t.dataset.dodel);
+    const code = document.querySelector(`[data-confirm="${a.id}"]`).value.trim().toUpperCase();
+    if (code !== a.code){ toast(`Retape exactement le code « ${a.code} » pour confirmer.`, true); return; }
+    t.disabled = true; t.textContent = 'Suppression…';
+    const {error} = await sb.rpc('supprimer_agence', {p_agence: a.id, p_confirmation: code});
+    if (error){ t.disabled = false; t.textContent = 'Supprimer définitivement'; toast(fr(error), true); return; }
+    deleting = null; toast(`Agence ${a.code} et toutes ses données supprimées.`); await load();
+  }
+});
+
+$('themeBtn').onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = cur==='dark' ? 'light' : 'dark';
+  try{ localStorage.setItem('stats-theme', document.documentElement.dataset.theme); }catch(e){}
+};
+try{ const t = localStorage.getItem('stats-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){}
+
+window.PilotageAuth.ready.then(async info => { sb = info.sb; await load(); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden && sb && !editing && !deleting) load(); });
+</script>
+</body>
+</html>
