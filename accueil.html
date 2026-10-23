@@ -127,14 +127,14 @@ footer a{color:var(--text-2)}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav" id="nav" hidden><a href="accueil.html" class="on">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a></nav>
+  <nav class="tabsnav" id="nav" hidden><a href="accueil.html" class="on">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
 
   <header class="hero">
     <div>
       <h1>Outils de pilotage de l'agence</h1>
       <p class="lead">Planning des intérimaires, marges et ETP, actions commerciales. Connecte-toi avec le compte que l'agence t'a créé : tu verras les outils auxquels ton rôle donne accès.</p>
     </div>
-    <div class="userbar"><span id="who" hidden></span><button id="logoutBtn" type="button" hidden>Se déconnecter</button><button id="themeBtn" type="button">◐ Thème</button></div>
+    <div class="userbar"><span id="who" hidden></span><button id="pwdBtn" type="button" hidden>Changer mon mot de passe</button><button id="logoutBtn" type="button" hidden>Se déconnecter</button><button id="themeBtn" type="button">◐ Thème</button></div>
   </header>
 
   <section class="card login" id="loginSec" hidden>
@@ -145,6 +145,17 @@ footer a{color:var(--text-2)}
       <label>Mot de passe<input type="password" id="password" required autocomplete="current-password"></label>
       <button class="primary" type="submit" id="loginBtn">Se connecter</button>
       <span class="msg" id="loginMsg" role="status" aria-live="polite"></span>
+    </form>
+  </section>
+
+  <section class="card login" id="pwdSec" hidden>
+    <h2>Changer mon mot de passe</h2>
+    <form id="pwdForm" autocomplete="off">
+      <label>Nouveau mot de passe (8 caractères minimum)<input type="password" id="pwd1" minlength="8" required autocomplete="new-password"></label>
+      <label>Confirmer<input type="password" id="pwd2" minlength="8" required autocomplete="new-password"></label>
+      <button class="primary" type="submit" id="pwdOk">Enregistrer</button>
+      <button type="button" id="pwdCancel">Annuler</button>
+      <span class="msg" id="pwdMsg" role="status" aria-live="polite"></span>
     </form>
   </section>
 
@@ -163,6 +174,17 @@ footer a{color:var(--text-2)}
       </ul>
       <div class="actions"><a class="btn primary" href="planning-base.html">Ouvrir le planning partagé</a></div>
       <div class="src">Aucun fichier à choisir : tout est dans la base de l'agence</div>
+    </article>
+
+    <article class="card tool base" data-acces="admin">
+      <div class="tag"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M18 8v6M15 11h6"/></svg></span><h3>Gestion des comptes</h3></div>
+      <p>Ajouter une personne, changer son rôle ou ses agences, réinitialiser un mot de passe, suspendre un compte.</p>
+      <ul>
+        <li>Mot de passe provisoire affiché à la création</li>
+        <li>Une agence garde toujours un administrateur</li>
+      </ul>
+      <div class="actions"><a class="btn primary" href="comptes.html">Gérer les comptes</a></div>
+      <div class="src">Réservé aux administrateurs d'agence</div>
     </article>
 
     <article class="card tool plan" data-acces="responsable">
@@ -285,16 +307,17 @@ function suite(){
 function show(info){
   const logged = !!info.user;
   $('loginSec').hidden = logged; $('content').hidden = !logged; $('nav').hidden = !logged;
-  $('who').hidden = $('logoutBtn').hidden = !logged;
+  $('who').hidden = $('logoutBtn').hidden = $('pwdBtn').hidden = !logged;
   if (!logged){ setTimeout(() => $('email').focus(), 50); return; }
   const roles = [...new Set(info.memberships.map(m => ({admin:'administrateur', responsable:'responsable', commercial:'commercial', lecture:'lecture seule'}[m.role] || m.role)))];
   $('who').innerHTML = `<b>${info.user.email.replace(/[<>&"]/g, '')}</b>${roles.length ? ' · ' + roles.join(', ') : ''}`;
   const member = info.memberships.length > 0;
   document.querySelectorAll('[data-acces]').forEach(el => {
-    const ok = el.dataset.acces === 'responsable' ? info.isManager : el.dataset.acces === 'membre' ? member : true;
+    const ok = el.dataset.acces === 'admin' ? info.isAdmin : el.dataset.acces === 'responsable' ? info.isManager : el.dataset.acces === 'membre' ? member : true;
     el.hidden = !ok; if (el.tagName === 'A') el.style.display = ok ? '' : 'none';
   });
-  $('noAgency').hidden = member;
+  $('noAgency').hidden = member && !info.suspendu;
+  if (info.suspendu) $('noAgency').textContent = 'Ton compte a été suspendu par un administrateur : tu n\'as plus accès aux outils. Contacte-le si c\'est une erreur.';
 }
 window.PilotageAuth.ready.then(info => {
   if (info.user && suite() && info.memberships.length){ location.replace(suite()); return; }
@@ -309,6 +332,20 @@ $('loginForm').onsubmit = async e => {
   location.replace(suite() || 'accueil.html');      // recharge : auth.js relit la session et les droits
 };
 $('logoutBtn').onclick = async () => { await sb.auth.signOut(); location.replace('accueil.html'); };
+// changer son propre mot de passe
+$('pwdBtn').onclick = () => { $('pwdSec').hidden = false; $('pwdMsg').textContent = ''; $('pwd1').focus(); $('pwdSec').scrollIntoView({block:'nearest'}); };
+$('pwdCancel').onclick = () => { $('pwdSec').hidden = true; $('pwdForm').reset(); };
+$('pwdForm').onsubmit = async e => {
+  e.preventDefault();
+  const m = $('pwdMsg');
+  if ($('pwd1').value !== $('pwd2').value){ m.className = 'msg err'; m.textContent = 'Les deux saisies sont différentes.'; return; }
+  $('pwdOk').disabled = true; m.className = 'msg'; m.textContent = 'Enregistrement…';
+  const {error} = await sb.auth.updateUser({password: $('pwd1').value});
+  $('pwdOk').disabled = false;
+  if (error){ m.className = 'msg err'; m.textContent = /weak|short|least/i.test(error.message) ? 'Mot de passe trop simple : allonge-le ou mélange lettres, chiffres et symboles.' : /same/i.test(error.message) ? 'Choisis un mot de passe différent de l\'actuel.' : frErr(error); return; }
+  $('pwdForm').reset(); m.className = 'msg'; m.textContent = '✓ Mot de passe changé.';
+  setTimeout(() => { $('pwdSec').hidden = true; }, 1800);
+};
 
 // navigateur compatible ?
 (function(){

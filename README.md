@@ -2,7 +2,7 @@
 
 👉 **Point d'entrée : https://dominorh.github.io/pilotage/accueil.html** — connexion, puis accès aux outils autorisés par le rôle.
 
-Quatre outils dans le navigateur, sans installation :
+Quatre outils et une page d'administration, dans le navigateur, sans installation :
 
 | Outil | Page | Données | Accès |
 |---|---|---|---|
@@ -10,6 +10,7 @@ Quatre outils dans le navigateur, sans installation :
 | **Planning (Excel)** | `planning.html` | planning Excel de l'agence, lu sur le poste | responsables, administrateurs |
 | **Marges & ETP** | `marges.html` | exports CSV de marges, lus sur le poste | responsables, administrateurs |
 | **Actions commerciales** | `index.html` | exports Excel des actions, lus sur le poste | responsables, administrateurs |
+| **Gestion des comptes** | `comptes.html` | comptes et rôles (base de données) | administrateurs |
 
 La base de données ne sert qu'au **planning partagé** et aux **comptes de connexion**. Les outils Marges, Actions
 et Planning (Excel) continuent de lire les exports sur le poste : rien n'est envoyé dans la base.
@@ -21,13 +22,15 @@ et Planning (Excel) continuent de lire les exports sur le poste : rien n'est env
 - Ouvrir directement un outil sans être connecté renvoie vers l'accueil, puis ramène à la page demandée.
 - Un compte qui ouvre un outil non autorisé voit « Accès réservé » ; les onglets correspondants sont masqués.
 - « Se déconnecter » (en haut des pages) ramène à l'accueil ; une déconnexion dans un onglet ferme l'accès dans les autres.
+- **« Changer mon mot de passe »** sur l'accueil, pour tout le monde.
+- Un compte **suspendu** par un administrateur n'a plus accès à aucune page.
 
-| Rôle | Planning partagé | Verrouiller une semaine | Planning (Excel), Marges, Actions |
-|---|---|---|---|
-| `admin` | lecture + saisie | oui | oui |
-| `responsable` | lecture + saisie | oui | oui |
-| `commercial` | lecture + saisie (semaines ouvertes) | non | non |
-| `lecture` | lecture seule | non | non |
+| Rôle | Planning partagé | Verrouiller une semaine | Planning (Excel), Marges, Actions | Gestion des comptes |
+|---|---|---|---|---|
+| `admin` | lecture + saisie | oui | oui | oui |
+| `responsable` | lecture + saisie | oui | oui | non |
+| `commercial` | lecture + saisie (semaines ouvertes) | non | non | non |
+| `lecture` | lecture seule | non | non | non |
 
 Chaque compte ne voit que les agences auxquelles il est rattaché. Pour le planning partagé, les droits sont appliqués
 par la base elle-même (Row Level Security) : masquer un bouton n'est jamais la seule protection. Pour les outils
@@ -35,6 +38,16 @@ sur fichiers, le contrôle d'accès protège l'affichage ; leurs données resten
 
 Comptes, rôles et installation de la base : voir le **paquet de déploiement** (`LISEZMOI.md`, scripts SQL numérotés),
 fourni à part — il n'est pas dans ce dépôt.
+
+## Gestion des comptes (`comptes.html`)
+
+Réservée aux administrateurs, pour les agences qu'ils administrent :
+
+- **Ajouter une personne** (nom, adresse, agence, rôle) : un **mot de passe provisoire** est affiché une seule fois, à lui transmettre ; elle le change depuis l'accueil.
+- **Changer un rôle**, **ajouter / retirer une agence**, **nouveau mot de passe**, **suspendre / réactiver**, **supprimer** un compte.
+- **Comptes sans agence** (créés dans Supabase sans rattachement) : à rattacher ou supprimer.
+- Contrôles faits par la base à chaque action : on n'agit que sur ses agences, pas sur son propre compte, et **une agence garde toujours au moins un administrateur**.
+- Création, mot de passe et suppression passent par la fonction serveur Supabase `gerer-comptes` (la clé secrète ne quitte jamais Supabase). Sans elle, la page affiche un avertissement et le reste fonctionne.
 
 ## Planning partagé (`planning-base.html`)
 
@@ -150,6 +163,7 @@ accueil.html                page d'accueil : connexion, outils selon le rôle, a
 auth.js                     contrôle d'accès commun (session, rôles, redirection vers l'accueil, déconnexion)
 supabase-config.js          adresse de la base et clé publishable
 planning-base.html          Planning partagé (base de données)
+comptes.html                Gestion des comptes (administrateurs)
 planning.html               Planning (Excel)
 marges.html                 Marges & ETP
 export-marges-pptx.js       génération de la présentation PowerPoint (marges)

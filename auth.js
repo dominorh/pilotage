@@ -5,11 +5,13 @@
  * data-acces :
  *   "membre"       → tout compte rattaché à au moins une agence (planning partagé)
  *   "responsable"  → responsable ou administrateur d'au moins une agence (marges, actions, planning Excel)
+ *   "admin"        → administrateur d'au moins une agence (gestion des comptes)
  *   "public"       → page d'accueil : pas de redirection, la page gère elle-même la connexion
  * data-chip="non"  → ne pas ajouter « adresse · Se déconnecter » dans la barre d'onglets
  *
  * Sans session : retour à l'accueil (accueil.html?suite=<page>), qui ramène ici après connexion.
- * Les liens d'onglets marqués data-acces="responsable" sont masqués pour les autres rôles.
+ * Les liens d'onglets marqués data-acces="responsable" ou "admin" sont masqués pour les autres rôles.
+ * Un compte suspendu (profils.actif = false) n'a plus accès à aucune page.
  * Ce contrôle protège l'affichage ; les données de la base restent protégées côté serveur par les règles RLS.
  */
 (function(){
@@ -32,9 +34,13 @@
   const goLogin = () => location.replace('accueil.html?suite=' + encodeURIComponent(page));
 
   async function memberships(user){
-    const {data, error} = await sb.from('membres_agence').select('role, agence_id, agences(code, nom)').eq('profil_id', user.id);
-    if (error) throw error;
-    return data || [];
+    const [m, p] = await Promise.all([
+      sb.from('membres_agence').select('role, agence_id, agences(code, nom)').eq('profil_id', user.id),
+      sb.from('profils').select('actif').eq('id', user.id).maybeSingle()]);
+    if (m.error) throw m.error;
+    if (p.error) throw p.error;
+    if (p.data && p.data.actif === false) return null;          // compte suspendu
+    return m.data || [];
   }
 
   function esc(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -42,6 +48,7 @@
   function decorate(info){
     // onglets réservés aux responsables
     document.querySelectorAll('nav.tabsnav a[data-acces="responsable"]').forEach(a => { a.hidden = !info.isManager; if (!info.isManager) a.style.display = 'none'; });
+    document.querySelectorAll('nav.tabsnav a[data-acces="admin"]').forEach(a => { a.hidden = !info.isAdmin; if (!info.isAdmin) a.style.display = 'none'; });
     if (chip && info.user){
       const nav = document.querySelector('nav.tabsnav');
       if (nav && !nav.querySelector('.authchip')){
@@ -71,7 +78,7 @@
     const user = session ? session.user : null;
     if (!user){
       if (acces !== 'public') { goLogin(); return new Promise(() => {}); }   // la page ne doit pas continuer
-      return {sb, user: null, memberships: [], isManager: false};
+      return {sb, user: null, memberships: [], isManager: false, isAdmin: false};
     }
     let ms;
     try { ms = await memberships(user); }
@@ -80,7 +87,12 @@
       if (acces !== 'public'){ deny('Connexion à la base impossible', 'Vérifie ta connexion internet puis recharge la page.'); return new Promise(() => {}); }
       return {sb, user, memberships: [], isManager: false, error: e};
     }
-    const info = {sb, user, memberships: ms, isManager: ms.some(m => MANAGER.includes(m.role))};
+    if (ms === null){
+      if (acces !== 'public'){ deny('Compte suspendu', 'Ton compte a été suspendu par un administrateur. Contacte-le si c\'est une erreur.'); return new Promise(() => {}); }
+      return {sb, user, memberships: [], isManager: false, isAdmin: false, suspendu: true};
+    }
+    const info = {sb, user, memberships: ms, isManager: ms.some(m => MANAGER.includes(m.role)), isAdmin: ms.some(m => m.role === 'admin')};
+    if (acces === 'admin' && !info.isAdmin){ deny('Accès réservé', 'La gestion des comptes est réservée aux administrateurs d\'agence.'); return new Promise(() => {}); }
     if (acces === 'responsable' && !info.isManager){ deny('Accès réservé', 'Cet outil est réservé aux responsables et aux administrateurs d\'agence. Ton compte donne accès au planning partagé.'); return new Promise(() => {}); }
     if (acces === 'membre' && !ms.length){ deny('Compte non rattaché', 'Ton compte n\'est rattaché à aucune agence. Demande à l\'administrateur de t\'ajouter.'); return new Promise(() => {}); }
     const show = () => { decorate(info); document.documentElement.classList.remove('auth-wait'); };
