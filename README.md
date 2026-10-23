@@ -179,6 +179,14 @@ vendor/jszip.min.js         JSZip 3.10.1 (modification ciblée du .xlsx du plann
 
 Pas de compilation : HTML, CSS et JavaScript directement servis tels quels.
 
+## Charte graphique
+
+Couleurs Domino RH : **bleu `#142469`** (boutons, liens, barres principales, planning), **orange `#ed4018`**
+(seconde série : clients dans les actions, marge dans les barres CA = coût + marge) et **gris `#9b9b9b`** (coût,
+éléments secondaires). En thème sombre, le bleu est éclairci (`#8494dd` pour le texte, `#4b5fbf` pour les boutons)
+pour rester lisible. Les couleurs d'état (vert « en direct », orange foncé « alerte », rouge « marge négative »)
+gardent leur sens. Les présentations PowerPoint exportées utilisent les mêmes couleurs.
+
 ## Publication (GitHub Pages)
 
 *Settings → Pages → Build and deployment* : **Source = Deploy from a branch**, **Branch = `main` / `(root)`**.

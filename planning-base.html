@@ -7,13 +7,13 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Planning partagé</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='2' width='14' height='13' rx='2' fill='none' stroke='%232a78d6' stroke-width='1.5'/><rect x='1' y='2' width='14' height='4' rx='1' fill='%232a78d6'/><rect x='4' y='8' width='3' height='2' fill='%232a78d6'/><rect x='9' y='8' width='3' height='2' fill='%23eb6834'/><rect x='4' y='11.5' width='3' height='2' fill='%232a78d6'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='2' width='14' height='13' rx='2' fill='none' stroke='%23142469' stroke-width='1.5'/><rect x='1' y='2' width='14' height='4' rx='1' fill='%23142469'/><rect x='4' y='8' width='3' height='2' fill='%23142469'/><rect x='9' y='8' width='3' height='2' fill='%23ed4018'/><rect x='4' y='11.5' width='3' height='2' fill='%23142469'/></svg>">
 <style>
 :root{
   color-scheme: light;
   --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
   --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
-  --accent:#2a78d6; --day:#cde2fb; --day-strong:#9ec5f4; --day-text:#0d366b;
+  --accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b; --day:#dfe3f2; --day-strong:#b9c2e6; --day-text:#142469;
   --warn:#b25e00; --warn-bg:#fff1dc; --late:#c23a39; --late-bg:#fde6e5; --ok:#14865d;
   --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
 }
@@ -22,7 +22,7 @@
     color-scheme: dark;
     --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
     --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-    --accent:#3987e5; --day:#173a66; --day-strong:#1c5cab; --day-text:#e6f0fc;
+    --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --day:#1f2c66; --day-strong:#2f4396; --day-text:#e6eafa;
     --warn:#f0a44b; --warn-bg:#3a2a12; --late:#f08080; --late-bg:#3d1f1f; --ok:#4cc999;
     --shadow:none;
   }
@@ -31,7 +31,7 @@
   color-scheme: dark;
   --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
   --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-  --accent:#3987e5; --day:#173a66; --day-strong:#1c5cab; --day-text:#e6f0fc;
+  --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --day:#1f2c66; --day-strong:#2f4396; --day-text:#e6eafa;
   --warn:#f0a44b; --warn-bg:#3a2a12; --late:#f08080; --late-bg:#3d1f1f; --ok:#4cc999;
   --shadow:none;
 }
@@ -43,6 +43,8 @@ h1{font-size:22px;margin:0;letter-spacing:-.01em}
 h2{font-size:15px;margin:0 0 2px}
 .sub{color:var(--text-2);font-size:13px}
 .muted{color:var(--muted)}
+.brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
+.brandmark i{font-style:normal;color:var(--brand-orange)}
 nav.tabsnav{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
 nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
 nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
@@ -51,7 +53,7 @@ nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--
 button,select,input{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
 button{cursor:pointer}
 button:hover{background:var(--surface-2)}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
 select{min-width:120px;max-width:240px}
 label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--text-2)}
 label.chk{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--text-2);align-self:flex-end;padding-bottom:6px}
@@ -146,7 +148,7 @@ tr.editing td{padding-top:4px;padding-bottom:4px}
 @media (min-width:861px){ table.pl td.days{display:none} }
 @page{size:A4 landscape;margin:10mm}
 @media print{
-  :root,:root[data-theme="dark"]{color-scheme:light;--bg:#fff;--surface:#fff;--surface-2:#f4f3f0;--border:#d9d7d0;--grid:#e9e7e2;--text:#0b0b0b;--text-2:#52514e;--muted:#85837d;--accent:#2a78d6;--day:#cde2fb;--day-strong:#9ec5f4;--day-text:#0d366b;--warn:#b25e00;--warn-bg:#fff1dc;--late:#c23a39;--late-bg:#fde6e5;--shadow:none}
+  :root,:root[data-theme="dark"]{color-scheme:light;--bg:#fff;--surface:#fff;--surface-2:#f4f3f0;--border:#d9d7d0;--grid:#e9e7e2;--text:#0b0b0b;--text-2:#52514e;--muted:#85837d;--accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b;--day:#dfe3f2;--day-strong:#b9c2e6;--day-text:#142469;--warn:#b25e00;--warn-bg:#fff1dc;--late:#c23a39;--late-bg:#fde6e5;--shadow:none}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{font-size:10.5px}
   .wrap{max-width:none;padding:0}
@@ -187,7 +189,7 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav no-print" id="nav"><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
+  <nav class="tabsnav no-print" id="nav"><span class="brandmark">Domino <i>RH</i></span><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
   <header class="top">
     <div>
       <h1>Planning des intérimaires</h1>

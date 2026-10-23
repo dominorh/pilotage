@@ -7,13 +7,13 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Marges et ETP</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='2' width='10' height='3' rx='1' fill='%23c3c2b7'/><rect x='11' y='2' width='4' height='3' rx='1' fill='%231baf7a'/><rect x='1' y='7' width='7' height='3' rx='1' fill='%23c3c2b7'/><rect x='8' y='7' width='3' height='3' rx='1' fill='%231baf7a'/><rect x='1' y='12' width='5' height='3' rx='1' fill='%23c3c2b7'/><rect x='6' y='12' width='2' height='3' rx='1' fill='%231baf7a'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='2' width='10' height='3' rx='1' fill='%23c3c2b7'/><rect x='11' y='2' width='4' height='3' rx='1' fill='%239b9b9b'/><rect x='1' y='7' width='7' height='3' rx='1' fill='%23c3c2b7'/><rect x='8' y='7' width='3' height='3' rx='1' fill='%239b9b9b'/><rect x='1' y='12' width='5' height='3' rx='1' fill='%23c3c2b7'/><rect x='6' y='12' width='2' height='3' rx='1' fill='%239b9b9b'/></svg>">
 <style>
 :root{
   color-scheme: light;
   --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
   --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
-  --accent:#2a78d6; --bar:#2a78d6; --cost:#c9c7bf; --marge:#1baf7a; --neg:#e34948;
+  --accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b; --bar:#142469; --cost:#9b9b9b; --marge:#ed4018; --neg:#b3261e;
   --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
 }
 @media (prefers-color-scheme: dark){
@@ -21,7 +21,7 @@
     color-scheme: dark;
     --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
     --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-    --accent:#3987e5; --bar:#3987e5; --cost:#4a4945; --marge:#199e70; --neg:#e66767;
+    --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --bar:#8494dd; --cost:#5c5c5c; --marge:#f26a4b; --neg:#ff8a95;
     --shadow:none;
   }
 }
@@ -29,7 +29,7 @@
   color-scheme: dark;
   --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
   --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-  --accent:#3987e5; --bar:#3987e5; --cost:#4a4945; --marge:#199e70; --neg:#e66767;
+  --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --bar:#8494dd; --cost:#5c5c5c; --marge:#f26a4b; --neg:#ff8a95;
   --shadow:none;
 }
 *{box-sizing:border-box}
@@ -40,6 +40,8 @@ h1{font-size:22px;margin:0;letter-spacing:-.01em}
 h2{font-size:15px;margin:0 0 2px}
 .sub{color:var(--text-2);font-size:13px}
 .muted{color:var(--muted)}
+.brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
+.brandmark i{font-style:normal;color:var(--brand-orange)}
 nav.tabsnav{display:flex;gap:4px;margin-bottom:8px}
 nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
 nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
@@ -48,7 +50,7 @@ nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--
 button,select,input{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
 button{cursor:pointer}
 button:hover{background:var(--surface-2)}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
 button.danger{color:var(--neg)}
 button:disabled{opacity:.5;cursor:default}
 select{min-width:120px;max-width:220px}
@@ -134,7 +136,7 @@ code{font:12px ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
 /* ---------- impression / PDF ---------- */
 @page{size:A4 landscape;margin:12mm}
 @media print{
-  :root,:root[data-theme="dark"]{color-scheme:light;--bg:#fff;--surface:#fff;--surface-2:#f4f3f0;--border:#d9d7d0;--grid:#e9e7e2;--text:#0b0b0b;--text-2:#52514e;--muted:#85837d;--bar:#2a78d6;--cost:#c9c7bf;--marge:#1baf7a;--neg:#d03b3a;--shadow:none}
+  :root,:root[data-theme="dark"]{color-scheme:light;--bg:#fff;--surface:#fff;--surface-2:#f4f3f0;--border:#d9d7d0;--grid:#e9e7e2;--text:#0b0b0b;--text-2:#52514e;--muted:#85837d;--bar:#142469;--cost:#9b9b9b;--marge:#ed4018;--neg:#b3261e;--shadow:none}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{font-size:11px}
   .wrap{max-width:none;padding:0}
@@ -167,7 +169,7 @@ code{font:12px ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav no-print"><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable" class="on">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
+  <nav class="tabsnav no-print"><span class="brandmark">Domino <i>RH</i></span><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable" class="on">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
   <header class="top">
     <div>
       <h1>Marges &amp; ETP</h1>

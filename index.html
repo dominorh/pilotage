@@ -7,14 +7,14 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Statistiques commerciales</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='8' width='3' height='7' rx='1' fill='%232a78d6'/><rect x='6' y='4' width='3' height='11' rx='1' fill='%232a78d6'/><rect x='11' y='1' width='3' height='14' rx='1' fill='%23eb6834'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='8' width='3' height='7' rx='1' fill='%23142469'/><rect x='6' y='4' width='3' height='11' rx='1' fill='%23142469'/><rect x='11' y='1' width='3' height='14' rx='1' fill='%23ed4018'/></svg>">
 <style>
 :root{
   color-scheme: light;
   --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
   --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
-  --accent:#2a78d6; --s1:#2a78d6; --s2:#eb6834;
-  --h0:#f0efec; --h1:#cde2fb; --h2:#9ec5f4; --h3:#6da7ec; --h4:#3987e5; --h5:#256abf; --h6:#184f95;
+  --accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b; --s1:#142469; --s2:#ed4018;
+  --h0:#f0efec; --h1:#dfe3f2; --h2:#b9c2e6; --h3:#8a99d4; --h4:#5a6dbc; --h5:#2f4396; --h6:#142469;
   --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
 }
 @media (prefers-color-scheme: dark){
@@ -22,8 +22,8 @@
     color-scheme: dark;
     --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
     --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-    --accent:#3987e5; --s1:#3987e5; --s2:#d95926;
-    --h0:#232321; --h1:#104281; --h2:#1c5cab; --h3:#256abf; --h4:#3987e5; --h5:#6da7ec; --h6:#9ec5f4;
+    --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --s1:#8494dd; --s2:#f26a4b;
+    --h0:#232321; --h1:#18204a; --h2:#1f2c66; --h3:#2c3d8a; --h4:#4a5db0; --h5:#7385cf; --h6:#a6b3e6;
     --shadow:none;
   }
 }
@@ -31,8 +31,8 @@
   color-scheme: dark;
   --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
   --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-  --accent:#3987e5; --s1:#3987e5; --s2:#d95926;
-  --h0:#232321; --h1:#104281; --h2:#1c5cab; --h3:#256abf; --h4:#3987e5; --h5:#6da7ec; --h6:#9ec5f4;
+  --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --s1:#8494dd; --s2:#f26a4b;
+  --h0:#232321; --h1:#18204a; --h2:#1f2c66; --h3:#2c3d8a; --h4:#4a5db0; --h5:#7385cf; --h6:#a6b3e6;
   --shadow:none;
 }
 *{box-sizing:border-box}
@@ -47,7 +47,7 @@ h2{font-size:15px;margin:0 0 2px}
 button,select,input[type=search]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
 button{cursor:pointer}
 button:hover{background:var(--surface-2)}
-button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
 select{min-width:130px}
 label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--text-2)}
 .drop{border:1.5px dashed var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:.15s}
@@ -112,6 +112,8 @@ tbody tr.sel td{background:var(--surface-2);font-weight:600}
 .tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
 .tabs button.on{background:var(--text);color:var(--surface);border-color:var(--text)}
 .muted{color:var(--muted)}
+.brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
+.brandmark i{font-style:normal;color:var(--brand-orange)}
 nav.tabsnav{display:flex;gap:4px;margin-bottom:8px}
 nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
 nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
@@ -182,7 +184,7 @@ table.det td:last-child{min-width:200px}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav"><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable" class="on">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
+  <nav class="tabsnav"><span class="brandmark">Domino <i>RH</i></span><a href="accueil.html">Accueil</a><a href="index.html" data-acces="responsable" class="on">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
   <header class="top">
     <div>
       <h1>Statistiques commerciales</h1>

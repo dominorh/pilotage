@@ -7,13 +7,13 @@
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
 <title>Outils de pilotage</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='1' width='6' height='6' rx='1.5' fill='%232a78d6'/><rect x='9' y='1' width='6' height='6' rx='1.5' fill='%231baf7a'/><rect x='1' y='9' width='6' height='6' rx='1.5' fill='%23eb6834'/><rect x='9' y='9' width='6' height='6' rx='1.5' fill='%23c9c7bf'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='1' width='6' height='6' rx='1.5' fill='%23142469'/><rect x='9' y='1' width='6' height='6' rx='1.5' fill='%239b9b9b'/><rect x='1' y='9' width='6' height='6' rx='1.5' fill='%23ed4018'/><rect x='9' y='9' width='6' height='6' rx='1.5' fill='%23b9c2e6'/></svg>">
 <style>
 :root{
   color-scheme: light;
   --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
   --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
-  --accent:#2a78d6; --c-plan:#2a78d6; --c-marge:#1baf7a; --c-act:#eb6834;
+  --accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b; --c-plan:#142469; --c-marge:#ed4018; --c-act:#142469;
   --warn:#b25e00; --warn-bg:#fff1dc; --ok:#14865d; --ok-bg:#e3f5ec;
   --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
 }
@@ -22,7 +22,7 @@
     color-scheme: dark;
     --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
     --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-    --accent:#3987e5; --c-plan:#3987e5; --c-marge:#199e70; --c-act:#d95926;
+    --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --c-plan:#8494dd; --c-marge:#f26a4b; --c-act:#8494dd;
     --warn:#f0a44b; --warn-bg:#3a2a12; --ok:#4cc999; --ok-bg:#16332a;
     --shadow:none;
   }
@@ -31,13 +31,15 @@
   color-scheme: dark;
   --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
   --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
-  --accent:#3987e5; --c-plan:#3987e5; --c-marge:#199e70; --c-act:#d95926;
+  --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --c-plan:#8494dd; --c-marge:#f26a4b; --c-act:#8494dd;
   --warn:#f0a44b; --warn-bg:#3a2a12; --ok:#4cc999; --ok-bg:#16332a;
   --shadow:none;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .wrap{max-width:1080px;margin:0 auto;padding:20px 16px 64px}
+.brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
+.brandmark i{font-style:normal;color:var(--brand-orange)}
 nav.tabsnav{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
 nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
 nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
@@ -49,7 +51,7 @@ h3{font-size:15px;margin:0 0 4px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
 button,.btn{font:inherit;font-size:14px;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:8px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 button:hover,.btn:hover{background:var(--surface-2)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
 .btn.primary:hover{filter:brightness(1.06)}
 /* bandeau navigateur */
 .banner{border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
@@ -111,7 +113,7 @@ details ul{padding-left:18px}
 .login label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--text-2)}
 .login input{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 12px}
 .login input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
-.login button.primary{background:var(--accent);border-color:var(--accent);color:#fff;justify-content:center;padding:10px 14px}
+.login button.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff;justify-content:center;padding:10px 14px}
 .msg{font-size:13.5px;color:var(--text-2);min-height:1em}
 .msg.err{color:#c23a39;font-weight:600}
 .userbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13.5px;color:var(--text-2)}
@@ -131,6 +133,7 @@ footer a{color:var(--text-2)}
 
   <header class="hero">
     <div>
+      <div class="brandmark" style="padding:0 0 6px;font-size:14px">Domino <i>RH</i></div>
       <h1>Outils de pilotage de l'agence</h1>
       <p class="lead">Planning des intérimaires, marges et ETP, actions commerciales. Connecte-toi avec le compte que l'agence t'a créé : tu verras les outils auxquels ton rôle donne accès.</p>
     </div>

@@ -5,7 +5,7 @@
    ============================================================ */
 (function () {
   const INK = '1A1A19', INK2 = '52514E', MUTED = '85837D', GRID = 'EBE9E4', CARD = 'F4F3F0', BORDER = 'E2E0DA',
-        NAVY = '14213D', ICE = 'B7D3F6', COST = 'C9C7BF', MARGE = '1BAF7A', NEG = 'D03B3A', WHITE = 'FFFFFF';
+        NAVY = '142469', ICE = 'DFE3F2', COST = '9B9B9B', MARGE = 'ED4018', NEG = 'B3261E', WHITE = 'FFFFFF';
   const FONT = 'Calibri', W = 13.333, MX = 0.6, CW = W - 2 * MX;
   const cut = (s, n) => (s = String(s ?? '')).length > n ? s.slice(0, n - 1) + '…' : s;
   const pct0 = (a, b) => b ? Math.round(a / b * 100) : 0;

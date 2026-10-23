@@ -6,8 +6,8 @@
    ============================================================ */
 (function () {
   const INK = '1A1A19', INK2 = '52514E', MUTED = '85837D', GRID = 'EBE9E4',
-        CARD = 'F4F3F0', BORDER = 'E2E0DA', NAVY = '14213D', ICE = 'B7D3F6',
-        CAND = '2A78D6', CLI = 'EB6834', WHITE = 'FFFFFF';
+        CARD = 'F4F3F0', BORDER = 'E2E0DA', NAVY = '142469', ICE = 'DFE3F2',
+        CAND = '142469', CLI = 'ED4018', WHITE = 'FFFFFF';
   const FONT = 'Calibri';
   const W = 13.333, MX = 0.6, CW = W - 2 * MX;   // largeur utile
 
