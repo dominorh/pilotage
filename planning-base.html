@@ -181,6 +181,51 @@ tr.editing td{padding-top:4px;padding-bottom:4px}
 label.incl{display:inline-flex;gap:6px;align-items:center;font-size:12px;color:var(--text-2)}
 label.incl input{width:15px;height:15px;padding:0}
 input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
+/* vue grille (tableau de bord) */
+:root{--g0:#eef0f4;--g0t:#858b99;--g1:#dfe3f2;--g1t:#142469;--g2:#5a6dbc;--g2t:#fff;--g3:#142469;--g3t:#fff;--gwe:#f6f7fa}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g0:#2a2a28;--g0t:#a09f97;--g1:#1f2c66;--g1t:#e6eafa;--g2:#3a4fae;--g2t:#fff;--g3:#8494dd;--g3t:#0b1030;--gwe:#1d1d1c}}
+:root[data-theme="dark"]{--g0:#2a2a28;--g0t:#a09f97;--g1:#1f2c66;--g1t:#e6eafa;--g2:#3a4fae;--g2t:#fff;--g3:#8494dd;--g3t:#0b1030;--gwe:#1d1d1c}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:6px 12px;background:var(--surface)}
+.seg button+button{border-left:1px solid var(--border)}
+.seg button.on{background:var(--accent-fill);color:#fff}
+.gridwrap{overflow-x:auto;padding:0}
+table.gr{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:760px}
+table.gr th,table.gr td{padding:3px 4px;border-bottom:1px solid var(--grid);vertical-align:middle}
+table.gr thead th{font-size:11.5px;font-weight:600;color:var(--text-2);text-align:center;padding:10px 4px 8px;position:sticky;top:0;background:var(--surface)}
+table.gr thead th.l{text-align:left;padding-left:14px}
+table.gr thead th.today{color:var(--accent)}
+table.gr thead th.today .dt{background:var(--accent-fill);color:#fff;border-radius:999px;padding:0 6px}
+table.gr thead .dt{font-weight:400;color:var(--muted);display:inline-block;margin-top:2px}
+table.gr tr.cl td{background:var(--surface-2);padding:8px 14px;font-size:13px;border-bottom:1px solid var(--border)}
+table.gr tr.cl .cn{font-weight:700}
+table.gr tr.cl .cs{color:var(--text-2);font-size:12px;margin-left:10px;font-variant-numeric:tabular-nums}
+table.gr tr.cl.excl td{opacity:.6}
+.dotc{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:-1px}
+table.gr td.who{padding-left:10px;border-left:4px solid var(--cc);white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+table.gr td.who .nm{cursor:pointer}
+table.gr td.who .nm:hover{text-decoration:underline}
+table.gr td.met{font-size:11.5px;color:var(--text-2);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+table.gr td.c{text-align:center;width:58px}
+table.gr td.c.we{background:var(--gwe)}
+table.gr td.c.today{box-shadow:inset 2px 0 0 var(--accent),inset -2px 0 0 var(--accent)}
+.cell{display:block;border-radius:6px;padding:5px 0;font-weight:700;font-variant-numeric:tabular-nums;font-size:12.5px;line-height:1.2}
+.cell.n{color:var(--muted);font-weight:400}
+.cell.z{background:var(--g0);color:var(--g0t);font-weight:600}
+.cell.l1{background:var(--g1);color:var(--g1t)}
+.cell.l2{background:var(--g2);color:var(--g2t)}
+.cell.l3{background:var(--g3);color:var(--g3t)}
+table.gr td.tot{text-align:right;padding-right:14px;width:110px;font-variant-numeric:tabular-nums}
+.tb{height:4px;border-radius:2px;background:var(--grid);margin-top:4px;overflow:hidden}
+.tb i{display:block;height:100%;background:var(--accent-fill)}
+.tb i.over{background:var(--brand-orange)}
+table.gr tfoot td{font-weight:700;background:var(--surface-2);padding:9px 4px;text-align:center;font-variant-numeric:tabular-nums;border-bottom:0}
+table.gr tfoot td.l{text-align:left;padding-left:14px}
+.al{font-size:12px;margin-left:6px;cursor:help}
+.al.warn{color:var(--warn)} .al.late{color:var(--late)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--text-2);padding:10px 14px;border-top:1px solid var(--grid)}
+.legend .cell{display:inline-block;width:30px;padding:2px 0;text-align:center;margin-right:5px;font-size:11px}
+@media print{.gridwrap{overflow:visible}table.gr{min-width:0;font-size:10px}table.gr thead th{position:static}.cell{padding:2px 0;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--text);color:var(--surface);padding:9px 14px;border-radius:10px;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:20;max-width:min(92vw,560px)}
 .toast.err{background:var(--late);color:#fff}
 .toast:empty{display:none}
@@ -221,6 +266,7 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
           <span class="lock" id="lockBadge"></span>
           <button id="lockBtn" hidden></button>
           <button id="nextWeekBtn" hidden title="Copie les clients et les intérimaires encore en mission dans la semaine suivante">+ Préparer la semaine suivante</button>
+          <span class="seg no-print" id="vueSeg" title="Vue du planning"><button data-vue="grille">Grille</button><button data-vue="detail">Détail</button></span>
           <button id="editBtn" hidden>✎ Modifier</button>
           <button id="xlsBtn" title="Télécharge la semaine affichée au format Excel">Excel</button>
           <button id="pdfBtn">PDF</button>
@@ -272,7 +318,8 @@ const sb = window.PilotageAuth.sb;          // client partagé créé par auth.j
 const state = {
   user: null, memberships: [], agence: null, role: null, param: null,
   weeks: [], week: null, rows: [], clients: [],
-  F: {client:'', q:'', excl:false}, edit: false, channel: null, live: false
+  F: {client:'', q:'', excl:false}, edit: false, channel: null, live: false,
+  vue: lsGet('pb-vue', 'grille')                        // « grille » (tableau de bord) ou « detail »
 };
 const canPlan = () => ['admin','responsable','commercial'].includes(state.role);
 const canManage = () => ['admin','responsable'].includes(state.role);
@@ -444,8 +491,11 @@ function render(){
     <div class="card kpi"><div class="v">${new Set(incl.map(r => r.client_id)).size}</div><div class="l">Clients</div></div>
     <div class="card kpi ${alerts ? 'warn' : ''}"><div class="v">${alerts}</div><div class="l">Fins de contrat</div><div class="s">cette semaine ou dépassées</div></div>
   </div>`;
-  h += `<div class="card sec" id="daySec"><div class="sec-h"><div><h2>Heures par jour</h2></div></div><div class="daysum">${perDay.map((v,i) =>
+  if (!(state.vue === 'grille' && !editing)) h += `<div class="card sec" id="daySec"><div class="sec-h"><div><h2>Heures par jour</h2></div></div><div class="daysum">${perDay.map((v,i) =>
       `<div class="ds ${i>4?'we':''}"><div class="v">${v ? nf1.format(v) : '–'}</div><div class="bar" style="height:${Math.round(v/maxDay*90)}%"></div><div class="l" ${sameDay(days[i],today)?'style="color:var(--accent);font-weight:600"':''}>${JOURS[i]} ${fdate(days[i])}</div></div>`).join('')}</div></div>`;
+
+  document.querySelectorAll('#vueSeg button').forEach(b => b.classList.toggle('on', b.dataset.vue === (editing ? 'detail' : state.vue)));
+  if (state.vue === 'grille' && !editing){ $('main').innerHTML = h + renderGrid(rows, days, today); return; }
 
   // blocs par client (dans l'ordre de la semaine)
   const order = state.clients.map(c => c.id);
@@ -484,6 +534,44 @@ function render(){
     h += `</tbody></table></div>`;
   }
   $('main').innerHTML = h;
+}
+
+/* =================== vue grille (tableau de bord) =================== */
+const PALETTE = ['#142469','#ed4018','#2f8f6b','#7b5cd6','#c98a00','#0e7c86','#9b9b9b','#b0417a','#4d7cc7','#6b4f2a'];
+const isDark = () => document.documentElement.dataset.theme === 'dark' || (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+const clientColor = id => { const c = PALETTE[Math.max(0, state.clients.findIndex(x => x.id === id)) % PALETTE.length]; return c === '#142469' && isDark() ? '#8494dd' : c; };   // bleu marine illisible sur fond sombre
+const niveau = v => v == null ? 'n' : v === 0 ? 'z' : v < 7 ? 'l1' : v <= 9 ? 'l2' : 'l3';
+function renderGrid(rows, days, today){
+  const byClient = new Map();
+  for (const r of rows){ if (!byClient.has(r.client_id)) byClient.set(r.client_id, []); byClient.get(r.client_id).push(r); }
+  const shown = state.clients.filter(c => byClient.has(c.id));
+  if (!shown.length) return `<div class="card empty">Aucune ligne pour ces filtres.</div>`;
+  const ti = days.findIndex(d => sameDay(d, today));
+  const base = hbase();
+  let h = `<div class="card gridwrap"><table class="gr"><thead><tr><th class="l" style="width:22%">Intérimaire</th><th class="l" style="width:14%">Métier</th>
+    ${days.map((d,i) => `<th class="${i === ti ? 'today' : ''}">${JOURS[i]}<br><span class="dt">${fdate(d)}</span></th>`).join('')}<th style="text-align:right;padding-right:14px">Semaine</th></tr></thead><tbody>`;
+  const perDay = days.map(() => 0); let total = 0;
+  for (const c of shown){
+    const rs = byClient.get(c.id), col = clientColor(c.id);
+    const ct = rs.reduce((s,r) => s + rowTotal(r), 0), ca = rs.filter(r => r.alerte_contrat).length;
+    h += `<tr class="cl ${c.inclus ? '' : 'excl'}"><td colspan="${days.length + 3}"><span class="dotc" style="background:${col}"></span><span class="cn">${esc(c.nom)}</span>
+      <span class="cs">${rs.length} intérimaire(s) · ${nf1.format(ct)} h · ${nf2.format(ct / base)} ETP</span>${c.inclus ? '' : ' <span class="badge mute">exclu (sans 1)</span>'}${ca ? ` <span class="badge warn">${ca} fin(s) de contrat</span>` : ''}</td></tr>`;
+    for (const r of rs){
+      const t = rowTotal(r);
+      if (c.inclus){ total += t; days.forEach((d,i) => perDay[i] += dayVal(r,i) || 0); }
+      const info = [r.contrat && 'Contrat : ' + r.contrat, r.vm && 'VM : ' + r.vm, r.commentaire, (r.date_debut || r.date_fin) && `Mission : ${fdate(parseD(r.date_debut)) || '?'} → ${fdate(parseD(r.date_fin)) || '?'}`].filter(Boolean).join(' · ');
+      const al = r.alerte_contrat ? `<span class="al ${r.alerte_contrat === 'fin dépassée' ? 'late' : 'warn'}" title="${esc(r.alerte_contrat)} (fin le ${fdate(parseD(r.date_fin))})">⚠</span>` : '';
+      h += `<tr title="${esc(info)}"><td class="who" style="--cc:${col}"><span class="nm" data-voir="${esc(r.interimaire)}">${esc(r.interimaire)}</span>${al}</td><td class="met">${esc(r.metier || '')}</td>
+        ${days.map((d,i) => { const v = dayVal(r,i), n = niveau(v);
+          return `<td class="c ${i > 4 ? 'we' : ''} ${i === ti ? 'today' : ''}"><span class="cell ${n}" title="${JOURS[i]} ${fdate(d)} : ${v == null ? 'non saisi' : nf1.format(v) + ' h'}">${v == null ? '·' : nf1.format(v)}</span></td>`; }).join('')}
+        <td class="tot"><b>${nf1.format(t)} h</b><div class="tb" title="${nf1.format(t)} h sur ${base} h"><i class="${t > base ? 'over' : ''}" style="width:${Math.min(100, Math.round(t / base * 100))}%"></i></div></td></tr>`;
+    }
+  }
+  h += `</tbody><tfoot><tr><td class="l" colspan="2">Total des clients suivis (1)</td>${perDay.map(v => `<td>${v ? nf1.format(v) : '–'}</td>`).join('')}<td style="text-align:right;padding-right:14px">${nf1.format(total)} h · ${nf2.format(total / base)} ETP</td></tr></tfoot></table>
+    <div class="legend"><span><span class="cell n" style="background:none">·</span>non saisi</span><span><span class="cell z">0</span>absent / 0 h</span><span><span class="cell l1">5</span>moins de 7 h</span>
+      <span><span class="cell l2">7</span>7 à 9 h</span><span><span class="cell l3">10</span>plus de 9 h</span><span>Barre : heures de la semaine sur ${base} h (orange au-delà)</span>
+      <span>⚠ fin de contrat</span><span class="no-print">Cliquer sur un nom : voir le détail de la ligne</span></div></div>`;
+  return h;
 }
 
 /* =================== enregistrement =================== */
@@ -576,6 +664,12 @@ function confirmInline(btn, label){
   return false;
 }
 $('editBtn').onclick = () => { state.edit = !state.edit; render(); };
+document.addEventListener('click', e => {
+  const v = e.target.closest('#vueSeg button');
+  if (v){ state.vue = v.dataset.vue; lsSet('pb-vue', state.vue); if (state.vue === 'grille') state.edit = false; render(); return; }
+  const n = e.target.closest('[data-voir]');
+  if (n){ state.F.q = n.dataset.voir; $('search').value = n.dataset.voir; state.vue = 'detail'; lsSet('pb-vue', 'detail'); render(); window.scrollTo({top: 0, behavior: 'smooth'}); }
+});
 
 /* =================== filtres =================== */
 $('fAgence').onchange = e => selectAgence(e.target.value);

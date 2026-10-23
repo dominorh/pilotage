@@ -81,6 +81,11 @@ Réservée aux administrateurs, pour les agences qu'ils administrent :
 ## Planning partagé (`planning-base.html`)
 
 - Semaine (‹ ›), agence (si plusieurs), client, recherche, clients exclus (sans « 1 »).
+- **Vue Grille** (par défaut) : une ligne par intérimaire, une case colorée par jour (non saisi, 0 h, moins de 7 h, 7 à 9 h,
+  plus de 9 h), une couleur par client, le jour courant encadré, une barre des heures de la semaine sur la base ETP
+  (orange au-delà), ⚠ pour les fins de contrat et le total par jour. Un clic sur un nom ouvre le détail de la ligne.
+- **Vue Détail** : un bloc par client avec contrat, VM, commentaire et dates ; c'est la vue utilisée pour modifier.
+  Le choix de la vue est mémorisé.
 - Chiffres de la semaine (heures et ETP des clients suivis, intérimaires, clients, fins de contrat), heures par jour,
   un bloc par client avec les heures du lundi au dimanche, le total et l'ETP (heures / 35).
 - **✎ Modifier** (commercial, responsable, administrateur) : heures par jour, métier, contrat, VM, commentaire, dates de
