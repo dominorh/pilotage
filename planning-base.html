@@ -45,6 +45,8 @@ h2{font-size:15px;margin:0 0 2px}
 .muted{color:var(--muted)}
 .brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
 .brandmark i{font-style:normal;color:var(--brand-orange)}
+nav.tabsnav a.brandmark{border:0;border-radius:0;background:none;text-decoration:none;padding:4px 12px 4px 0;color:var(--accent);font-size:12.5px}
+nav.tabsnav a.brandmark:hover{opacity:.8}
 nav.tabsnav{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
 nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
 nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
@@ -189,7 +191,7 @@ input.ed.err{border-color:var(--late);box-shadow:0 0 0 2px rgba(194,58,57,.2)}
 </head>
 <body>
 <div class="wrap">
-  <nav class="tabsnav no-print" id="nav"><span class="brandmark">Domino <i>RH</i></span><a href="index.html">Accueil</a><a href="actions.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
+  <nav class="tabsnav no-print" id="nav"><a class="brandmark" href="index.html" title="Retour à la page de garde">Domino <i>RH</i></a><a href="index.html">Accueil</a><a href="actions.html" data-acces="responsable">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html" class="on">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
   <header class="top">
     <div>
       <h1>Planning des intérimaires</h1>
