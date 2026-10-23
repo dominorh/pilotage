@@ -27,12 +27,12 @@ vers la page de garde, puis ramène à l'outil après la connexion.
 | **Générateur de propositions commerciales** | [`proposition_commerciale_domino.html`](./proposition_commerciale_domino.html) | saisie dans la page | tous les comptes |
 | **Calculateur pédagogique de marge** | [`calculateur_marge_pedagogique.html`](./calculateur_marge_pedagogique.html) | saisie dans la page | tous les comptes |
 | **Comparateur chauffeur PL / TP** | [`comparateur_remuneration_chauffeur_TP.html`](./comparateur_remuneration_chauffeur_TP.html) | saisie dans la page | tous les comptes |
-| **Dashboard recrutement** | [`dashboard_recrutement_github_version.html`](./dashboard_recrutement_github_version.html) | import dans la page | tous les comptes |
 
 - L'ancien **Reporting des marges** est remplacé par **Marges & ETP** : l'adresse `reporting_marges.html` y redirige.
+- L'ancien **Dashboard recrutement** lisait les mêmes exports Tempo que **Actions commerciales**, qui le remplace : l'adresse `dashboard_recrutement_github_version.html` y redirige.
 - Le calculateur pédagogique utilise des taux et coefficients modifiables ; il sert à comparer des hypothèses et ne remplace pas un paramétrage paie validé.
 - Pour créer un PDF depuis le générateur commercial, utiliser **Imprimer / enregistrer en PDF**, puis choisir l'enregistrement PDF dans la fenêtre d'impression.
-- Les outils simples (propositions, calculateur, comparateur, dashboard) affichent en haut un bandeau commun : retour à l'espace outils et déconnexion.
+- Les outils simples (propositions, calculateur, comparateur) affichent en haut un bandeau commun : retour à l'espace outils et déconnexion.
 - Pour changer qui a accès à un outil : attribut `data-acces` de la balise `auth.js` en tête de la page (`membre`, `responsable` ou `admin`) et de sa carte dans `index.html`.
 
 ## Connexion et rôles
@@ -45,7 +45,7 @@ vers la page de garde, puis ramène à l'outil après la connexion.
 - **« Changer mon mot de passe »** sur la page de garde, pour tout le monde.
 - Un compte **suspendu** par un administrateur n'a plus accès à aucune page.
 
-| Rôle | Planning partagé | Verrouiller une semaine | Planning (Excel), Marges, Actions | Gestion des comptes | Propositions, calculateur, comparateur, dashboard recrutement |
+| Rôle | Planning partagé | Verrouiller une semaine | Planning (Excel), Marges, Actions | Gestion des comptes | Propositions, calculateur, comparateur |
 |---|---|---|---|---|---|
 | `admin` | lecture + saisie | oui | oui | oui | oui |
 | `responsable` | lecture + saisie | oui | oui | non | oui |
@@ -194,7 +194,7 @@ reporting_marges.html       ancien reporting des marges → redirige vers marges
 proposition_commerciale_domino.html         Générateur de propositions commerciales
 calculateur_marge_pedagogique.html          Calculateur pédagogique de marge
 comparateur_remuneration_chauffeur_TP.html  Comparateur de rémunération chauffeur PL / TP
-dashboard_recrutement_github_version.html   Dashboard recrutement
+dashboard_recrutement_github_version.html   ancien dashboard recrutement → redirige vers actions.html
 charte.css                  style commun des pages de pilotage (en-tête bleu marine, police, couleurs de la charte)
 auth.js                     contrôle d'accès commun (session, rôles, redirection vers la page de garde, bandeau, déconnexion)
 supabase-config.js          adresse de la base et clé publishable
@@ -232,5 +232,4 @@ gardent leur sens. Les présentations PowerPoint exportées utilisent les mêmes
 *Settings → Pages → Build and deployment* : **Source = Deploy from a branch**, **Branch = `main` / `(root)`**.
 La nouvelle version est en ligne en une ou deux minutes après chaque mise à jour de `main` (Ctrl+F5 pour la recharger).
 
-Les outils de simulation et de développement commercial (propositions, calculateur, comparateur, dashboard
-recrutement) et la page de garde viennent du dépôt **DOMINOSO** (afkfeclope/DOMINOSO), réunis ici avec les outils de pilotage.
+Les outils de simulation et de développement commercial (propositions, calculateur, comparateur) et la page de garde viennent du dépôt **DOMINOSO** (afkfeclope/DOMINOSO), réunis ici avec les outils de pilotage.
