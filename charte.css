@@ -1,0 +1,78 @@
+/* =============================================================================
+   Charte DOMINO RH commune aux pages de pilotage (planning, marges, actions, comptes, agences)
+   Reprend le style de l'espace outils (page de garde et outils DOMINOSO) :
+   en-tête bleu marine pleine largeur avec les onglets, police Arial, fond gris-bleu, cartes arrondies.
+   Chargé APRÈS les styles de chaque page : il ne fait que les ajuster.
+   ============================================================================= */
+
+/* ---------- couleurs du thème clair (le thème sombre de chaque page reste inchangé) ---------- */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f5f6f9; --surface:#fff; --surface-2:#eef1f7; --border:#e0e3eb; --grid:#e8ebf2;
+    --text:#232323; --text-2:#5c6372; --muted:#858b99;
+    --shadow:0 3px 14px rgba(20,36,105,.05);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f6f9; --surface:#fff; --surface-2:#eef1f7; --border:#e0e3eb; --grid:#e8ebf2;
+  --text:#232323; --text-2:#5c6372; --muted:#858b99;
+  --shadow:0 3px 14px rgba(20,36,105,.05);
+}
+:root{ --band:#142469; --band-2:#283d8d; --band-text:#fff; --band-soft:#d9def1; --band-line:#ffffff38; --band-fill:#ffffff14; }
+
+body{font-family:Arial,Helvetica,sans-serif}
+.card{border-radius:16px}
+
+/* ---------- en-tête bleu marine pleine largeur : onglets + titre ---------- */
+.wrap{padding-top:0}
+.wrap > nav.tabsnav,
+.wrap > header.top,
+.wrap > header.hero{
+  position:relative;
+  background:var(--band);
+  /* le fond déborde sur toute la largeur de la fenêtre, le contenu reste aligné sur la page */
+  box-shadow:0 0 0 100vmax var(--band);
+  clip-path:inset(0 -100vmax);
+  color:var(--band-text);
+}
+/* raccord sans liseré entre la barre d'onglets et le titre */
+.wrap > nav.tabsnav{clip-path:inset(0 -100vmax -2px)}
+.wrap > header.top, .wrap > header.hero{clip-path:inset(-2px -100vmax 0)}
+.wrap > nav.tabsnav{padding:14px 0 6px;margin:0;align-items:center}
+.wrap > header.top,
+.wrap > header.hero{padding:14px 0 26px;margin:0 0 22px;align-items:flex-end}
+
+/* onglets sur fond bleu */
+.wrap > nav.tabsnav a{color:var(--band-soft);border-color:var(--band-line);background:var(--band-fill)}
+.wrap > nav.tabsnav a:hover{background:#ffffff26;color:#fff}
+.wrap > nav.tabsnav a.on{background:#fff;color:var(--band);border-color:#fff;font-weight:700}
+.wrap > nav.tabsnav a.brandmark,
+.wrap > nav.tabsnav .brandmark{color:#fff;background:none;border:0;letter-spacing:.12em;font-weight:800}
+.wrap > nav.tabsnav .brandmark i{color:#ed4018}
+.wrap > nav.tabsnav .authchip{color:var(--band-soft)!important}
+.wrap > nav.tabsnav .authchip a{color:#fff!important;background:none;border:0;padding:0;text-decoration:underline}
+
+/* titres et textes de l'en-tête */
+.wrap > header h1{color:#fff;letter-spacing:-.02em}
+.wrap > header .sub,
+.wrap > header .lead,
+.wrap > header .muted,
+.wrap > header .userbar,
+.wrap > header .status{color:var(--band-soft)}
+.wrap > header .userbar b{color:#fff}
+
+/* boutons de l'en-tête : contour clair ; bouton principal orange, comme dans l'espace outils */
+.wrap > header button,
+.wrap > header .btn{color:#fff;background:var(--band-fill);border-color:var(--band-line)}
+.wrap > header button:hover,
+.wrap > header .btn:hover{background:#ffffff26}
+.wrap > header button.primary,
+.wrap > header .btn.primary{background:#ed4018;border-color:#ed4018;color:#fff}
+.wrap > header button.primary:hover{filter:brightness(1.06)}
+
+/* ---------- impression : pas de bandeau coloré ---------- */
+@media print{
+  .wrap > nav.tabsnav, .wrap > header.top, .wrap > header.hero{background:none!important;box-shadow:none!important;clip-path:none!important;color:#0b0b0b!important;padding:0 0 8px!important}
+  .wrap > header h1{color:#0b0b0b!important}
+  .wrap > header .sub, .wrap > header .lead{color:#52514e!important}
+}

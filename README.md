@@ -195,6 +195,7 @@ proposition_commerciale_domino.html         Générateur de propositions commerc
 calculateur_marge_pedagogique.html          Calculateur pédagogique de marge
 comparateur_remuneration_chauffeur_TP.html  Comparateur de rémunération chauffeur PL / TP
 dashboard_recrutement_github_version.html   Dashboard recrutement
+charte.css                  style commun des pages de pilotage (en-tête bleu marine, police, couleurs de la charte)
 auth.js                     contrôle d'accès commun (session, rôles, redirection vers la page de garde, bandeau, déconnexion)
 supabase-config.js          adresse de la base et clé publishable
 planning-base.html          Planning partagé (base de données)
@@ -216,6 +217,9 @@ vendor/jszip.min.js         JSZip 3.10.1 (modification ciblée du .xlsx du plann
 Pas de compilation : HTML, CSS et JavaScript directement servis tels quels.
 
 ## Charte graphique
+
+Toutes les pages suivent le style de l'espace outils : en-tête bleu marine pleine largeur, police Arial, fond gris-bleu.
+Pour les pages de pilotage, ce style est regroupé dans `charte.css` (à modifier à un seul endroit).
 
 Couleurs Domino RH : **bleu `#142469`** (boutons, liens, barres principales, planning), **orange `#ed4018`**
 (seconde série : clients dans les actions, marge dans les barres CA = coût + marge) et **gris `#9b9b9b`** (coût,
