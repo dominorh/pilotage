@@ -1,6 +1,6 @@
 /* ============================================================
    Suppression d'un fichier importé, depuis la liste des fichiers.
-   Utilisé par index.html (Actions commerciales) et marges.html (Marges & ETP).
+   Utilisé par actions.html (Actions commerciales) et marges.html (Marges & ETP).
    Repose sur les variables de la page : dirHandle, snapshotFiles, manual,
    lastSig, sync().
 

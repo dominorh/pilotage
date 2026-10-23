@@ -9,7 +9,7 @@
  *   "public"       → page d'accueil : pas de redirection, la page gère elle-même la connexion
  * data-chip="non"  → ne pas ajouter « adresse · Se déconnecter » dans la barre d'onglets
  *
- * Sans session : retour à l'accueil (accueil.html?suite=<page>), qui ramène ici après connexion.
+ * Sans session : retour à l'accueil (index.html?suite=<page>), qui ramène ici après connexion.
  * Les liens d'onglets marqués data-acces="responsable" ou "admin" sont masqués pour les autres rôles.
  * Un compte suspendu (profils.actif = false) n'a plus accès à aucune page.
  * Ce contrôle protège l'affichage ; les données de la base restent protégées côté serveur par les règles RLS.
@@ -19,7 +19,7 @@
   const acces = (me && me.dataset.acces) || 'membre';
   const chip = !(me && me.dataset.chip === 'non');
   const CFG = window.PILOTAGE_SUPABASE || {};
-  const page = (location.pathname.split('/').pop() || 'accueil.html') + location.search + location.hash;
+  const page = (location.pathname.split('/').pop() || 'index.html') + location.search + location.hash;
   const MANAGER = ['admin', 'responsable'];
 
   // masquer la page tant que l'accès n'est pas vérifié (pas d'aperçu furtif)
@@ -31,7 +31,7 @@
   }
 
   const sb = window.supabase.createClient(CFG.url, CFG.key, {auth:{persistSession:true, autoRefreshToken:true, storageKey:'pilotage-auth'}});
-  const goLogin = () => location.replace('accueil.html?suite=' + encodeURIComponent(page));
+  const goLogin = () => location.replace('index.html?suite=' + encodeURIComponent(page));
 
   async function memberships(user){
     const [m, p] = await Promise.all([
@@ -59,6 +59,17 @@
         s.querySelector('a').onclick = async e => { e.preventDefault(); await sb.auth.signOut(); };   // le retour à l'accueil est fait par onAuthStateChange
         nav.appendChild(s);
       }
+      // pages sans barre d'onglets (outils simples) : bandeau commun en haut de page
+      if (!nav && !document.getElementById('authbar')){
+        const b = document.createElement('div');
+        b.id = 'authbar';
+        b.style.cssText = 'display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:7px 16px;background:#142469;color:#fff;font:13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;position:relative;z-index:1000';
+        b.innerHTML = `<a href="index.html" style="color:#fff;text-decoration:none;font-weight:700;letter-spacing:.06em">DOMINO <span style="color:#ed4018">RH</span> <span style="font-weight:400;letter-spacing:0;opacity:.85">· ← Espace outils</span></a>
+          <span style="display:inline-flex;gap:12px;align-items:center"><span style="opacity:.85">${esc(info.user.email)}</span><a href="#" style="color:#fff">Se déconnecter</a></span>`;
+        b.querySelector('a[href="#"]').onclick = async e => { e.preventDefault(); await sb.auth.signOut(); };
+        document.body.insertBefore(b, document.body.firstChild);
+        const st = document.createElement('style'); st.textContent = '@media print{#authbar{display:none!important}}'; document.head.appendChild(st);
+      }
     }
   }
 
@@ -66,7 +77,7 @@
     const run = () => {
       document.body.innerHTML = `<div style="max-width:520px;margin:12vh auto;padding:24px;font:15px/1.5 system-ui,sans-serif;background:var(--surface,#fff);color:var(--text,#111);border:1px solid var(--border,#ddd);border-radius:14px">
         <h1 style="font-size:20px;margin:0 0 8px">${esc(title)}</h1><p style="margin:0 0 16px;color:var(--text-2,#555)">${text}</p>
-        <p style="margin:0;display:flex;gap:14px;flex-wrap:wrap"><a href="accueil.html">Retour à l'accueil</a><a href="planning-base.html">Planning partagé</a><a href="#" id="authOut">Se déconnecter</a></p></div>`;
+        <p style="margin:0;display:flex;gap:14px;flex-wrap:wrap"><a href="index.html">Retour à l'espace outils</a><a href="planning-base.html">Planning partagé</a><a href="#" id="authOut">Se déconnecter</a></p></div>`;
       document.getElementById('authOut').onclick = async e => { e.preventDefault(); await sb.auth.signOut(); };
       document.documentElement.classList.remove('auth-wait');
     };
@@ -101,7 +112,7 @@
   })();
 
   // déconnexion depuis un autre onglet → retour à l'accueil
-  sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_OUT' && acces !== 'public') location.replace('accueil.html'); });
+  sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_OUT' && acces !== 'public') location.replace('index.html'); });
 
   window.PilotageAuth = {sb, ready, MANAGER};
 })();

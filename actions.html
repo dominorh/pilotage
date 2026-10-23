@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Statistiques commerciales</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='8' width='3' height='7' rx='1' fill='%23142469'/><rect x='6' y='4' width='3' height='11' rx='1' fill='%23142469'/><rect x='11' y='1' width='3' height='14' rx='1' fill='%23ed4018'/></svg>">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f4f3f0; --surface:#fcfcfb; --surface-2:#f0efec; --border:#e2e0da; --grid:#ebe9e4;
+  --text:#0b0b0b; --text-2:#52514e; --muted:#85837d;
+  --accent:#142469; --accent-fill:#142469; --brand-orange:#ed4018; --brand-gray:#9b9b9b; --s1:#142469; --s2:#ed4018;
+  --h0:#f0efec; --h1:#dfe3f2; --h2:#b9c2e6; --h3:#8a99d4; --h4:#5a6dbc; --h5:#2f4396; --h6:#142469;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
+    --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
+    --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --s1:#8494dd; --s2:#f26a4b;
+    --h0:#232321; --h1:#18204a; --h2:#1f2c66; --h3:#2c3d8a; --h4:#4a5db0; --h5:#7385cf; --h6:#a6b3e6;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --border:#2f2f2c; --grid:#2a2a28;
+  --text:#f0efec; --text-2:#c3c2b7; --muted:#8d8c84;
+  --accent:#8494dd; --accent-fill:#4b5fbf; --brand-orange:#f26a4b; --brand-gray:#8a8a8a; --s1:#8494dd; --s2:#f26a4b;
+  --h0:#232321; --h1:#18204a; --h2:#1f2c66; --h3:#2c3d8a; --h4:#4a5db0; --h5:#7385cf; --h6:#a6b3e6;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 60px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+h1{font-size:22px;margin:0;letter-spacing:-.01em}
+h2{font-size:15px;margin:0 0 2px}
+.sub{color:var(--text-2);font-size:13px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+button,select,input[type=search]{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}
+button:hover{background:var(--surface-2)}
+button.primary{background:var(--accent-fill);border-color:var(--accent-fill);color:#fff}
+select{min-width:130px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--text-2)}
+.drop{border:1.5px dashed var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;transition:.15s}
+.drop.over{border-color:var(--accent);background:var(--surface-2)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:3px 6px 3px 10px;font-size:12px}
+.chip button{border:0;background:none;padding:0 4px;color:var(--muted);line-height:1}
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;margin:8px 0}
+.filters .card{padding:10px 14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
+.kpi .v{font-size:28px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--text-2);font-size:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.sec{margin-bottom:16px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--text-2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+/* bars */
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar-row{display:grid;grid-template-columns:minmax(110px,190px) 1fr 44px;gap:10px;align-items:center;cursor:default}
+.bar-row.click{cursor:pointer}
+.bar-row.click:hover .bl{color:var(--accent)}
+.bar-row.sel .bl{color:var(--accent);font-weight:600}
+.bl{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bt{height:18px;display:flex;gap:2px}
+.bt span{height:100%;min-width:2px}
+.bt span:first-child{border-radius:4px 0 0 4px}
+.bt span:last-child{border-radius:0 4px 4px 0}
+.bt span:only-child{border-radius:4px}
+.bv{font-variant-numeric:tabular-nums;text-align:right;font-size:13px;color:var(--text-2)}
+/* agency cards */
+.agencies{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ag{cursor:pointer;transition:border-color .15s}
+.ag:hover{border-color:var(--accent)}
+.ag.sel{border-color:var(--accent);outline:1px solid var(--accent)}
+.ag .name{font-weight:650;font-size:16px}
+.ag .big{font-size:26px;font-weight:650;font-variant-numeric:tabular-nums}
+.ag dl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin:10px 0 0;font-size:12.5px}
+.ag dt{color:var(--text-2)} .ag dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.split{height:8px;display:flex;gap:2px;margin-top:8px}
+.split span:first-child{border-radius:4px 0 0 4px}.split span:last-child{border-radius:0 4px 4px 0}.split span:only-child{border-radius:4px}
+/* tables */
+.tbl-wrap{overflow:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--grid);text-align:left;white-space:nowrap}
+th{font-weight:600;color:var(--text-2);font-size:12px;position:sticky;top:0;background:var(--surface)}
+th.sort{cursor:pointer;user-select:none}
+th.sort:hover{color:var(--text)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--surface-2)}
+tbody tr.sel td{background:var(--surface-2);font-weight:600}
+/* heatmap */
+.hm td.c{text-align:center;font-variant-numeric:tabular-nums;min-width:44px;border:2px solid var(--surface);border-radius:4px}
+.hm th.rot{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;vertical-align:bottom;padding:8px 4px;font-weight:500;max-height:200px}
+.hm td.tot,.hm th.tot{font-weight:650}
+.tip{position:fixed;pointer-events:none;background:var(--text);color:var(--surface);padding:7px 10px;border-radius:8px;font-size:12px;line-height:1.4;z-index:50;max-width:320px;opacity:0;transition:opacity .08s}
+.tip b{font-weight:650}
+.empty{color:var(--muted);padding:20px;text-align:center}
+.detail{border-left:3px solid var(--accent)}
+.pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+.tabs{display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap}
+.tabs button.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.muted{color:var(--muted)}
+.brandmark{font-weight:750;letter-spacing:.08em;font-size:12.5px;color:var(--accent);padding:4px 12px 4px 0;align-self:center;text-transform:uppercase;white-space:nowrap}
+.brandmark i{font-style:normal;color:var(--brand-orange)}
+nav.tabsnav{display:flex;gap:4px;margin-bottom:8px}
+nav.tabsnav a{font-size:13px;color:var(--text-2);text-decoration:none;padding:4px 10px;border-radius:999px;border:1px solid var(--border)}
+nav.tabsnav a.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.weeks{display:flex;align-items:flex-end;gap:6px;height:190px;padding-top:6px}
+.wcol{flex:1 1 0;max-width:72px;min-width:0;height:100%;display:flex;flex-direction:column;cursor:pointer}
+.wplot{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end}
+.wcol .wbar{display:flex;flex-direction:column;gap:2px;margin:0 auto;width:min(100%,40px)}
+.wcol .wbar span{min-height:2px}
+.wcol .wbar span:first-child{border-radius:4px 4px 0 0}
+.wcol .wbar span:last-child{border-radius:0}
+.wcol .wbar span:only-child{border-radius:4px 4px 0 0}
+.wcol .wv{text-align:center;font-size:12px;color:var(--text-2);font-variant-numeric:tabular-nums;margin-bottom:3px}
+.wcol .wl{text-align:center;font-size:12px;color:var(--text-2);border-top:1px solid var(--border);padding-top:4px;margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wcol:hover .wl,.wcol.sel .wl{color:var(--accent);font-weight:600}
+.wcol.dim{opacity:.35}
+.chip .wk{font-weight:600;color:var(--accent)}
+.chip .wk.guess{color:var(--text-2)}
+.h3{font-size:13px;font-weight:600;color:var(--text-2);margin:4px 0 8px;text-transform:uppercase;letter-spacing:.04em}
+.det-bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:6px 32px}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:12px;padding:1px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-2)}
+table.raw.com td,table.raw.com th{padding:7px 6px}
+table.raw tfoot td{border-top:1px solid var(--border);border-bottom:0}
+@media (max-width:760px){
+  table.raw tfoot,table.raw tfoot tr{display:block;width:100%}
+  table.raw tfoot td{display:block;border:0;padding:2px 4px}
+  table.raw .hide-m{display:none}
+}
+/* données détaillées : pas de scroll, texte qui s'enroule */
+table.raw{table-layout:fixed;width:100%}
+table.raw th,table.raw td{white-space:normal;overflow-wrap:anywhere;vertical-align:top;position:static}
+table.raw th.sort{position:static}
+table.raw tbody tr:hover td{background:var(--surface-2)}
+table.raw .fic{color:var(--muted);font-size:12px}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--text-2)}
+.pager .pg{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.pager button{padding:4px 10px;min-width:34px}
+.pager button.on{background:var(--text);color:var(--surface);border-color:var(--text)}
+.pager button:disabled{opacity:.4;cursor:default}
+@media (max-width:760px){
+  table.raw thead{display:none}
+  table.raw,table.raw tbody,table.raw tr,table.raw td{display:block;width:100%}
+  table.raw tr{border-bottom:1px solid var(--grid);padding:8px 0}
+  table.raw td{border:0;padding:2px 4px}
+  table.raw td[data-l]::before{content:attr(data-l)" : ";color:var(--muted);font-size:12px}
+  table.raw td.n{text-align:left}
+}
+code{font:12px ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--muted);display:inline-block}
+.dot.ok{background:#1baf7a;box-shadow:0 0 0 3px color-mix(in srgb,#1baf7a 25%,transparent)}
+.dot.ko{background:#e34948}
+.chip.new{border-color:var(--accent);animation:flash 2s ease-out}
+@keyframes flash{from{background:color-mix(in srgb,var(--accent) 30%,var(--surface-2))}to{background:var(--surface-2)}}
+.chip.err{border-color:#e34948;color:#e34948}
+table.det td{white-space:normal;vertical-align:top}
+table.det td:last-child{min-width:200px}
+
+.chip .del{border:0;background:none;padding:0 2px 0 4px;margin-left:2px;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;border-radius:6px}
+.chip .del:hover{color:var(--text);background:var(--border)}
+.chip .del.armed{color:#fff;background:#c23a39;font-size:11.5px;font-weight:600;padding:2px 7px}
+.delmsg{font-size:13px;margin-top:6px}
+.delmsg:empty{display:none}
+.delmsg.ok{color:#14865d}.delmsg.err{color:#c23a39;font-weight:600}.delmsg.busy{color:#b25e00}
+</style>
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="responsable"></script>
+</head>
+<body>
+<div class="wrap">
+  <nav class="tabsnav"><span class="brandmark">Domino <i>RH</i></span><a href="index.html">Accueil</a><a href="actions.html" data-acces="responsable" class="on">Actions commerciales</a><a href="marges.html" data-acces="responsable">Marges &amp; ETP</a><a href="planning.html" data-acces="responsable">Planning (Excel)</a><a href="planning-base.html">Planning (base)</a><a href="comptes.html" data-acces="admin">Comptes</a></nav>
+  <header class="top">
+    <div>
+      <h1>Statistiques commerciales</h1>
+      <div class="sub" id="subtitle">Actions par agence et par commercial</div>
+    </div>
+    <div class="row">
+      <button id="themeBtn" title="Changer de thème">◐ Thème</button>
+      <button id="pptxBtn" class="primary">Exporter en présentation (.pptx)</button>
+    </div>
+  </header>
+
+  <div class="drop card" id="drop">
+    <div style="flex:1;min-width:220px">
+      <div class="row" style="gap:8px"><span class="dot" id="liveDot"></span><b>Dossier surveillé</b> <code id="folder" class="muted">aucun</code></div>
+      <div class="sub" id="liveTxt">Chargement…</div>
+      <div class="row" id="files" style="margin-top:8px;gap:6px"></div>
+    </div>
+    <div class="row">
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.xlsm" multiple hidden>
+      <input type="file" id="dirInput" webkitdirectory multiple hidden>
+      <label class="f">Lignes identiques dans plusieurs fichiers
+        <select id="dedupe"><option value="1">Même semaine : compter une seule fois (fichier le plus récent)</option><option value="0">Additionner</option></select></label>
+      <div class="row" style="align-self:flex-end;gap:8px">
+        <button class="primary" id="reconnectBtn" hidden>Reprendre la surveillance</button>
+        <button class="primary" id="pickBtn">Choisir le dossier des exports</button>
+        <button id="refreshBtn" hidden>Actualiser</button>
+        <button id="addBtn" title="Ajoute des fichiers pour cette session, sans les mettre dans le dossier">+ Fichier ponctuel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <div class="card row">
+      <label class="f">Agence<select id="fAgence"></select></label>
+      <label class="f">Commercial<select id="fCom"></select></label>
+      <label class="f">Type de cible<select id="fType"></select></label>
+      <label class="f">Type d'action<select id="fAction"></select></label>
+      <label class="f">Semaine<select id="fWeek"></select></label>
+      <label class="f">Année<select id="fYear"></select></label>
+      <button id="clearBtn" style="align-self:flex-end">Réinitialiser les filtres</button>
+    </div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section class="sec">
+    <div class="sec-h"><div><h2>Par agence</h2><div class="sub">Clique sur une agence pour filtrer</div></div></div>
+    <div class="agencies" id="agencies"></div>
+  </section>
+
+  <section class="card sec" id="weekSec">
+    <div class="sec-h">
+      <div><h2>Évolution par semaine</h2><div class="sub">Clique sur une semaine pour filtrer</div></div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>Candidat</span><span><i style="background:var(--s2)"></i>Client</span></div>
+    </div>
+    <div class="weeks" id="weekChart"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="sec-h">
+        <div><h2>Actions par commercial</h2><div class="sub">Clique pour voir le détail</div></div>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Candidat</span><span><i style="background:var(--s2)"></i>Client</span></div>
+      </div>
+      <div class="bars" id="comBars"></div>
+    </section>
+    <section class="card">
+      <div class="sec-h">
+        <div><h2>Actions par type</h2><div class="sub">Volume par type d'action</div></div>
+        <div class="legend"><span><i style="background:var(--s1)"></i>Candidat</span><span><i style="background:var(--s2)"></i>Client</span></div>
+      </div>
+      <div class="bars" id="actBars"></div>
+    </section>
+  </div>
+
+  <section class="card sec detail" id="detail" hidden></section>
+
+  <section class="card sec">
+    <div class="sec-h"><div><h2>Tableau par commercial</h2><div class="sub">Clique sur un en-tête pour trier</div></div></div>
+    <div class="tbl-wrap" id="comTable"></div>
+  </section>
+
+  <section class="card sec">
+    <div class="sec-h"><div><h2>Matrice commercial × type d'action</h2><div class="sub">Plus la case est foncée, plus il y a d'actions</div></div></div>
+    <div class="tbl-wrap hm" id="heat"></div>
+  </section>
+
+  <section class="card sec">
+    <div class="sec-h">
+      <div><h2>Cibles les plus travaillées</h2><div class="sub">Candidats et clients ayant reçu le plus d'actions</div></div>
+      <div class="tabs" id="topTabs"></div>
+    </div>
+    <div class="tbl-wrap" id="topTable"></div>
+  </section>
+
+  <section class="card sec">
+    <div class="sec-h">
+      <div><h2>Données détaillées</h2><div class="sub" id="rawCount"></div></div>
+      <div class="row" style="gap:8px"><input type="search" id="search" placeholder="Rechercher (nom, client, action…)" style="min-width:240px"><button id="csvBtn" title="Exporter les données filtrées pour Excel">Exporter CSV</button></div>
+    </div>
+    <div id="rawTable"></div>
+    <div class="pager" id="rawPager"></div>
+  </section>
+</div>
+<div class="tip" id="tip"></div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="file-delete.js"></script>
+<script src="vendor/pptxgen.bundle.js"></script>
+<script>
+
+/* ---------- état ---------- */
+let datasets = [];          // {name, rows:[...]}
+let F = {agence:'', com:'', type:'', action:'', year:'', week:''};
+let selCom = '';
+let sortKey = 'total', sortDir = -1;
+let topMode = 'Candidat';
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('fr-FR');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clean = v => v == null ? '' : String(v).replace(/[\u0000-\u001f\u007f-\u009f\ufffd]/g,'').replace(/\s+/g,' ').trim();
+
+/* ---------- lecture des exports ---------- */
+function b64ToBuf(b64){ const s = atob(b64); const u = new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; }
+
+function parseWorkbook(buf, name){
+  const wb = XLSX.read(buf, {type:'array'});
+  const out = [];
+  for (const sn of wb.SheetNames){
+    const grid = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header:1, defval:null, raw:true});
+    // ligne d'en-tête : celle qui contient "Total" en dernière position et des années
+    let hi = grid.findIndex(r => r && r.some(c => clean(c).toLowerCase()==='total') && r.some(c => /^\d{4}$/.test(clean(c))));
+    if (hi < 0) hi = 0;
+    const header = grid[hi] || [];
+    const yearCols = [];
+    header.forEach((c,i) => { if (/^\d{4}(\.0)?$/.test(clean(c))) yearCols.push([i, clean(c).slice(0,4)]); });
+    if (!yearCols.length) continue;
+    const firstYear = yearCols[0][0];
+    const textCols = firstYear;               // colonnes descriptives avant les années
+    let last = new Array(textCols).fill('');
+    for (let r = hi+1; r < grid.length; r++){
+      const row = grid[r]; if (!row) continue;
+      const a = clean(row[0]);
+      if (a.toLowerCase() === 'total') break;
+      // déplier les cellules fusionnées
+      for (let c = 0; c < textCols; c++){
+        const v = clean(row[c]);
+        if (v) last[c] = v;
+      }
+      const cible = clean(row[textCols-1]);
+      if (!cible) continue;
+      for (const [ci, y] of yearCols){
+        const n = Number(row[ci]);
+        if (!n) continue;
+        out.push({
+          fichier: name,
+          action: last[0] || '(non renseigné)',
+          agence: (last[1] || '(non renseigné)').replace(/^MISSIONS\s+/i,''),
+          commercial: last[2] || '(non renseigné)',
+          type: last[3] || '(non renseigné)',
+          cible, annee: y, n
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/* ---------- semaines (un export = une semaine) ---------- */
+const MOIS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+function isoWeek(date){
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7; d.setUTCDate(d.getUTCDate() + 4 - day);
+  const y = d.getUTCFullYear();
+  return {y, w: Math.ceil(((d - Date.UTC(y,0,1)) / 864e5 + 1) / 7)};
+}
+function weekMonday(y, w){
+  const j4 = new Date(Date.UTC(y,0,4)), day = j4.getUTCDay() || 7;
+  return new Date(Date.UTC(y, 0, 4 - day + 1 + (w-1)*7));
+}
+const weekKey = (y,w) => `${y}-S${String(w).padStart(2,'0')}`;
+function weekLabel(key, long){
+  const m = /^(\d{4})-S(\d{2})$/.exec(key||''); if (!m) return key||'';
+  const y = +m[1], w = +m[2], a = weekMonday(y,w), b = new Date(a.getTime() + 6*864e5);
+  const da = `${a.getUTCDate()}${a.getUTCMonth()!==b.getUTCMonth()?' '+MOIS[a.getUTCMonth()]:''}`;
+  const range = `${da} – ${b.getUTCDate()} ${MOIS[b.getUTCMonth()]}`;
+  return long ? `S${w} ${y} · ${range}` : `S${w}`;
+}
+// semaine d'un export : 1) « S42 », « semaine 42 », « W42 » dans le nom  2) une date dans le nom  3) date d'enregistrement du fichier
+function weekFromFile(name, mtime){
+  const s = name.replace(/^\(ajouté\) /,'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\.(xlsx|xlsm|xls)$/,'');
+  const yIn = (/(?:^|\D)(20\d{2})(?!\d)/.exec(s) || [])[1];
+  const fallbackY = new Date(mtime || Date.now()).getFullYear();
+  let m = /(?:^|[^a-z])(?:s|sem|semaine|w|wk|week)[ _.\-]?(\d{1,2})(?!\d)/.exec(s);
+  if (m && +m[1] >= 1 && +m[1] <= 53) return {key: weekKey(yIn ? +yIn : fallbackY, +m[1]), src:'nom'};
+  const ok = (y,mo,d) => mo>=1 && mo<=12 && d>=1 && d<=31;
+  m = /(?:^|\D)(20\d{2})[-_. ]?(\d{2})[-_. ]?(\d{2})(?!\d)/.exec(s);
+  if (m && ok(+m[1],+m[2],+m[3])){ const r = isoWeek(new Date(+m[1], +m[2]-1, +m[3])); return {key: weekKey(r.y,r.w), src:'nom'}; }
+  m = /(?:^|\D)(\d{1,2})[-_. ](\d{1,2})[-_. ](20\d{2}|\d{2})(?!\d)/.exec(s);
+  if (m && ok(0,+m[2],+m[1])){ const y = m[3].length===2 ? 2000 + +m[3] : +m[3]; const r = isoWeek(new Date(y, +m[2]-1, +m[1])); return {key: weekKey(r.y,r.w), src:'nom'}; }
+  const r = isoWeek(new Date(mtime || Date.now()));
+  return {key: weekKey(r.y,r.w), src:'date'};
+}
+function fillWeekSelect(sel, values, cur){
+  sel.innerHTML = `<option value="">Toutes</option>` + values.map(v=>`<option ${v===cur?'selected':''} value="${esc(v)}">${esc(weekLabel(v,true))}</option>`).join('');
+}
+
+/* ---------- surveillance du dossier, directement depuis le navigateur ---------- */
+// Edge / Chrome : API « File System Access » -> on garde l'accès au dossier et on le relit toutes les 2 s.
+// Autres navigateurs : sélection du dossier (instantané) + bouton Actualiser.
+const FS_OK = 'showDirectoryPicker' in window;
+const EXT = /\.(xlsx|xlsm|xls)$/i;
+const cache = new Map();      // name -> {sig, mtime, rows, error}
+const manual = new Map();     // fichiers glissés à la main (non surveillés)
+let dirHandle = null;
+let snapshotFiles = null;     // fallback sans File System Access
+let fresh = new Set();
+let syncing = false, lastChange = '', lastSig = '';
+
+/* mémorisation du dossier entre deux ouvertures (IndexedDB) */
+function idb(){ return new Promise((ok,ko)=>{ const r = indexedDB.open('stats-commerciales',1);
+  r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => ok(r.result); r.onerror = () => ko(r.error); }); }
+async function kvSet(k,v){ try{ const db = await idb(); await new Promise((ok,ko)=>{ const t=db.transaction('kv','readwrite'); t.objectStore('kv').put(v,k); t.oncomplete=ok; t.onerror=()=>ko(t.error); }); }catch(e){} }
+async function kvGet(k){ try{ const db = await idb(); return await new Promise((ok,ko)=>{ const r=db.transaction('kv').objectStore('kv').get(k); r.onsuccess=()=>ok(r.result); r.onerror=()=>ko(r.error); }); }catch(e){ return null; } }
+
+async function listFolder(dir, prefix='', out=[]){
+  for await (const [name, h] of dir.entries()){
+    if (name.startsWith('~$') || name.startsWith('.')) continue;
+    if (h.kind === 'directory'){ if (!name.startsWith('_')) await listFolder(h, prefix+name+'/', out); continue; }   // _corbeille, _sauvegardes : ignorés
+    else if (EXT.test(name)) out.push({name: prefix+name, handle: h});
+  }
+  return out;
+}
+
+async function currentEntries(){
+  if (dirHandle){
+    const list = await listFolder(dirHandle);
+    const out = [];
+    for (const e of list){
+      try{ const f = await e.handle.getFile(); out.push({name:e.name, mtime:f.lastModified, size:f.size, file:f}); }
+      catch(err){ out.push({name:e.name, mtime:0, size:-1, file:null, err:err.message}); } // verrouillé / en cours d'écriture
+    }
+    return out;
+  }
+  if (snapshotFiles) return snapshotFiles.map(f=>({name:f.webkitRelativePath.split('/').slice(1).join('/')||f.name, mtime:f.lastModified, size:f.size, file:f}))
+    .filter(f=>EXT.test(f.name) && !f.name.split('/').pop().startsWith('~$'));
+  return [];
+}
+
+async function sync(){
+  if (syncing) return; syncing = true;
+  try{
+    const entries = await currentEntries();
+    for (const [n,f] of manual) entries.push({name:'(ajouté) '+n, mtime:f.lastModified, size:f.size, file:f});
+    const sig = entries.map(f=>f.name+':'+f.mtime+':'+f.size).join('|');
+    if (sig !== lastSig){
+      const names = new Set(entries.map(f=>f.name));
+      const added = [], updated = [], removed = [];
+      let retry = false;
+      for (const n of [...cache.keys()]) if (!names.has(n)){ cache.delete(n); removed.push(n); }
+      for (const f of entries){
+        const fsig = f.mtime+':'+f.size, prev = cache.get(f.name);
+        if (prev && prev.sig === fsig) continue;
+        try{
+          if (!f.file) throw new Error(f.err || 'fichier illisible');
+          const rows = parseWorkbook(new Uint8Array(await f.file.arrayBuffer()), f.name);
+          const wk = weekFromFile(f.name, f.mtime);
+          for (const r of rows) r.semaine = wk.key;
+          cache.set(f.name, {sig:fsig, mtime:f.mtime, rows, week:wk, error: rows.length ? '' : 'aucune donnée reconnue'});
+        }catch(e){
+          retry = true;
+          cache.set(f.name, {sig:'retry', mtime:f.mtime, week: prev && prev.week, rows: prev ? prev.rows : [], error: 'illisible pour l\'instant (fichier ouvert ?)'});
+        }
+        (prev ? updated : added).push(f.name);
+      }
+      if (!retry) lastSig = sig;
+      fresh = new Set([...added, ...updated]);
+      datasets = [...cache].sort((a,b)=>a[0].localeCompare(b[0],'fr')).map(([name,c])=>({name, mtime:c.mtime, week:c.week, rows:c.rows, error:c.error}));
+      render();
+      const parts = [];
+      if (added.length && cache.size !== added.length) parts.push(`${added.length} ajouté(s)`);
+      if (updated.length) parts.push(`${updated.length} modifié(s)`);
+      if (removed.length) parts.push(`${removed.length} retiré(s)`);
+      if (parts.length) lastChange = `dernier changement à ${new Date().toLocaleTimeString('fr-FR')} : ${parts.join(', ')}`;
+    }
+    setLive(dirHandle ? 'ok' : snapshotFiles ? 'snap' : 'none');
+  }catch(e){
+    // dossier déplacé/supprimé ou permission retirée
+    setLive('lost', e.message);
+  }finally{ syncing = false; }
+}
+
+function setLive(state, msg){
+  const dot = $('liveDot'), txt = $('liveTxt');
+  $('pickBtn').textContent = (dirHandle || snapshotFiles) ? 'Changer de dossier' : 'Choisir le dossier des exports';
+  $('refreshBtn').hidden = state !== 'snap';
+  $('reconnectBtn').hidden = state !== 'reconnect';
+  if (state === 'ok'){ dot.className='dot ok'; txt.textContent = `Mise à jour automatique active · vérifié à ${new Date().toLocaleTimeString('fr-FR')}` + (lastChange?' · '+lastChange:''); }
+  else if (state === 'snap'){ dot.className='dot'; txt.textContent = 'Ce navigateur ne permet pas la surveillance automatique : clique sur « Actualiser » après avoir ajouté un export (ou ouvre ce fichier avec Edge ou Chrome).'; }
+  else if (state === 'reconnect'){ dot.className='dot'; txt.textContent = 'Clique sur « Reprendre la surveillance » pour réautoriser l\'accès au dossier (demandé par le navigateur à chaque ouverture).'; }
+  else if (state === 'lost'){ dot.className='dot ko'; txt.textContent = 'Le dossier n\'est plus accessible (déplacé, renommé ou autorisation retirée). Choisis-le à nouveau.'; dirHandle = null; }
+  else { dot.className='dot'; txt.textContent = 'Choisis le dossier où tu enregistres tes exports Excel : la page le surveillera et se mettra à jour toute seule.'; }
+}
+
+async function pickFolder(){
+  if (FS_OK){
+    try{
+      const h = await window.showDirectoryPicker({id:'exports', mode:'read'});
+      dirHandle = h; snapshotFiles = null; lastSig = ''; cache.clear(); lastChange = '';
+      $('folder').textContent = h.name;
+      kvSet('dir', h);
+      sync();
+    }catch(e){ if (e.name !== 'AbortError') alertBox('Accès au dossier refusé : '+e.message); }
+  } else $('dirInput').click();
+}
+
+async function reconnect(){
+  const h = await kvGet('dir'); if (!h) return pickFolder();
+  try{
+    if (await h.requestPermission({mode:'read'}) === 'granted'){ dirHandle = h; $('folder').textContent = h.name; lastSig=''; sync(); }
+  }catch(e){ pickFolder(); }
+}
+
+async function restoreFolder(){
+  if (!FS_OK){ setLive('none'); return; }
+  const h = await kvGet('dir');
+  if (!h){ setLive('none'); return; }
+  $('folder').textContent = h.name;
+  let perm = 'prompt';
+  try{ perm = await h.queryPermission({mode:'read'}); }catch(e){}
+  if (perm === 'granted'){ dirHandle = h; sync(); }
+  else setLive('reconnect');
+}
+
+function addFiles(files){
+  for (const f of files) manual.set(f.name, f);
+  lastSig = ''; sync();
+}
+
+function alertBox(msg){ const s=$('subtitle'); s.textContent = msg; s.style.color='var(--s2)'; setTimeout(()=>{s.style.color='';updateSubtitle();},6000); }
+
+/* ---------- agrégation ---------- */
+let dedupe = true;
+try{ dedupe = localStorage.getItem('stats-dedupe') !== 'sum'; }catch(e){}
+function allRows(){
+  if (!dedupe) return datasets.flatMap(d => d.rows);
+  // même ligne (action, agence, commercial, type, cible, année) dans plusieurs fichiers : on garde la plus récente
+  const best = new Map();
+  for (const d of [...datasets].sort((a,b)=>(a.mtime||0)-(b.mtime||0)))
+    for (const r of d.rows) best.set([r.semaine,r.action,r.agence,r.commercial,r.type,r.cible,r.annee].join('\u0001'), r);
+  return [...best.values()];
+}
+function filtered(except){
+  return allRows().filter(r =>
+    (except==='agence' || !F.agence || r.agence===F.agence) &&
+    (except==='com'    || !F.com    || r.commercial===F.com) &&
+    (except==='type'   || !F.type   || r.type===F.type) &&
+    (except==='action' || !F.action || r.action===F.action) &&
+    (except==='year'   || !F.year   || r.annee===F.year) &&
+    (except==='week'   || !F.week   || r.semaine===F.week));
+}
+function groupBy(rows, key){
+  const m = new Map();
+  for (const r of rows){ const k = typeof key==='function'?key(r):r[key]; if(!m.has(k)) m.set(k, []); m.get(k).push(r); }
+  return m;
+}
+const sum = rows => rows.reduce((s,r)=>s+r.n,0);
+const sumType = (rows,t) => rows.reduce((s,r)=>s+(r.type===t?r.n:0),0);
+const distinct = (rows, f) => new Set(rows.map(f)).size;
+function topOf(rows, key){ let best='',bv=-1; for (const [k,v] of groupBy(rows,key)){ const s=sum(v); if(s>bv){bv=s;best=k;} } return [best,bv]; }
+
+/* ---------- tooltip ---------- */
+const tip = $('tip');
+document.addEventListener('mousemove', e => {
+  const t = e.target.closest('[data-tip]');
+  if (!t){ tip.style.opacity=0; return; }
+  tip.innerHTML = t.dataset.tip; tip.style.opacity=1;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = e.clientX + 14, y = e.clientY + 14;
+  if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+  if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+  tip.style.left = x+'px'; tip.style.top = y+'px';
+});
+
+/* ---------- rendu ---------- */
+function fillSelect(sel, values, cur, allLabel){
+  sel.innerHTML = `<option value="">${allLabel}</option>` + values.map(v=>`<option ${v===cur?'selected':''} value="${esc(v)}">${esc(v)}</option>`).join('');
+}
+const uniq = (rows,k) => [...new Set(rows.map(r=>r[k]))].sort((a,b)=>a.localeCompare(b,'fr'));
+
+function updateSubtitle(){
+  const rows = allRows();
+  const years = uniq(rows,'annee'); const nbW = uniq(rows,'semaine').length;
+  $('subtitle').textContent = `${datasets.length} fichier(s) · ${nbW} semaine(s) · ${fmt(sum(rows))} actions · ${years.join(', ')}`;
+}
+
+function render(){
+  // filtres (options dépendantes des autres filtres)
+  fillSelect($('fAgence'), uniq(filtered('agence'),'agence'), F.agence, 'Toutes');
+  fillSelect($('fCom'),    uniq(filtered('com'),'commercial'), F.com, 'Tous');
+  fillSelect($('fType'),   uniq(filtered('type'),'type'), F.type, 'Tous');
+  fillSelect($('fAction'), uniq(filtered('action'),'action'), F.action, 'Toutes');
+  fillSelect($('fYear'),   uniq(filtered('year'),'annee'), F.year, 'Toutes');
+  fillWeekSelect($('fWeek'), uniq(filtered('week'),'semaine').reverse(), F.week);
+
+  $('files').innerHTML = datasets.length ? datasets.map(d=>`<span class="chip ${d.error?'err':''} ${fresh.has(d.name)&&!d.error?'new':''}" style="padding-right:10px" title="${esc(d.error||'')}">${d.week?`<b class="wk ${d.week.src==='date'?'guess':''}" title="${d.week.src==='date'?'Semaine déduite de la date d\'enregistrement du fichier. Pour la fixer, mets-la dans le nom (ex. « Export S42.xlsx » ou « Export 2026-10-19.xlsx »).':'Semaine lue dans le nom du fichier'}">${esc(weekLabel(d.week.key))}${d.week.src==='date'?' ?':''}</b> `:''}${esc(d.name)} <span class="muted">(${d.error?'⚠ '+esc(d.error):fmt(sum(d.rows))+' actions'})</span>${delBtn(d.name)}</span>`).join('') : `<span class="muted">${(typeof dirHandle!=='undefined'&&(dirHandle||snapshotFiles))?'Aucun export Excel dans ce dossier pour l\'instant.':'Aucun dossier choisi.'}</span>`;
+  fresh = new Set();
+  updateSubtitle();
+
+  const rows = filtered();
+  renderKpis(rows);
+  renderAgencies(filtered('agence'));
+  renderComBars(rows);
+  renderActBars(rows);
+  renderWeeks(filtered('week'));
+  renderComTable(rows);
+  renderHeat(rows);
+  renderTop(rows);
+  renderRaw(rows);
+  renderDetail();
+}
+
+function renderKpis(rows){
+  const cand = rows.filter(r=>r.type==='Candidat'), cli = rows.filter(r=>r.type==='Client');
+  const k = [
+    ['Actions totales', fmt(sum(rows))],
+    ['Actions candidats', fmt(sum(cand))],
+    ['Actions clients', fmt(sum(cli))],
+    ['Candidats distincts', fmt(distinct(cand,r=>r.cible))],
+    ['Clients distincts', fmt(distinct(cli,r=>r.cible))],
+    ['Commerciaux actifs', fmt(distinct(rows,r=>r.commercial))],
+  ];
+  $('kpis').innerHTML = k.map(([l,v])=>`<div class="card kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+}
+
+function splitBar(c, k, cls){
+  const t = c+k || 1;
+  const parts = [];
+  if (c) parts.push(`<span style="width:${c/t*100}%;background:var(--s1)"></span>`);
+  if (k) parts.push(`<span style="width:${k/t*100}%;background:var(--s2)"></span>`);
+  return `<div class="${cls}">${parts.join('')}</div>`;
+}
+
+function renderAgencies(rows){
+  const g = [...groupBy(rows,'agence')].map(([a,v])=>({a,v,t:sum(v)})).sort((x,y)=>y.t-x.t);
+  if (!g.length){ $('agencies').innerHTML = '<div class="empty card">Aucune donnée</div>'; return; }
+  $('agencies').innerHTML = g.map(({a,v,t})=>{
+    const c = sumType(v,'Candidat'), k = sumType(v,'Client');
+    const [ta,tav] = topOf(v,'action'); const [tc,tcv] = topOf(v,'commercial');
+    return `<div class="card ag ${F.agence===a?'sel':''}" data-ag="${esc(a)}">
+      <div class="row" style="justify-content:space-between"><span class="name">${esc(a)}</span><span class="pill">${distinct(v,r=>r.commercial)} commercial(aux)</span></div>
+      <div class="big">${fmt(t)} <span class="sub" style="font-size:13px;font-weight:400">actions</span></div>
+      <div data-tip="<b>${esc(a)}</b><br>Candidat : ${c} (${Math.round(c/t*100)} %)<br>Client : ${k} (${Math.round(k/t*100)} %)">${splitBar(c,k,'split')}</div>
+      <dl>
+        <dt>Candidat / Client</dt><dd>${fmt(c)} / ${fmt(k)}</dd>
+        <dt>Candidats distincts</dt><dd>${distinct(v.filter(r=>r.type==='Candidat'),r=>r.cible)}</dd>
+        <dt>Clients distincts</dt><dd>${distinct(v.filter(r=>r.type==='Client'),r=>r.cible)}</dd>
+        <dt>Action n°1</dt><dd title="${esc(ta)}">${esc(ta.length>22?ta.slice(0,21)+'…':ta)} (${tav})</dd>
+        <dt>Commercial n°1</dt><dd>${esc(tc)} (${tcv})</dd>
+      </dl></div>`;
+  }).join('');
+}
+
+function stackedBars(el, groups, labelFn, clickAttr, selVal){
+  const max = Math.max(1, ...groups.map(g=>g.t));
+  el.innerHTML = groups.length ? groups.map(g=>{
+    const tipTxt = `<b>${esc(g.k)}</b><br>Total : ${g.t}<br>Candidat : ${g.c}<br>Client : ${g.l}${g.extra||''}`;
+    return `<div class="bar-row ${clickAttr?'click':''} ${selVal===g.k?'sel':''}" ${clickAttr?`${clickAttr}="${esc(g.k)}"`:''} data-tip="${esc(tipTxt)}">
+      <div class="bl" title="${esc(g.k)}">${labelFn(g)}</div>
+      <div class="bt" style="width:${g.t/max*100}%">${g.c?`<span style="flex:${g.c};background:var(--s1)"></span>`:''}${g.l?`<span style="flex:${g.l};background:var(--s2)"></span>`:''}</div>
+      <div class="bv">${fmt(g.t)}</div></div>`;
+  }).join('') : '<div class="empty">Aucune donnée</div>';
+}
+
+function renderComBars(rows){
+  const g = [...groupBy(rows,'commercial')].map(([k,v])=>({k,t:sum(v),c:sumType(v,'Candidat'),l:sumType(v,'Client'),ag:uniq(v,'agence').join(', ')}))
+    .sort((a,b)=>b.t-a.t).map(x=>({...x,extra:`<br>Agence : ${esc(x.ag)}`}));
+  stackedBars($('comBars'), g, x=>`${esc(x.k)} <span class="muted">· ${esc(x.ag)}</span>`, 'data-com', selCom);
+}
+function renderWeeks(rows){
+  const g = [...groupBy(rows,'semaine')].map(([k,v])=>({k,t:sum(v),c:sumType(v,'Candidat'),l:sumType(v,'Client')})).sort((a,b)=>a.k.localeCompare(b.k));
+  if (!g.length){ $('weekChart').innerHTML = '<div class="empty">Aucune donnée</div>'; return; }
+  const max = Math.max(1, ...g.map(x=>x.t));
+  $('weekChart').innerHTML = g.map(x=>`<div class="wcol ${F.week===x.k?'sel':''} ${F.week&&F.week!==x.k?'dim':''}" data-week="${esc(x.k)}"
+      data-tip="${esc(`<b>${weekLabel(x.k,true)}</b><br>Total : ${x.t}<br>Candidat : ${x.c}<br>Client : ${x.l}`)}">
+      <div class="wplot"><div class="wv">${fmt(x.t)}</div>
+      <div class="wbar" style="height:${Math.max(2, x.t/max*82)}%">${x.l?`<span style="flex:${x.l};background:var(--s2)"></span>`:''}${x.c?`<span style="flex:${x.c};background:var(--s1)"></span>`:''}</div></div>
+      <div class="wl">${esc(weekLabel(x.k))}</div></div>`).join('');
+}
+function renderActBars(rows){
+  const g = [...groupBy(rows,'action')].map(([k,v])=>({k,t:sum(v),c:sumType(v,'Candidat'),l:sumType(v,'Client')})).sort((a,b)=>b.t-a.t);
+  stackedBars($('actBars'), g, x=>esc(x.k), 'data-act', F.action);
+}
+
+function comStats(rows){
+  return [...groupBy(rows,'commercial')].map(([k,v])=>{
+    const [ta,tav] = topOf(v,'action');
+    return {commercial:k, agence:uniq(v,'agence').join(', '), total:sum(v), cand:sumType(v,'Candidat'), cli:sumType(v,'Client'),
+      candD:distinct(v.filter(r=>r.type==='Candidat'),r=>r.cible), cliD:distinct(v.filter(r=>r.type==='Client'),r=>r.cible),
+      nbAct:distinct(v,r=>r.action), top:`${ta} (${tav})`};
+  });
+}
+function renderComTable(rows){
+  const data = comStats(rows);
+  const tot = sum(rows) || 1;
+  data.sort((a,b)=> (typeof a[sortKey]==='number' ? (a[sortKey]-b[sortKey]) : String(a[sortKey]).localeCompare(b[sortKey],'fr')) * sortDir);
+  const cols = [['commercial','Commercial'],['agence','Agence'],['total','Total','n'],['part','Part','n'],['cand','Actions candidats','n'],['cli','Actions clients','n'],['candD','Candidats distincts','n'],['cliD','Clients distincts','n'],['nbAct','Types d\'action','n'],['top','Action principale']];
+  const arrow = k => sortKey===k ? (sortDir<0?' ↓':' ↑') : '';
+  const W = ['15%','8%','7%','7%','9%','8%','9%','8%','8%','21%'];
+  $('comTable').innerHTML = data.length ? `<table class="raw com"><colgroup>${W.map(w=>`<col style="width:${w}">`).join('')}</colgroup><thead><tr>${cols.map(([k,l,c])=>`<th class="sort ${c||''}" data-sort="${k==='part'?'total':k}">${l}${arrow(k==='part'?'total':k)}</th>`).join('')}</tr></thead><tbody>
+    ${data.map(d=>`<tr class="click ${selCom===d.commercial?'sel':''}" data-com="${esc(d.commercial)}">
+      <td data-l="Commercial"><b>${esc(d.commercial)}</b></td><td data-l="Agence">${esc(d.agence)}</td><td class="n" data-l="Total"><b>${fmt(d.total)}</b></td><td class="n" data-l="Part">${Math.round(d.total/tot*100)} %</td>
+      <td class="n" data-l="Actions candidats">${fmt(d.cand)}</td><td class="n" data-l="Actions clients">${fmt(d.cli)}</td><td class="n" data-l="Candidats distincts">${d.candD}</td><td class="n" data-l="Clients distincts">${d.cliD}</td><td class="n" data-l="Types d'action">${d.nbAct}</td><td data-l="Action principale">${esc(d.top)}</td></tr>`).join('')}
+    </tbody><tfoot><tr><td><b>Total</b></td><td class="hide-m"></td><td class="n" data-l="Total"><b>${fmt(sum(rows))}</b></td><td class="n hide-m">100 %</td><td class="n" data-l="Actions candidats">${fmt(sumType(rows,'Candidat'))}</td><td class="n" data-l="Actions clients">${fmt(sumType(rows,'Client'))}</td><td class="n" data-l="Candidats distincts">${distinct(rows.filter(r=>r.type==='Candidat'),r=>r.cible)}</td><td class="n" data-l="Clients distincts">${distinct(rows.filter(r=>r.type==='Client'),r=>r.cible)}</td><td class="n" data-l="Types d'action">${distinct(rows,r=>r.action)}</td><td class="hide-m"></td></tr></tfoot></table>`
+    : '<div class="empty">Aucune donnée</div>';
+}
+
+function heatColor(v, max){
+  if (!v) return 'var(--h0)';
+  const steps = ['--h1','--h2','--h3','--h4','--h5','--h6'];
+  const i = Math.min(steps.length-1, Math.floor(v/max*steps.length - 1e-9));
+  return `var(${steps[Math.max(0,i)]})`;
+}
+function renderHeat(rows){
+  const coms = [...groupBy(rows,'commercial')].map(([k,v])=>[k,sum(v)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+  const acts = [...groupBy(rows,'action')].map(([k,v])=>[k,sum(v)]).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+  if (!coms.length){ $('heat').innerHTML='<div class="empty">Aucune donnée</div>'; return; }
+  const m = {}; let max = 0;
+  for (const r of rows){ const k = r.commercial+'|'+r.action; m[k]=(m[k]||0)+r.n; }
+  for (const k in m) max = Math.max(max, m[k]);
+  const dark = v => v/max > .5;
+  $('heat').innerHTML = `<table><thead><tr><th>Commercial</th>${acts.map(a=>`<th class="rot">${esc(a)}</th>`).join('')}<th class="n tot">Total</th></tr></thead><tbody>
+    ${coms.map(c=>`<tr><td>${esc(c)}</td>${acts.map(a=>{const v=m[c+'|'+a]||0;
+      return `<td class="c" style="background:${heatColor(v,max)};color:${v?(dark(v)?'#fff':'var(--text)'):'var(--muted)'}" data-tip="<b>${esc(c)}</b><br>${esc(a)} : ${v}">${v||'·'}</td>`}).join('')}
+      <td class="n tot">${fmt(acts.reduce((s,a)=>s+(m[c+'|'+a]||0),0))}</td></tr>`).join('')}
+    </tbody><tfoot><tr><td class="tot"><b>Total</b></td>${acts.map(a=>`<td class="c tot">${fmt(coms.reduce((s,c)=>s+(m[c+'|'+a]||0),0))}</td>`).join('')}<td class="n tot">${fmt(sum(rows))}</td></tr></tfoot></table>`;
+}
+
+function renderTop(rows){
+  const types = uniq(rows,'type');
+  if (!types.includes(topMode) && types.length) topMode = types[0];
+  $('topTabs').innerHTML = types.map(t=>`<button data-top="${esc(t)}" class="${t===topMode?'on':''}">${esc(t)}</button>`).join('');
+  const sub = rows.filter(r=>r.type===topMode);
+  const g = [...groupBy(sub,'cible')].map(([k,v])=>({k,t:sum(v),acts:[...groupBy(v,'action')].map(([a,x])=>`${a} (${sum(x)})`).join(', '),coms:uniq(v,'commercial').join(', ')}))
+    .sort((a,b)=>b.t-a.t).slice(0,15);
+  $('topTable').innerHTML = g.length ? `<table class="raw"><colgroup><col style="width:34%"><col style="width:9%"><col style="width:17%"><col style="width:40%"></colgroup><thead><tr><th>${esc(topMode)}</th><th class="n">Actions</th><th>Suivi par</th><th>Détail des actions</th></tr></thead><tbody>
+    ${g.map(x=>`<tr><td data-l="${esc(topMode)}">${esc(x.k)}</td><td class="n" data-l="Actions"><b>${x.t}</b></td><td data-l="Suivi par">${esc(x.coms)}</td><td class="muted" data-l="Détail">${esc(x.acts)}</td></tr>`).join('')}</tbody></table>` : '<div class="empty">Aucune donnée</div>';
+}
+
+let rawPage = 1, rawSize = 25, rawSort = 'action', rawDir = 1;
+try{ rawSize = +localStorage.getItem('stats-rawsize') || 25; }catch(e){}
+const RAW_COLS = [
+  ['action','Type d\'action','21%'],['agence','Agence','8%'],['commercial','Commercial','15%'],
+  ['type','Type','9%'],['cible','Cible','30%'],['semaine','Semaine','9%'],['n','Nb','6%','n']];
+function renderRaw(rows){
+  const q = $('search').value.trim().toLowerCase();
+  let r2 = q ? rows.filter(r=>[r.action,r.agence,r.commercial,r.type,r.cible,r.fichier,weekLabel(r.semaine,true)].join(' ').toLowerCase().includes(q)) : rows.slice();
+  r2.sort((a,b)=>{ const x=a[rawSort], y=b[rawSort];
+    const c = typeof x==='number' ? x-y : String(x).localeCompare(String(y),'fr');
+    return c*rawDir || a.action.localeCompare(b.action,'fr') || a.cible.localeCompare(b.cible,'fr'); });
+  const size = rawSize || r2.length || 1;
+  const pages = Math.max(1, Math.ceil(r2.length/size));
+  rawPage = Math.min(Math.max(1,rawPage), pages);
+  const slice = r2.slice((rawPage-1)*size, rawPage*size);
+  $('rawCount').textContent = `${fmt(r2.length)} ligne(s) · ${fmt(sum(r2))} actions`;
+  const arrow = k => rawSort===k ? (rawDir>0?' ↑':' ↓') : '';
+  $('rawTable').innerHTML = r2.length ? `<table class="raw"><colgroup>${RAW_COLS.map(c=>`<col style="width:${c[2]}">`).join('')}</colgroup>
+    <thead><tr>${RAW_COLS.map(([k,l,,cl])=>`<th class="sort ${cl||''}" data-rsort="${k}">${l}${arrow(k)}</th>`).join('')}</tr></thead><tbody>
+    ${slice.map(r=>`<tr><td data-l="Action">${esc(r.action)}</td><td data-l="Agence">${esc(r.agence)}</td><td data-l="Commercial">${esc(r.commercial)}</td>
+      <td data-l="Type"><span class="pill">${esc(r.type)}</span></td>
+      <td data-l="Cible">${esc(r.cible)}${datasets.length>1?`<div class="fic">${esc(r.fichier)}</div>`:''}</td>
+      <td data-l="Semaine" title="${esc(weekLabel(r.semaine,true))}">${esc(weekLabel(r.semaine))} <span class="muted">${r.semaine?r.semaine.slice(0,4):r.annee}</span></td><td class="n" data-l="Nb"><b>${r.n}</b></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">Aucune ligne ne correspond</div>';
+  // pagination
+  let nums = [];
+  for (let i=1;i<=pages;i++) if (i===1||i===pages||Math.abs(i-rawPage)<=2) nums.push(i); else if (nums[nums.length-1]!=='…') nums.push('…');
+  const from = r2.length ? (rawPage-1)*size+1 : 0, to = Math.min(rawPage*size, r2.length);
+  $('rawPager').innerHTML = `<div>Lignes ${fmt(from)}–${fmt(to)} sur ${fmt(r2.length)} ·
+      <label>afficher <select id="rawSize">${[25,50,100,0].map(s=>`<option value="${s}" ${s===rawSize?'selected':''}>${s||'tout'}</option>`).join('')}</select></label></div>
+    ${pages>1?`<div class="pg"><button data-rpage="${rawPage-1}" ${rawPage===1?'disabled':''}>‹</button>
+      ${nums.map(n=>n==='…'?'<span class="muted">…</span>':`<button data-rpage="${n}" class="${n===rawPage?'on':''}">${n}</button>`).join('')}
+      <button data-rpage="${rawPage+1}" ${rawPage===pages?'disabled':''}>›</button></div>`:''}`;
+  $('rawSize').onchange = e => { rawSize = +e.target.value; rawPage = 1; try{localStorage.setItem('stats-rawsize', rawSize||'0');}catch(_){}; renderRaw(filtered()); };
+}
+
+let detAll = false, detType = '', detFor = '';
+function renderDetail(){
+  const el = $('detail');
+  if (!selCom){ el.hidden = true; return; }
+  const v = filtered().filter(r=>r.commercial===selCom);
+  if (!v.length){ el.hidden = true; return; }
+  if (detFor !== selCom){ detFor = selCom; detAll = false; detType = ''; }
+  el.hidden = false;
+  const acts = [...groupBy(v,'action')].map(([k,x])=>({k,t:sum(x),c:sumType(x,'Candidat'),l:sumType(x,'Client')})).sort((a,b)=>b.t-a.t);
+  const types = uniq(v,'type');
+  if (detType && !types.includes(detType)) detType = '';
+  const vv = detType ? v.filter(r=>r.type===detType) : v;
+  const cibles = [...groupBy(vv,r=>r.type+'|'+r.cible)].map(([k,x])=>({type:x[0].type,cible:x[0].cible,t:sum(x),
+      acts:[...groupBy(x,'action')].sort((a,b)=>sum(b[1])-sum(a[1])).map(([a,y])=>({a,n:sum(y)}))}))
+    .sort((a,b)=>b.t-a.t||a.cible.localeCompare(b.cible,'fr'));
+  const LIMIT = 10, shown = detAll ? cibles : cibles.slice(0, LIMIT);
+  el.innerHTML = `<div class="sec-h"><div><h2>Détail — ${esc(selCom)}</h2><div class="sub">${esc(uniq(v,'agence').join(', '))} · ${fmt(sum(v))} actions · ${distinct(v,r=>r.cible)} cibles distinctes</div></div><button id="closeDetail">Fermer</button></div>
+    <h3 class="h3">Actions par type</h3>
+    <div class="bars det-bars" id="detBars"></div>
+    <div class="sec-h" style="margin:18px 0 8px"><h3 class="h3" style="margin:0">Cibles suivies <span class="muted" style="font-weight:400">(${cibles.length})</span></h3>
+      ${types.length>1?`<div class="tabs" style="margin:0"><button data-dtype="" class="${detType===''?'on':''}">Tous</button>${types.map(x=>`<button data-dtype="${esc(x)}" class="${detType===x?'on':''}">${esc(x)}</button>`).join('')}</div>`:''}</div>
+    <table class="raw"><colgroup><col style="width:12%"><col style="width:36%"><col style="width:8%"><col style="width:44%"></colgroup>
+      <thead><tr><th>Type</th><th>Cible</th><th class="n">Actions</th><th>Détail</th></tr></thead><tbody>
+      ${shown.map(c=>`<tr><td data-l="Type"><span class="pill">${esc(c.type)}</span></td><td data-l="Cible">${esc(c.cible)}</td><td class="n" data-l="Actions"><b>${c.t}</b></td>
+        <td data-l="Détail"><div class="tags">${c.acts.map(a=>`<span class="tag">${esc(a.a)}${a.n>1?` <b>×${a.n}</b>`:''}</span>`).join('')}</div></td></tr>`).join('')}
+      </tbody></table>
+    ${cibles.length>LIMIT?`<div style="text-align:center;margin-top:10px"><button id="detMore">${detAll?'Réduire':`Afficher les ${cibles.length-LIMIT} autres cibles`}</button></div>`:''}`;
+  stackedBars($('detBars'), acts, x=>esc(x.k));
+}
+
+/* ---------- export CSV ---------- */
+function exportCsv(){
+  const rows = filtered();
+  const head = ['Semaine','Du','Type d\'action','Agence','Commercial','Type','Cible','Année','Nombre','Fichier'];
+  const q = s => `"${String(s).replace(/"/g,'""')}"`;
+  const csv = '﻿' + [head, ...rows.map(r=>[weekLabel(r.semaine), r.semaine?weekMonday(+r.semaine.slice(0,4),+r.semaine.slice(6)).toISOString().slice(0,10):'', r.action,r.agence,r.commercial,r.type,r.cible,r.annee,r.n,r.fichier])].map(l=>l.map(q).join(';')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download = 'statistiques_filtrees.csv'; a.click();
+}
+
+/* ---------- événements ---------- */
+const bindF = (id,k) => $(id).addEventListener('change', e => { F[k] = e.target.value; render(); });
+bindF('fAgence','agence'); bindF('fCom','com'); bindF('fType','type'); bindF('fAction','action'); bindF('fYear','year'); bindF('fWeek','week');
+$('clearBtn').onclick = () => { F = {agence:'',com:'',type:'',action:'',year:'',week:''}; selCom=''; $('search').value=''; render(); };
+$('search').addEventListener('input', () => { rawPage = 1; renderRaw(filtered()); });
+$('csvBtn').onclick = exportCsv;
+$('pptxBtn').onclick = () => window.exportPptx();
+$('dedupe').value = dedupe ? '1' : '0';
+$('dedupe').onchange = e => { dedupe = e.target.value === '1'; try{ localStorage.setItem('stats-dedupe', dedupe ? 'dedupe' : 'sum'); }catch(_){} render(); };
+$('addBtn').onclick = () => $('fileInput').click();
+$('fileInput').onchange = e => { addFiles([...e.target.files]); e.target.value=''; };
+$('themeBtn').onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try{ localStorage.setItem('stats-theme', next); }catch(e){}
+};
+try{ const t = localStorage.getItem('stats-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){}
+
+document.addEventListener('click', e => {
+  if (e.target.id==='closeDetail'){ selCom=''; render(); return; }
+  const ag = e.target.closest('[data-ag]'); if (ag){ F.agence = F.agence===ag.dataset.ag ? '' : ag.dataset.ag; render(); return; }
+  const rs = e.target.closest('[data-rsort]'); if (rs){ const k=rs.dataset.rsort; if (rawSort===k) rawDir*=-1; else { rawSort=k; rawDir = k==='n'?-1:1; } rawPage=1; renderRaw(filtered()); return; }
+  const rp = e.target.closest('[data-rpage]'); if (rp && !rp.disabled){ rawPage=+rp.dataset.rpage; renderRaw(filtered()); $('rawTable').scrollIntoView({block:'nearest'}); return; }
+  if (e.target.id==='detMore'){ detAll = !detAll; renderDetail(); if(!detAll) $('detail').scrollIntoView({block:'nearest'}); return; }
+  const dt = e.target.closest('[data-dtype]'); if (dt){ detType = dt.dataset.dtype; detAll = false; renderDetail(); return; }
+  const th = e.target.closest('[data-sort]'); if (th){ const k=th.dataset.sort; if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=(k==='commercial'||k==='agence'||k==='top')?1:-1;} render(); return; }
+  const com = e.target.closest('[data-com]'); if (com){ selCom = selCom===com.dataset.com ? '' : com.dataset.com; render(); if(selCom) $('detail').scrollIntoView({behavior:'smooth',block:'nearest'}); return; }
+  const act = e.target.closest('[data-act]'); if (act){ F.action = F.action===act.dataset.act ? '' : act.dataset.act; render(); return; }
+  const wk = e.target.closest('[data-week]'); if (wk){ F.week = F.week===wk.dataset.week ? '' : wk.dataset.week; render(); return; }
+  const tp = e.target.closest('[data-top]'); if (tp){ topMode = tp.dataset.top; renderTop(filtered()); return; }
+});
+const drop = $('drop');
+['dragenter','dragover'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev==='drop' || !e.relatedTarget) drop.classList.remove('over'); }));
+document.addEventListener('drop', e => { const fs=[...e.dataTransfer.files].filter(f=>/\.xlsx?$/i.test(f.name)); if (fs.length) addFiles(fs); });
+
+$('pickBtn').onclick = pickFolder;
+$('reconnectBtn').onclick = reconnect;
+$('refreshBtn').onclick = () => $('dirInput').click();
+$('dirInput').onchange = e => { snapshotFiles = [...e.target.files]; dirHandle = null; lastSig=''; cache.clear();
+  $('folder').textContent = (snapshotFiles[0]?.webkitRelativePath||'').split('/')[0] || 'dossier'; e.target.value=''; sync(); };
+render();
+restoreFolder();
+setInterval(() => { if (dirHandle) sync(); }, 2000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && dirHandle) sync(); });
+</script>
+<script src="export-pptx.js"></script>
+<script src="watch.js"></script>
+</body>
+</html>

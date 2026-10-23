@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="membre"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Comparateur de rémunération · Chauffeur PL / TP · 2026</title>
+<style>
+:root{--navy:#14273f;--blue:#21578f;--cyan:#087f87;--ink:#203149;--muted:#65778b;--line:#dbe4ec;--soft:#f4f7fb;--white:#fff;--warning:#a56715;--warnbg:#fff8e8;--success:#08735e;--greenbg:#eaf7f1;--radius:15px;--shadow:0 8px 26px rgba(21,50,74,.055)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f2f6fa;color:var(--ink);font:14px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(11,132,167,.24);outline-offset:2px}a{color:#205a90}
+header{background:linear-gradient(113deg,#152b44,#204969);color:#fff;padding:27px 24px 31px}header .inner,.page{max-width:1380px;margin:0 auto}header .top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.105em;text-transform:uppercase;color:#a8d3e7}.hero{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-top:11px;flex-wrap:wrap}h1{font-size:clamp(23px,3.3vw,33px);line-height:1.18;letter-spacing:-.045em;margin:0 0 8px;font-weight:790}.intro{color:#d1e0ec;font-size:13px;max-width:790px;margin:0}.pill{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.23);border-radius:999px;padding:6px 10px;color:#e4f5ff;font-size:11px;font-weight:800;white-space:nowrap}
+.page{padding:20px 21px 46px}.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:17px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;color:#24455f;border-radius:9px;padding:10px 13px;font-size:12px;font-weight:750;box-shadow:0 2px 7px rgba(10,43,74,.025)}.btn:hover{background:#edf5fa;border-color:#bacddd}.btn.primary{background:#225c8e;color:white;border-color:#225c8e}.btn.primary:hover{background:#184972}.toolbar p{margin:0;color:var(--muted);font-size:11px}
+.surface{border:1px solid var(--line);background:white;border-radius:var(--radius);box-shadow:var(--shadow)}.settings{padding:15px 18px;margin-bottom:17px}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}.sectionhead h2,.panel h2{margin:0;font-size:15px;letter-spacing:-.02em}.sectionnote{color:var(--muted);font-size:11px}.settingsgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.field label,.mini-label{font-size:11px;color:#52687f;font-weight:740}.field input,.field select,.rowfields input,.rowfields select{height:37px;width:100%;border:1px solid #d2dde6;border-radius:8px;background:white;color:#1b334a;padding:7px 9px;font-weight:660;min-width:0}.field select,.rowfields select{padding-left:7px}.field small{font-size:10px;color:var(--muted)}
+.comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.panel{overflow:hidden}.panel .panelhead{padding:16px 18px;border-bottom:1px solid #e1e8ef;display:flex;align-items:center;justify-content:space-between;gap:10px}.panel:nth-child(2) .panelhead{border-top:4px solid var(--cyan);padding-top:12px}.panel:nth-child(1) .panelhead{border-top:4px solid var(--blue);padding-top:12px}.caseid{font-size:10px;font-weight:800;letter-spacing:.09em;color:var(--muted);text-transform:uppercase}.casename{margin:5px 0 0;height:30px;font-size:17px;font-weight:800;border:0;background:transparent;border-bottom:1px dashed #b5c6d3;width:100%;color:#17334d;padding:1px 0;border-radius:0}.casename:focus{outline:0;border-bottom:2px solid #087f87}.case-tag{white-space:nowrap;background:#f1f5fa;color:#557087;border-radius:99px;padding:6px 9px;font-size:10px;font-weight:750}
+.panelbody{padding:16px 17px 14px}.subheading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:18px 0 10px;border-bottom:1px solid #e6edf3;padding-bottom:7px}.subheading:first-child{margin-top:0}.subheading h3{margin:0;font-size:12px;font-weight:820;color:#213950}.subheading span{color:#7f8da0;font-size:10px}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.note{font-size:11px;color:#6b7a8b;margin:7px 0 0}.notice{padding:10px 11px;border-radius:9px;font-size:11px;line-height:1.5;border:1px solid #efdec3;background:var(--warnbg);color:#83591c;margin-top:10px}.notice.hidden{display:none}.legalalert{font-weight:700}
+.allowance{display:grid;grid-template-columns:minmax(100px,1.5fr) 68px 85px 102px;gap:8px;align-items:end;margin-bottom:10px}.allowance .key{align-self:center}.allowance .key strong{display:block;font-size:12px}.allowance .key small{display:block;color:#748396;font-size:10px}.allowance .field label{font-size:10px}.allowance input,.allowance select{font-size:12px}.allowance select{height:36px}.allowance.single{grid-template-columns:minmax(100px,1.5fr) 68px 85px 102px}.minorbtn{border:0;background:none;color:#30618e;font-size:11px;font-weight:750;padding:2px 0}
+.metrics{background:#f6f9fc;border-top:1px solid #e3ebf1;padding:15px 17px 17px}.bigstat{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metricbox{background:white;border:1px solid #dce7f0;border-radius:10px;padding:13px}.metricbox.focus{background:linear-gradient(130deg,#edf8fa,#f7fcff);border-color:#b0d9df}.metricbox .k{color:#586f83;font-size:11px;font-weight:700;display:block;margin-bottom:5px}.metricbox .v{font-size:clamp(18px,2.2vw,25px);font-weight:850;color:#213c53;letter-spacing:-.04em;display:block}.metricbox.focus .v{color:#086d7b}.metricbox small{display:block;color:#8290a0;font-size:10px;margin-top:3px}.detailtable{margin-top:12px;width:100%;border-collapse:collapse;font-size:12px}.detailtable td{padding:6px 0;border-bottom:1px solid #e1e8ef}.detailtable td:last-child{text-align:right;font-weight:750}.detailtable tr:last-child td{border-bottom:0}.detailtable .em td{color:#1d4e74;font-weight:800}.calcbar{display:flex;height:11px;background:#d2e4ea;overflow:hidden;border-radius:30px;margin-top:13px}.calcbar .salary{background:#2c628e}.calcbar .refund{background:#1299a0}.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px;color:#6b7f8f;font-size:10px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}.salary-dot{background:#2c628e}.refund-dot{background:#1299a0}
+.summary{margin-top:17px;padding:19px}.sum-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.sum-header h2{margin:0;font-size:17px}.sum-header p{margin:3px 0 0;color:var(--muted);font-size:11px}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{border:1px solid #d3e3ed;background:#f6fafc;color:#35617b;font-size:10px;border-radius:999px;padding:6px 9px;font-weight:750}.comparetable{width:100%;border-collapse:collapse;font-size:12px}.comparetable th{font-size:11px;color:#526a7d;text-align:right;background:#f4f8fb;padding:11px;border-bottom:1px solid #dae5ed}.comparetable th:first-child{text-align:left}.comparetable td{padding:11px;border-bottom:1px solid #e6eef3;text-align:right}.comparetable td:first-child{text-align:left;font-weight:600}.comparetable td:last-child{font-weight:800}.comparetable tr.primaryrow td{background:#eef7f8;font-weight:850}.positive{color:var(--success)}.negative{color:#b95034}.bars{margin-top:15px;display:grid;gap:9px}.barrow{display:grid;grid-template-columns:100px 1fr 95px;align-items:center;gap:12px;font-size:11px}.track{height:18px;background:#eef3f7;border-radius:6px;overflow:hidden}.track>div{height:100%;background:#3f729f;border-radius:6px;transition:width .2s}.barrow:nth-child(2) .track>div{background:#119499}.barrow strong{text-align:right;font-size:12px}.insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}.insight{border:1px solid #e1e9f0;padding:12px;border-radius:10px}.insight .t{font-size:11px;color:#5f7284;font-weight:750}.insight .v{margin-top:4px;font-size:22px;font-weight:850;color:#173d58}.insight small{color:#758697;font-size:10px}.insight.warn{background:#fffaf0;border-color:#eddab2}
+.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:17px}.foot{padding:18px}.foot h2{font-size:13px;margin:0 0 9px}.foot p,.foot li{font-size:11px;color:#5c7084;line-height:1.55}.foot ul{padding-left:19px;margin:5px 0 0}.foot a{word-break:break-word;font-size:11px}.foot .links{display:grid;gap:4px}.print-meta{display:none}
+@media(max-width:1050px){.comparison{gap:12px}.allowance,.allowance.single{grid-template-columns:minmax(90px,1fr) 60px 75px 91px;gap:6px}.panelbody{padding:13px}.settingsgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.panel .panelhead{padding-left:13px;padding-right:13px}.metrics{padding-left:13px;padding-right:13px}}
+@media(max-width:790px){header{padding:23px 16px}.page{padding:15px 12px 35px}.comparison,.footer-grid{grid-template-columns:1fr}.panelbody{padding:15px}.panel .panelhead{padding:15px}.settingsgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.allowance,.allowance.single{grid-template-columns:minmax(110px,1fr) 74px 86px 105px;gap:7px}.insights{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:470px){.settingsgrid{grid-template-columns:1fr 1fr}.three{gap:6px}.field input,.field select{padding:6px}.allowance,.allowance.single{grid-template-columns:minmax(85px,1fr) 48px 65px 87px;gap:5px}.allowance .key strong{font-size:11px}.allowance .key small{font-size:9px}.allowance input,.allowance select{padding:4px;font-size:11px}.allowance .field label{font-size:9px}.metrics .metricbox{padding:10px}.comparetable{font-size:11px}.comparetable td,.comparetable th{padding:9px 5px}.barrow{grid-template-columns:62px 1fr 78px;gap:7px}.insights{grid-template-columns:1fr}.chip{font-size:9px}}
+@media print{body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10px}header{background:#fff;color:#000;border-bottom:2px solid #26384c;padding:5px 0 16px}header .eyebrow,header .intro{color:#555}.pill{color:#333;border-color:#bbb}.page{padding:12px 0}.toolbar,.btn,.minorbtn{display:none!important}.surface{box-shadow:none;break-inside:avoid}.comparison{grid-template-columns:1fr 1fr;gap:8px}.panelbody{padding:10px}.allowance,.allowance.single{grid-template-columns:minmax(85px,1fr) 50px 70px 76px;gap:3px;margin-bottom:6px}.allowance .key strong{font-size:9px}.allowance .key small{font-size:8px}.allowance .field label{font-size:8px}.field input,.field select,.rowfields input,.rowfields select{height:24px;font-size:10px;padding:1px;border:1px solid #d2d2d2}.settings{padding:10px}.panel .panelhead{padding:7px}.panelbody .subheading{margin:9px 0 5px}.metricbox{padding:6px}.metrics{padding:9px}.metricbox .v{font-size:15px}.detailtable{font-size:9px}.detailtable td{padding:3px}.summary{padding:9px}.comparetable td,.comparetable th{padding:5px}.footer-grid{gap:10px}.foot{padding:10px}.foot p,.foot li{font-size:9px}.print-meta{display:block;font-size:9px;color:#666}}
+
+/* Charte DOMINO RH */
+:root{--navy:#142469;--blue:#142469;--cyan:#ed4018;--warning:#a56715;--success:#216b43;--shadow:0 8px 26px rgba(20,36,105,.08)}
+body{background:#f5f6f9}header{background:linear-gradient(113deg,#142469,#263b86)}.eyebrow{color:#ffad98}.btn.primary{background:#142469;border-color:#142469}.btn.primary:hover{background:#0e194d}.panel:nth-child(2) .panelhead{border-top-color:#ed4018}.panel:nth-child(1) .panelhead{border-top-color:#142469}.casename:focus{border-bottom-color:#ed4018}.metricbox.focus{background:linear-gradient(130deg,#fff1ec,#fff9f7);border-color:#f2b09c}.metricbox.focus .v{color:#c93412}.calcbar .salary{background:#142469}.calcbar .refund{background:#ed4018}.salary-dot{background:#142469}.refund-dot{background:#ed4018}.chip{border-color:#f2c6b9;background:#fff6f2;color:#9e321b}
+</style>
+</head>
+<body>
+<header>
+ <div class="inner">
+  <div class="top"><div class="eyebrow">Outil de simulation RH · Chauffeurs PL / SPL</div><div style="display:flex;align-items:center;gap:13px;flex-wrap:wrap"><a href="./reporting_marges.html" style="color:#fff;text-decoration:underline;text-underline-offset:3px;font-size:12px;font-weight:700">← Reporting des marges</a><span class="pill">Barèmes 2026 · Mode hors ligne</span></div></div>
+  <div class="hero"><div><h1>Comparateur de rémunération</h1><p class="intro">Deux situations côte à côte. Ajustez les heures, les indemnités et les hypothèses de cotisations pour mesurer les écarts de brut, net et coût direct.</p></div><span class="pill">Transport routier / Travaux publics</span></div>
+ </div>
+</header>
+<main class="page">
+ <div class="toolbar">
+  <p>Les champs sont modifiables. Les résultats se recalculent automatiquement.</p>
+  <div class="actions"><button id="copy" class="btn" type="button">Copier A vers B</button><button id="reset" class="btn" type="button">Réinitialiser</button><button id="csv" class="btn" type="button">Exporter en CSV</button><button id="print" class="btn primary" type="button">Imprimer / PDF</button></div>
+ </div>
+ <section class="surface settings" aria-label="Paramètres communs">
+  <div class="sectionhead"><h2>Paramètres communs</h2><span class="sectionnote">Taux indicatifs et personnalisables</span></div>
+  <div class="settingsgrid">
+   <div class="field"><label for="netRate">Taux net estimé du brut soumis (%)</label><input id="netRate" type="number" min="50" max="100" step="0.5" value="80"><small>Sans simulation exacte des allègements HS</small></div>
+   <div class="field"><label for="employerRate">Cotisations patronales estimées (%)</label><input id="employerRate" type="number" min="0" max="100" step="1" value="40"><small>Pour un coût direct indicatif</small></div>
+   <div class="field"><label for="goal">Objectif de versement net (€)</label><input id="goal" type="number" min="0" max="20000" step="50" value="2750"><small>Net avant prélèvement à la source</small></div>
+   <div class="field"><label for="calcMode">Décompte des heures</label><select id="calcMode"><option value="transport">Transport : 25 % jusqu'à 186 h</option><option value="general">Modèle général : 25 % jusqu'à 186,33 h</option></select><small>Répartition mensuelle simplifiée, à valider</small></div>
+  </div>
+ </section>
+ <section class="comparison" aria-label="Deux cas à comparer">
+  <article class="panel surface" id="panelA"><div class="panelhead"><div style="min-width:0;flex:1"><div class="caseid">Cas A · Référence</div><input class="casename" id="a-name" aria-label="Nom du cas A" value="Situation actuelle"></div><span class="case-tag">A</span></div><div class="panelbody" id="inputsA"></div><div class="metrics" id="metricsA" aria-live="polite"></div></article>
+  <article class="panel surface" id="panelB"><div class="panelhead"><div style="min-width:0;flex:1"><div class="caseid">Cas B · Variante</div><input class="casename" id="b-name" aria-label="Nom du cas B" value="Organisation optimisée"></div><span class="case-tag">B</span></div><div class="panelbody" id="inputsB"></div><div class="metrics" id="metricsB" aria-live="polite"></div></article>
+ </section>
+ <section class="summary surface" aria-label="Synthèse comparative">
+  <div class="sum-header"><div><h2>Synthèse comparative</h2><p>Écart B − A : un chiffre négatif signifie une diminution par rapport au cas A.</p></div><div class="chips"><span class="chip" id="goalChip">Objectif : 2 750 €</span><span class="chip">Net avant impôt</span><span class="chip">Hors IFM / ICCP</span></div></div>
+  <div style="overflow-x:auto"><table class="comparetable"><thead><tr><th>Indicateur</th><th>Cas A</th><th>Cas B</th><th>Écart B − A</th></tr></thead><tbody id="comparisonRows"></tbody></table></div>
+  <div class="bars"><div class="barrow"><b id="a-bar-label">Cas A</b><div class="track"><div id="barA"></div></div><strong id="barValA"></strong></div><div class="barrow"><b id="b-bar-label">Cas B</b><div class="track"><div id="barB"></div></div><strong id="barValB"></strong></div></div>
+  <div class="insights"><div class="insight"><div class="t">Brut soumis : variation B − A</div><div class="v" id="savingGross">—</div><small>Inclut la réintégration sociale éventuelle des indemnités</small></div><div class="insight"><div class="t">Net total versé : variation B − A</div><div class="v" id="netDiff">—</div><small>Indemnités exonérées incluses, avant impôt</small></div><div class="insight warn"><div class="t">Coût direct théorique : variation B − A</div><div class="v" id="costDiff">—</div><small>Non assimilable au coût total employeur / intérim</small></div></div>
+  <p class="note" id="conclusion"></p>
+ </section>
+ <section class="footer-grid">
+  <div class="foot surface"><h2>Règles intégrées et points de vigilance</h2><ul>
+   <li>Le simulateur sépare <b>rémunération nette estimée</b>, <b>frais exonérés</b> et <b>net total viré</b>. Les frais indemnisent des dépenses, ils ne remplacent pas du salaire.</li>
+   <li>Repas : plafond URSSAF 2026 de <b>21,40 €</b> (restaurant imposé), <b>10,40 €</b> (hors restaurant), ou <b>7,50 €</b> (repas/encas sur lieu de travail sous contraintes).</li>
+   <li>Transport 2026 : repas 16,36 €, casse-croûte 8,87 €, indemnité spéciale 4,42 €. Le casse-croûte suppose notamment une prise de poste avant 5 h ; il ne se cumule pas avec le repos journalier ni le repas unique de nuit. La « spéciale » ne se cumule pas automatiquement avec le même repas.</li>
+   <li>TP Aquitaine 2026 : repas 14,20 € ; transport et trajet selon zone. <b>Le trajet est soumis</b> ; le transport n'est exonéré que sous conditions.</li>
+   <li>Calcul mensuel approximatif : 151,67 h de base ; 25 % jusqu'à 186 h (transport) ou 186,33 h (général), puis 50 %. Contrôler les décomptes hebdomadaires, le régime d'équivalence, les repos, les heures supplémentaires réellement éligibles et les minima.</li>
+   <li>Les montants peuvent être ajustés pour simuler une proposition, mais ils ne constituent pas un droit à exonération. En intérim, contrôler l'égalité de rémunération et les IFM/ICCP.</li>
+  </ul></div>
+  <div class="foot surface"><h2>Sources officielles · 2026</h2><div class="links">
+   <a target="_blank" rel="noopener" href="https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/frais-professionnels.html">URSSAF – frais professionnels, repas et petits déplacements 2026</a>
+   <a target="_blank" rel="noopener" href="https://www.legifrance.gouv.fr/conv_coll/article/KALIARTI000053715771">Légifrance – Transport, avenant n°81, frais 2026</a>
+   <a target="_blank" rel="noopener" href="https://www.legifrance.gouv.fr/conv_coll/article/KALIARTI000005849465">Légifrance – Transport, protocole article 5 (casse-croûte)</a>
+   <a target="_blank" rel="noopener" href="https://www.legifrance.gouv.fr/conv_coll/article/KALIARTI000005849469">Légifrance – Transport, protocole article 7 (indemnité spéciale)</a>
+   <a target="_blank" rel="noopener" href="https://www.legifrance.gouv.fr/conv_coll/article/KALIARTI000023750163">Légifrance – Accord du 23 avril 2002, majorations du temps de service</a>
+   <a target="_blank" rel="noopener" href="https://www.legifrance.gouv.fr/conv_coll/article/KALIARTI000054092205">Légifrance – TP Aquitaine, barème de petits déplacements 2026</a>
+   <a target="_blank" rel="noopener" href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000033450327">Légifrance – Code des transports, temps de service</a>
+  </div><p><b>Portée :</b> outil de simulation et d'aide à la décision, non bulletin de paie. Le net réel dépend des contributions salariales, de l'exonération des heures supplémentaires, de la mutuelle, du prélèvement à la source et des particularités contractuelles. Les tarifs conventionnels ne permettent pas à eux seuls de qualifier les frais comme non soumis.</p><p class="print-meta">Impression du comparatif : valeurs paramétrées par l'utilisateur.</p></div>
+ </section>
+</main>
+<script>
+(function(){'use strict';
+ const TRANSPORT={meal:16.36,breakfast:8.87,special:4.42,trans:0,trajet:0},
+ TP={meal:14.2,breakfast:0,special:0,trans:0,trajet:0};
+ const ZONES={"0":[0,0],"1":[2.86,1.97],"2":[5.78,3.71],"3":[9.66,5.22],"4":[12.8,6.92],"5":[16.65,8.79]};
+ const defaults=()=>({a:{name:'Situation actuelle',convention:'transport',hours:200,rate:12.5,days:21,mealCount:21,mealAmount:16.36,mealContext:'restaurant',snackCount:0,snackAmount:8.87,snackEligible:true,specialCount:0,specialAmount:4.42,specialEligible:false,transCount:0,transAmount:0,transEligible:false,trajetCount:0,trajetAmount:0,zone:'0'},b:{name:'Organisation optimisée',convention:'transport',hours:190,rate:12.5,days:21,mealCount:21,mealAmount:16.36,mealContext:'restaurant',snackCount:15,snackAmount:8.87,snackEligible:true,specialCount:0,specialAmount:4.42,specialEligible:false,transCount:21,transAmount:6,transEligible:false,trajetCount:0,trajetAmount:0,zone:'0'},common:{netRate:80,employerRate:40,goal:2750,calcMode:'transport'}});
+ let data=defaults();
+ const num=v=>Math.max(0,Number(String(v??0).replace(',','.'))||0);
+ const money=v=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(v||0);
+ const money0=v=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(v||0);
+ const signed=v=>(v>0?'+':'')+money(v);
+ const eq=(a,b)=>Math.abs(a-b)<0.005;
+ const safe=(value)=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+ const input=(id,label,value,{step='.01',min='0',max='9999'}={})=>`<div class="field"><label for="${id}">${label}</label><input id="${id}" data-k="${id}" type="number" min="${min}" max="${max}" step="${step}" value="${safe(value)}"></div>`;
+ const choice=(id,label,current,opts)=>`<div class="field"><label for="${id}">${label}</label><select id="${id}" data-k="${id}">${opts.map(o=>`<option value="${safe(o[0])}" ${String(current)===String(o[0])?'selected':''}>${safe(o[1])}</option>`).join('')}</select></div>`;
+ const check=(id,label,current)=>`<label style="display:flex;align-items:center;gap:5px;color:#697d8c;font-size:10px;margin:2px 0 6px"><input type="checkbox" id="${id}" data-k="${id}" ${current?'checked':''}> ${label}</label>`;
+ const allowance=(side,key,title,hint,n,amount,extra='')=>`<div class="allowance"><div class="key"><strong>${title}</strong><small>${hint}</small></div>${input(side+'-'+key+'Count','Jours',n,{step:'1',max:'31'})}${input(side+'-'+key+'Amount','€/jour',amount)}<div>${extra}</div></div>`;
+ function markup(side){const s=data[side], isT=s.convention==='tp';
+  const options= isT?[['restaurant','Restaurant imposé · plafond 21,40 €'],['hors','Hors restaurant · plafond 10,40 €'],['lieu','Lieu de travail · plafond 7,50 €'],['aucun','Non exonérable · 0 €']]:[['restaurant','Restaurant imposé · plafond 21,40 €'],['hors','Hors restaurant · plafond 10,40 €'],['lieu','Lieu de travail · plafond 7,50 €'],['aucun','Non exonérable · 0 €']];
+  return `<div class="subheading"><h3>Temps de travail</h3><span>Heures effectivement réalisées</span></div>
+  <div class="three">${input(side+'-hours','Heures / mois',s.hours,{step:'.5',max:'350'})}${input(side+'-rate','€/h brut',s.rate,{step:'.1',max:'150'})}${input(side+'-days','Jours travaillés',s.days,{step:'1',max:'31'})}</div>
+  <div style="margin-top:10px">${choice(side+'-convention','Convention applicable (ne se choisit pas librement)',s.convention,[['transport','Transport routier · IDCC 0016'],['tp','Travaux publics Aquitaine · IDCC 1702']])}</div>
+  <div class="subheading"><h3>Indemnités de repas</h3><span>Au réel et selon les conditions</span></div>
+  <div class="two">${input(side+'-mealCount','Nombre de repas',s.mealCount,{step:'1',max:'62'})}${input(side+'-mealAmount','Montant par repas (€)',s.mealAmount)}</div>
+  <div style="margin-top:9px">${choice(side+'-mealContext','Contexte du repas · plafond URSSAF',s.mealContext,options)}</div>
+  <p class="note">Transport : 16,36 € conventionnels. TP Aquitaine : 14,20 €. Un montant de 21,40 € est un <b>plafond social</b>, pas une obligation de versement.</p>
+  <div class="subheading"><h3>Indemnités complémentaires</h3><span>Ne pas présumer du cumul</span></div>
+  ${isT?`<p class="notice">En TP, les indemnités transport et trajet sont renseignées ci-dessous. Les rubriques « casse-croûte » et « spéciale » ne sont <b>pas automatiquement dues</b> selon les barèmes du transport routier.</p>`:''}
+  ${allowance(side,'snack','Casse-croûte','Transport · avant 5 h',s.snackCount,s.snackAmount,check(side+'-snackEligible','Plafond 7,50 € si justifié',s.snackEligible))}
+  ${allowance(side,'special','Indemnité spéciale','Transport · horaires article 7',s.specialCount,s.specialAmount,check(side+'-specialEligible','Repas distinct justifié',s.specialEligible))}
+  <div class="subheading"><h3>Déplacements</h3><span>Justification indispensable</span></div>
+  ${isT?`<div style="margin-bottom:9px">${choice(side+'-zone','Zone conventionnelle TP',s.zone,[['0','Personnalisé / aucune zone'],['1','Zone 1 · 0–10 km'],['2','Zone 2 · 10–20 km'],['3','Zone 3 · 20–30 km'],['4','Zone 4 · 30–40 km'],['5','Zone 5 · 40–50 km']])}</div>`:''}
+  ${allowance(side,'trans','Transport / frais','Frais justifiés',s.transCount,s.transAmount,check(side+'-transEligible','Exonérable si justifié',s.transEligible))}
+  ${allowance(side,'trajet','Trajet TP','Soumis à cotisations',s.trajetCount,s.trajetAmount,`<div style="font-size:10px;line-height:1.3;color:#aa6333;padding-bottom:7px;font-weight:750">100 % soumis</div>`)}
+  <div id="${side}-alerts" aria-live="polite"></div>`;
+ }
+ function getTotals(s){
+  const base=151.67;const split=data.common.calcMode==='general'?186.33:186;
+  const h=num(s.hours),rate=num(s.rate),ordinary=Math.min(h,base),hs25=Math.min(Math.max(0,h-base),split-base),hs50=Math.max(0,h-split);
+  const grossBase=ordinary*rate,gross25=hs25*rate*1.25,gross50=hs50*rate*1.5,regularGross=grossBase+gross25+gross50;
+  const ceiling=({restaurant:21.4,hors:10.4,lieu:7.5,aucun:0})[s.mealContext]??0;
+  const count=k=>num(s[k+'Count']),amount=k=>num(s[k+'Amount']);
+  const mealGross=count('meal')*amount('meal'),mealExempt=count('meal')*Math.min(amount('meal'),ceiling);
+  const snackGross=count('snack')*amount('snack'),snackExempt=s.snackEligible?count('snack')*Math.min(amount('snack'),7.5):0;
+  const specialGross=count('special')*amount('special'),specialExempt=s.specialEligible?count('special')*Math.min(amount('special'),7.5):0;
+  const transGross=count('trans')*amount('trans'),transExempt=s.transEligible?transGross:0;
+  const trajetGross=count('trajet')*amount('trajet');
+  const allowances=mealGross+snackGross+specialGross+transGross+trajetGross;
+  const exempt=Math.min(allowances,mealExempt+snackExempt+specialExempt+transExempt);
+  const reintegrated=Math.max(0,allowances-exempt);
+  const subjectGross=regularGross+reintegrated;
+  const netSalary=subjectGross*(num(data.common.netRate)/100);
+  const totalNet=netSalary+exempt;
+  const employerCost=subjectGross*(1+num(data.common.employerRate)/100)+exempt;
+  return {baseHours:ordinary,h25:hs25,h50:hs50,grossBase,gross25,gross50,regularGross,allowances,exempt,reintegrated,subjectGross,netSalary,totalNet,employerCost,mealGross,snackGross,specialGross,transGross,trajetGross,mealExempt,snackExempt,specialExempt,transExempt};
+ }
+ const anomalies=(s)=>{
+  const out=[];const days=num(s.days);
+  for(const k of ['snack','special','trans','trajet'])if(num(s[k+'Count'])>days)out.push(`${({snack:'Casse-croûte',special:'Indemnité spéciale',trans:'Transport',trajet:'Trajet'})[k]} : plus de jours indemnisés que de jours travaillés.`);
+  if(num(s.mealCount)>days*2)out.push('Nombre de repas supérieur à 2 par jour : vérifier les repas distincts.');
+  if(num(s.specialCount)>0&&num(s.mealCount)>0)out.push('Repas + indemnité spéciale : vérifier qu’il ne s’agit pas de la même période de repas et que le cumul est admis.');
+  if(num(s.snackCount)>0)out.push('Casse-croûte : réservée aux prises de service avant 5 h en déplacement ; pas de cumul avec les indemnités de repos journalier ou de nuit prévues par le protocole.');
+  if(num(s.transCount)>0&&!s.transEligible)out.push('Frais de transport non validés : ils sont intégrés au brut soumis par prudence.');
+  if(num(s.transCount)>0&&s.transEligible)out.push('Transport exonéré sous réserve de frais réels justifiés, des conditions URSSAF et de la distance. Le simulateur ne valide pas le plafond kilométrique.');
+  if(s.convention==='tp'&&(num(s.snackCount)>0||num(s.specialCount)>0))out.push('Barèmes transport routier sur poste TP : ne pas les appliquer sans fondement conventionnel ou contractuel vérifié.');
+  if(num(s.mealAmount)>((({restaurant:21.4,hors:10.4,lieu:7.5,aucun:0})[s.mealContext])||0))out.push('Part du repas dépassant le plafond sélectionné : réintégrée dans le brut soumis.');
+  if(s.convention==='transport'&&num(s.mealAmount)>16.36)out.push('Repas supérieur à 16,36 € conventionnels : ce supplément n’est pas automatique et requiert une base de versement distincte.');
+  if(s.convention==='tp'&&num(s.mealAmount)>14.2)out.push('Repas supérieur à 14,20 € TP Aquitaine : supplément à justifier ; vérifier les accords applicables.');
+  if(num(s.hours)>215)out.push('Volume d’heures important : contrôler les maxima hebdomadaires et les repos, impossible avec un total mensuel seul.');
+  if(num(s.rate)<12.5)out.push('Contrôler les minima légaux et conventionnels du poste.');
+  return out;
+ };
+ function metricMarkup(s,t){const max=Math.max(t.netSalary+t.exempt,1);return `<div class="bigstat"><div class="metricbox"><span class="k">Brut soumis</span><strong class="v">${money(t.subjectGross)}</strong><small>Salaire + réintégrations</small></div><div class="metricbox focus"><span class="k">Net total versé</span><strong class="v">${money(t.totalNet)}</strong><small>Avant prélèvement à la source</small></div></div>
+ <table class="detailtable"><tbody><tr><td>Salaire brut (heures)</td><td>${money(t.regularGross)}</td></tr><tr><td>Dont ${t.h25.toFixed(2).replace('.',',')} h à +25 %</td><td>${money(t.gross25)}</td></tr><tr><td>Dont ${t.h50.toFixed(2).replace('.',',')} h à +50 %</td><td>${money(t.gross50)}</td></tr><tr><td>Total des indemnités versées</td><td>${money(t.allowances)}</td></tr><tr><td>Part exonérée des indemnités</td><td>${money(t.exempt)}</td></tr><tr><td>Part réintégrée au brut</td><td>${money(t.reintegrated)}</td></tr><tr class="em"><td>Net salaire estimé (hors frais)</td><td>${money(t.netSalary)}</td></tr><tr class="em"><td>Coût direct théorique</td><td>${money(t.employerCost)}</td></tr></tbody></table>
+ <div class="calcbar"><div class="salary" style="width:${100*t.netSalary/max}%"></div><div class="refund" style="width:${100*t.exempt/max}%"></div></div><div class="legend"><span><i class="dot salary-dot"></i>Net rémunération</span><span><i class="dot refund-dot"></i>Frais exonérés</span></div>`;}
+ function renderSummary(A,B){
+  const rows=[['Heures travaillées',num(data.a.hours),num(data.b.hours),'h'],['Salaire brut des heures',A.regularGross,B.regularGross,'€'],['Indemnités versées',A.allowances,B.allowances,'€'],['Dont frais exonérés',A.exempt,B.exempt,'€'],['Part réintégrée au brut',A.reintegrated,B.reintegrated,'€'],['Brut total soumis',A.subjectGross,B.subjectGross,'€'],['Net salaire estimé (hors frais)',A.netSalary,B.netSalary,'€'],['Net total versé',A.totalNet,B.totalNet,'€'],['Coût direct théorique',A.employerCost,B.employerCost,'€']];
+  document.getElementById('comparisonRows').innerHTML=rows.map(([title,a,b,unit])=>`<tr class="${title==='Net total versé'?'primaryrow':''}"><td>${title}</td><td>${unit==='€'?money(a):a+' h'}</td><td>${unit==='€'?money(b):b+' h'}</td><td class="${b-a<0?'negative':b-a>0?'positive':''}">${unit==='€'?signed(b-a):((b-a>0?'+':'')+(Math.round((b-a)*100)/100)+' h')}</td></tr>`).join('');
+  const larger=Math.max(A.totalNet,B.totalNet,1);document.getElementById('barA').style.width=(100*A.totalNet/larger)+'%';document.getElementById('barB').style.width=(100*B.totalNet/larger)+'%';
+  document.getElementById('barValA').textContent=money0(A.totalNet);document.getElementById('barValB').textContent=money0(B.totalNet);document.getElementById('a-bar-label').textContent=data.a.name;document.getElementById('b-bar-label').textContent=data.b.name;
+  const fields=[['savingGross',B.subjectGross-A.subjectGross],['netDiff',B.totalNet-A.totalNet],['costDiff',B.employerCost-A.employerCost]];
+  fields.forEach(([id,v])=>{const e=document.getElementById(id);e.textContent=signed(v);e.style.color=id==='netDiff'?(v>=0?'#08735e':'#b95034'):(v<=0?'#08735e':'#b95034')});
+  const goal=num(data.common.goal);document.getElementById('goalChip').textContent='Objectif : '+money0(goal);
+  let summary=`Cas B : ${money0(B.totalNet)} versés pour ${num(data.b.hours)} h, soit ${money(B.totalNet-A.totalNet)} d’écart de versement et ${money(B.subjectGross-A.subjectGross)} de brut soumis par rapport à A. `;
+  summary+=B.totalNet>=goal?`L’objectif de ${money0(goal)} est atteint en estimation.`:`L’objectif de ${money0(goal)} n’est pas atteint (écart ${money(B.totalNet-goal)}).`;
+  if(B.exempt>A.exempt) summary+=' La hausse des frais exonérés correspond à des frais professionnels à justifier : ce n’est pas une hausse équivalente du pouvoir d’achat.';
+  document.getElementById('conclusion').textContent=summary;
+ }
+ function renderNumbers(){
+  const a=getTotals(data.a),b=getTotals(data.b);for(const [s,t] of [['a',a],['b',b]]){
+   document.getElementById('metrics'+s.toUpperCase()).innerHTML=metricMarkup(data[s],t);
+   const warns=anomalies(data[s]);document.getElementById(s+'-alerts').innerHTML=warns.length?`<div class="notice"><b class="legalalert">Points à contrôler</b><ul style="margin:5px 0 0;padding-left:16px">${warns.map(w=>'<li>'+safe(w)+'</li>').join('')}</ul></div>`:'';
+  }renderSummary(a,b);
+  try{localStorage.setItem('comparateurChauffeur2026',JSON.stringify(data))}catch(e){}
+ }
+ function rebuild(side){document.getElementById('inputs'+side.toUpperCase()).innerHTML=markup(side);renderNumbers()}
+ function rebuildAll(){['a','b'].forEach(side=>{document.getElementById(side+'-name').value=data[side].name;document.getElementById('inputs'+side.toUpperCase()).innerHTML=markup(side)});['netRate','employerRate','goal','calcMode'].forEach(k=>document.getElementById(k).value=data.common[k]);renderNumbers()}
+ function write(side,key,value){if(key==='name'){data[side][key]=String(value);renderNumbers();return}
+  if(key==='convention'){
+   const prev=data[side].convention;data[side].convention=value;
+   if(prev!==value){const preset=value==='tp'?TP:TRANSPORT;data[side].mealAmount=preset.meal;data[side].snackAmount=preset.breakfast;data[side].specialAmount=preset.special;
+    data[side].snackCount=0;data[side].specialCount=0;data[side].transCount=0;data[side].transAmount=0;data[side].transEligible=false;data[side].trajetCount=0;data[side].trajetAmount=0;data[side].zone='0';}
+   rebuild(side);return
+  }
+  if(key==='zone'){
+   data[side].zone=value;
+   if(value!=='0'){data[side].transAmount=ZONES[value][0];data[side].trajetAmount=ZONES[value][1];data[side].transCount=data[side].days;data[side].trajetCount=data[side].days;data[side].transEligible=false;}
+   rebuild(side);return;
+  }
+  if(key.endsWith('Eligible'))data[side][key]=!!value;
+  else if(key==='mealContext')data[side][key]=value;
+  else data[side][key]=num(value);
+  if(key==='days'){
+   for(const k of ['meal','trans','trajet'])if(data[side][k+'Count']>data[side].days)data[side][k+'Count']=data[side].days;
+   rebuild(side);return;
+  }
+  renderNumbers();
+ }
+ document.addEventListener('input',event=>{
+  const t=event.target;if(!t||!t.id)return;
+  if(t.id==='a-name'||t.id==='b-name'){write(t.id[0],'name',t.value);return}
+  if(t.id in data.common){data.common[t.id]=t.id==='calcMode'?t.value:num(t.value);renderNumbers();return}
+  const m=t.id.match(/^([ab])-(.+)$/);if(!m||t.type==='checkbox'||t.tagName==='SELECT')return;
+  write(m[1],m[2],t.value);
+ });
+ document.addEventListener('change',event=>{
+  const t=event.target;if(!t?.id)return;
+  if(t.id==='calcMode'){data.common.calcMode=t.value;renderNumbers();return}
+  const m=t.id.match(/^([ab])-(.+)$/);if(!m)return;
+  if(t.tagName==='SELECT'||t.type==='checkbox')write(m[1],m[2],t.type==='checkbox'?t.checked:t.value);
+ });
+ document.getElementById('copy').addEventListener('click',()=>{data.b=JSON.parse(JSON.stringify(data.a));data.b.name='Copie de '+data.a.name;rebuildAll()});
+ document.getElementById('reset').addEventListener('click',()=>{if(confirm('Revenir aux deux scénarios d’origine ?')){data=defaults();rebuildAll()}});
+ document.getElementById('print').addEventListener('click',()=>window.print());
+ document.getElementById('csv').addEventListener('click',()=>{
+  const A=getTotals(data.a),B=getTotals(data.b);const fmt=n=>String(Math.round(n*100)/100).replace('.',',');
+  const lines=[['Comparateur de rémunération chauffeur · 2026','Cas A','Cas B'],['Nom du scénario',data.a.name,data.b.name],['Convention',data.a.convention,data.b.convention],['Heures mensuelles',data.a.hours,data.b.hours],['Taux horaire',data.a.rate,data.b.rate],['Jours travaillés',data.a.days,data.b.days],['Salaire brut (heures)',fmt(A.regularGross),fmt(B.regularGross)],['Indemnités versées',fmt(A.allowances),fmt(B.allowances)],['Dont exonérées',fmt(A.exempt),fmt(B.exempt)],['Réintégration soumise',fmt(A.reintegrated),fmt(B.reintegrated)],['Brut soumis',fmt(A.subjectGross),fmt(B.subjectGross)],['Net salaire estimé',fmt(A.netSalary),fmt(B.netSalary)],['Net total estimé',fmt(A.totalNet),fmt(B.totalNet)],['Coût direct indicatif',fmt(A.employerCost),fmt(B.employerCost)],['Taux net appliqué',data.common.netRate+'%',data.common.netRate+'%'],['Taux patronal simulé',data.common.employerRate+'%',data.common.employerRate+'%'],['Remarque','Frais soumis aux justificatifs, barèmes et non-cumuls','Hors IFM / ICCP et PAS']];
+  const csv='\ufeff'+lines.map(l=>l.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='comparaison_chauffeur_2026.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+ });
+ try{const saved=JSON.parse(localStorage.getItem('comparateurChauffeur2026')||'null');if(saved?.a?.hours>=0&&saved?.b?.hours>=0&&saved?.common?.netRate>=0){const fallback=defaults();data={a:{...fallback.a,...saved.a},b:{...fallback.b,...saved.b},common:{...fallback.common,...saved.common}}}}catch(e){}
+ rebuildAll();
+})();
+</script>
+</body>
+</html>

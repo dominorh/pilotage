@@ -1,36 +1,55 @@
-# Outils de pilotage de l'agence
+<div align="center">
 
-👉 **Point d'entrée : https://dominorh.github.io/pilotage/accueil.html** — connexion, puis accès aux outils autorisés par le rôle.
+# DOMINO RH · Espace outils
 
-Quatre outils et une page d'administration, dans le navigateur, sans installation :
+**Un point d’entrée unique pour les outils de pilotage, de recrutement et de développement commercial.**
+
+[ Ouvrir la page de garde ](https://dominorh.github.io/pilotage/)
+
+</div>
+
+---
+
+## Accès rapide
+
+La page de garde est **[`index.html`](./index.html)** : on s'y connecte avec le compte créé par l'administrateur,
+puis elle affiche les outils auxquels le rôle donne accès. Ouvrir directement un outil sans être connecté renvoie
+vers la page de garde, puis ramène à l'outil après la connexion.
 
 | Outil | Page | Données | Accès |
 |---|---|---|---|
-| **Planning partagé** | `planning-base.html` | base de données commune (Supabase) | tous les comptes rattachés à une agence |
-| **Planning (Excel)** | `planning.html` | planning Excel de l'agence, lu sur le poste | responsables, administrateurs |
-| **Marges & ETP** | `marges.html` | exports CSV de marges, lus sur le poste | responsables, administrateurs |
-| **Actions commerciales** | `index.html` | exports Excel des actions, lus sur le poste | responsables, administrateurs |
-| **Gestion des comptes** | `comptes.html` | comptes et rôles (base de données) | administrateurs |
+| **Planning partagé** | [`planning-base.html`](./planning-base.html) | base de données commune (Supabase) | tous les comptes rattachés à une agence |
+| **Marges & ETP** | [`marges.html`](./marges.html) | exports CSV de marges, lus sur le poste | responsables, administrateurs |
+| **Actions commerciales** | [`actions.html`](./actions.html) | exports Excel des actions, lus sur le poste | responsables, administrateurs |
+| **Planning (Excel)** | [`planning.html`](./planning.html) | planning Excel de l'agence, lu sur le poste | responsables, administrateurs |
+| **Gestion des comptes** | [`comptes.html`](./comptes.html) | comptes et rôles (base de données) | administrateurs |
+| **Générateur de propositions commerciales** | [`proposition_commerciale_domino.html`](./proposition_commerciale_domino.html) | saisie dans la page | tous les comptes |
+| **Calculateur pédagogique de marge** | [`calculateur_marge_pedagogique.html`](./calculateur_marge_pedagogique.html) | saisie dans la page | tous les comptes |
+| **Comparateur chauffeur PL / TP** | [`comparateur_remuneration_chauffeur_TP.html`](./comparateur_remuneration_chauffeur_TP.html) | saisie dans la page | tous les comptes |
+| **Dashboard recrutement** | [`dashboard_recrutement_github_version.html`](./dashboard_recrutement_github_version.html) | import dans la page | tous les comptes |
 
-La base de données ne sert qu'au **planning partagé** et aux **comptes de connexion**. Les outils Marges, Actions
-et Planning (Excel) continuent de lire les exports sur le poste : rien n'est envoyé dans la base.
+- L'ancien **Reporting des marges** est remplacé par **Marges & ETP** : l'adresse `reporting_marges.html` y redirige.
+- Le calculateur pédagogique utilise des taux et coefficients modifiables ; il sert à comparer des hypothèses et ne remplace pas un paramétrage paie validé.
+- Pour créer un PDF depuis le générateur commercial, utiliser **Imprimer / enregistrer en PDF**, puis choisir l'enregistrement PDF dans la fenêtre d'impression.
+- Les outils simples (propositions, calculateur, comparateur, dashboard) affichent en haut un bandeau commun : retour à l'espace outils et déconnexion.
+- Pour changer qui a accès à un outil : attribut `data-acces` de la balise `auth.js` en tête de la page (`membre`, `responsable` ou `admin`) et de sa carte dans `index.html`.
 
 ## Connexion et rôles
 
-- On se connecte sur **`accueil.html`** (adresse e-mail + mot de passe créés par l'administrateur). L'accueil n'affiche
+- On se connecte sur la **page de garde** (`index.html`) (adresse e-mail + mot de passe créés par l'administrateur). La page de garde n'affiche
   ensuite que les outils autorisés.
-- Ouvrir directement un outil sans être connecté renvoie vers l'accueil, puis ramène à la page demandée.
+- Ouvrir directement un outil sans être connecté renvoie vers la page de garde, puis ramène à la page demandée.
 - Un compte qui ouvre un outil non autorisé voit « Accès réservé » ; les onglets correspondants sont masqués.
-- « Se déconnecter » (en haut des pages) ramène à l'accueil ; une déconnexion dans un onglet ferme l'accès dans les autres.
-- **« Changer mon mot de passe »** sur l'accueil, pour tout le monde.
+- « Se déconnecter » (en haut des pages) ramène à la page de garde ; une déconnexion dans un onglet ferme l'accès dans les autres.
+- **« Changer mon mot de passe »** sur la page de garde, pour tout le monde.
 - Un compte **suspendu** par un administrateur n'a plus accès à aucune page.
 
-| Rôle | Planning partagé | Verrouiller une semaine | Planning (Excel), Marges, Actions | Gestion des comptes |
-|---|---|---|---|---|
-| `admin` | lecture + saisie | oui | oui | oui |
-| `responsable` | lecture + saisie | oui | oui | non |
-| `commercial` | lecture + saisie (semaines ouvertes) | non | non | non |
-| `lecture` | lecture seule | non | non | non |
+| Rôle | Planning partagé | Verrouiller une semaine | Planning (Excel), Marges, Actions | Gestion des comptes | Propositions, calculateur, comparateur, dashboard recrutement |
+|---|---|---|---|---|---|
+| `admin` | lecture + saisie | oui | oui | oui | oui |
+| `responsable` | lecture + saisie | oui | oui | non | oui |
+| `commercial` | lecture + saisie (semaines ouvertes) | non | non | non | oui |
+| `lecture` | lecture seule | non | non | non | oui |
 
 Chaque compte ne voit que les agences auxquelles il est rattaché. Pour le planning partagé, les droits sont appliqués
 par la base elle-même (Row Level Security) : masquer un bouton n'est jamais la seule protection. Pour les outils
@@ -43,7 +62,7 @@ fourni à part — il n'est pas dans ce dépôt.
 
 Réservée aux administrateurs, pour les agences qu'ils administrent :
 
-- **Ajouter une personne** (nom, adresse, agence, rôle) : un **mot de passe provisoire** est affiché une seule fois, à lui transmettre ; elle le change depuis l'accueil.
+- **Ajouter une personne** (nom, adresse, agence, rôle) : un **mot de passe provisoire** est affiché une seule fois, à lui transmettre ; elle le change depuis la page de garde.
 - **Changer un rôle**, **ajouter / retirer une agence**, **nouveau mot de passe**, **suspendre / réactiver**, **supprimer** un compte.
 - **Comptes sans agence** (créés dans Supabase sans rattachement) : à rattacher ou supprimer.
 - Contrôles faits par la base à chaque action : on n'agit que sur ses agences, pas sur son propre compte, et **une agence garde toujours au moins un administrateur**.
@@ -96,7 +115,7 @@ Lit le planning Excel de l'agence (ex. `Planning_agence_DAX.xlsx`) : chaque **on
 - **Exports** : **PDF** (impression A4 paysage, « Enregistrer au format PDF ») et **PowerPoint** (.pptx, graphiques natifs + tableaux, une fiche par agence).
 - Dossier surveillé (Edge / Chrome) ou fichiers ponctuels ; une ligne identique présente dans deux fichiers n'est comptée qu'une fois.
 
-## Actions commerciales (`index.html`)
+## Actions commerciales (`actions.html`)
 
 Tableau de bord des actions commerciales **par agence et par commercial**, construit à partir des exports Excel de Tempo (tableau croisé : *Type d'action → Agence → Commercial → Candidat/Client → Cible → année*).
 
@@ -153,21 +172,27 @@ Dans **Actions commerciales** et **Marges & ETP**, chaque fichier de la liste a 
 Toutes les pages vérifient le compte auprès de la base : elles demandent une connexion internet, y compris les outils
 sur fichiers (dont les données restent pourtant sur le poste). Si la base est indisponible (coupure, projet en pause),
 la page affiche « Connexion à la base impossible ». Pour revenir à des outils sans compte ni réseau, il suffit de
-retirer les trois lignes `<script>` de connexion en tête de `index.html`, `marges.html` et `planning.html` et de remettre
-`connect-src 'none'` (voir l'historique Git, commit « Connexion obligatoire depuis l'accueil »).
+retirer les trois lignes `<script>` de connexion (`supabase-config.js`, `vendor/supabase.js`, `auth.js`) en tête des pages
+et, pour `actions.html`, `marges.html` et `planning.html`, remettre `connect-src 'none'`.
 
 ## Structure
 
 ```
-accueil.html                page d'accueil : connexion, outils selon le rôle, aide, liens pour SharePoint
-auth.js                     contrôle d'accès commun (session, rôles, redirection vers l'accueil, déconnexion)
+index.html                  page de garde : connexion, outils selon le rôle, aide, liens pour SharePoint
+accueil.html                ancienne adresse de l'accueil → redirige vers index.html
+reporting_marges.html       ancien reporting des marges → redirige vers marges.html
+proposition_commerciale_domino.html         Générateur de propositions commerciales
+calculateur_marge_pedagogique.html          Calculateur pédagogique de marge
+comparateur_remuneration_chauffeur_TP.html  Comparateur de rémunération chauffeur PL / TP
+dashboard_recrutement_github_version.html   Dashboard recrutement
+auth.js                     contrôle d'accès commun (session, rôles, redirection vers la page de garde, bandeau, déconnexion)
 supabase-config.js          adresse de la base et clé publishable
 planning-base.html          Planning partagé (base de données)
 comptes.html                Gestion des comptes (administrateurs)
 planning.html               Planning (Excel)
 marges.html                 Marges & ETP
 export-marges-pptx.js       génération de la présentation PowerPoint (marges)
-index.html                  Actions commerciales
+actions.html                Actions commerciales
 export-pptx.js              génération de la présentation PowerPoint (actions)
 file-delete.js              retrait d'un fichier (vers _corbeille), commun aux outils Actions et Marges
 watch.js                    surveillance renforcée des dossiers synchronisés, commune aux outils sur fichiers
@@ -190,4 +215,7 @@ gardent leur sens. Les présentations PowerPoint exportées utilisent les mêmes
 ## Publication (GitHub Pages)
 
 *Settings → Pages → Build and deployment* : **Source = Deploy from a branch**, **Branch = `main` / `(root)`**.
-Après une modification, la nouvelle version est en ligne en une ou deux minutes (Ctrl+F5 pour la recharger).
+La nouvelle version est en ligne en une ou deux minutes après chaque mise à jour de `main` (Ctrl+F5 pour la recharger).
+
+Les outils de simulation et de développement commercial (propositions, calculateur, comparateur, dashboard
+recrutement) et la page de garde viennent du dépôt **DOMINOSO** (afkfeclope/DOMINOSO), réunis ici avec les outils de pilotage.

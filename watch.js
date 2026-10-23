@@ -1,6 +1,6 @@
 /* ============================================================
    Surveillance renforcée des fichiers (dossiers synchronisés OneDrive / SharePoint)
-   Commun à index.html, marges.html et planning.html.
+   Commun à actions.html, marges.html et planning.html.
 
    La surveillance de base de chaque page compare la date et la taille des
    fichiers toutes les 2 s. Avec OneDrive, ça ne suffit pas toujours :

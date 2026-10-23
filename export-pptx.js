@@ -1,7 +1,7 @@
 /* ============================================================
    Export PowerPoint (.pptx) — généré entièrement dans le navigateur
    avec PptxGenJS. Reprend la vue filtrée affichée à l'écran.
-   Dépend des fonctions de index.html : filtered, groupBy, sum, sumType,
+   Dépend des fonctions de actions.html : filtered, groupBy, sum, sumType,
    distinct, uniq, topOf, comStats, weekLabel, weekMonday, F, datasets.
    ============================================================ */
 (function () {
