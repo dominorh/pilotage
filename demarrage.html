@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#142469">
+<title>DOMINO RH — Démarrage</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7.5' fill='%23ed4018'/><text x='8' y='10.6' font-size='6.4' text-anchor='middle' fill='white' font-family='Arial' font-weight='700'>DR</text></svg>">
+<style>
+:root{--blue:#142469;--orange:#ed4018;--gray:#9b9b9b;--ink:#232323;--muted:#666d7d;--line:#e0e3eb;--paper:#f5f6f9;--white:#fff;--soft:#d9def1;--ok:#14865d;--warn:#b25e00;--late:#b3261e}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Arial,Helvetica,sans-serif;min-height:100vh}
+a{color:inherit}
+.hero{background:linear-gradient(135deg,#142469 0%,#1d347e 75%,#283d8d 100%);color:#fff;padding:26px max(20px,calc((100vw - 1080px)/2)) 34px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:340px;height:340px;border:1px solid #ffffff22;border-radius:50%;right:6%;top:-200px;box-shadow:0 0 0 34px #ffffff08,0 0 0 70px #ffffff06;pointer-events:none}
+.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;position:relative;z-index:1}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none}
+.mark{width:40px;height:40px;border-radius:50%;background:var(--orange);display:grid;place-items:center;font-weight:900;font-size:10px;letter-spacing:.04em}
+.brand-name{font-size:13px;letter-spacing:.14em;font-weight:800}
+.brand-name span{display:block;color:#c7cee9;font-weight:500;font-size:10px;letter-spacing:.12em;margin-top:2px}
+.who{font-size:13px;color:var(--soft);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.who b{color:#fff}
+.pillbtn{font:inherit;font-size:12.5px;color:#fff;background:#ffffff14;border:1px solid #ffffff40;border-radius:999px;padding:6px 12px;cursor:pointer;text-decoration:none}
+.pillbtn:hover{background:#ffffff26}
+.pillbtn.primary{background:var(--orange);border-color:var(--orange)}
+.clock{position:relative;z-index:1;margin:26px 0 4px;display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.clock .h{font-size:clamp(46px,8vw,72px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.clock .d{font-size:16px;color:var(--soft)}
+.clock .d b{color:#fff}
+.hello{position:relative;z-index:1;font-size:18px;margin:6px 0 18px;color:#fff}
+.search{position:relative;z-index:1;display:flex;max-width:680px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.search input{flex:1;border:0;font:inherit;font-size:16px;padding:14px 16px;color:var(--ink);outline:none;min-width:0}
+.search button{border:0;background:var(--orange);color:#fff;font:inherit;font-weight:700;padding:0 20px;cursor:pointer}
+.search .hint{position:absolute;right:138px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--gray);pointer-events:none}
+.main{max-width:1080px;margin:0 auto;padding:26px 20px 50px}
+h2{font-size:15px;color:var(--blue);margin:0 0 12px;letter-spacing:.01em;text-transform:uppercase}
+.sec{margin-bottom:28px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.tile{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 14px 14px;text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform .15s,box-shadow .15s,border-color .15s;min-height:112px}
+.tile:hover,.tile:focus-visible{transform:translateY(-2px);box-shadow:0 10px 28px rgba(20,36,105,.10);border-color:#b9c3e7;outline:none}
+.tile .ic{width:38px;height:38px;border-radius:11px;background:#edf0fa;color:var(--blue);display:grid;place-items:center;font-size:18px;font-weight:800}
+.tile.or .ic{background:#fff2ee;color:var(--orange)}
+.tile b{color:var(--blue);font-size:14px;line-height:1.25}
+.tile small{color:var(--muted);font-size:11.5px;margin-top:auto}
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.wk{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;text-decoration:none;display:block}
+.wk:hover{border-color:#b9c3e7;box-shadow:0 10px 28px rgba(20,36,105,.08)}
+.wk .t{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.wk .t b{color:var(--blue)}
+.wk .t span{font-size:12px;color:var(--muted)}
+.wk .nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.wk .n{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1.1}
+.wk .l{font-size:11.5px;color:var(--muted)}
+.wk .n.warn{color:var(--warn)} .wk .n.late{color:var(--late)}
+.wk .bars{display:flex;gap:4px;align-items:flex-end;height:34px;margin-top:12px}
+.wk .bars i{flex:1;background:var(--blue);border-radius:3px 3px 0 0;min-height:2px;opacity:.85}
+.wk .bars i.we{opacity:.4}
+.wk .bars i.today{background:var(--orange);opacity:1}
+.empty{background:#fff;border:1px dashed var(--line);border-radius:16px;padding:18px;color:var(--muted);font-size:13.5px}
+.links{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lk{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 8px 7px 14px;text-decoration:none;font-size:13.5px}
+.lk:hover{border-color:#b9c3e7}
+.lk .x{border:0;background:none;color:var(--gray);cursor:pointer;font-size:15px;line-height:1;padding:0 4px;border-radius:50%}
+.lk .x:hover{color:var(--late)}
+.addlk{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.addlk input{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#fff;min-width:0}
+.addlk button,.btn{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:10px;padding:7px 12px;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--blue);border-color:var(--line)}
+details.help{background:#fff;border:1px solid var(--line);border-radius:16px;padding:2px 18px}
+details.help summary{cursor:pointer;list-style:none;padding:13px 0;font-weight:700;color:var(--blue);display:flex;justify-content:space-between}
+details.help summary::-webkit-details-marker{display:none}
+details.help summary::after{content:'+';color:var(--orange);font-size:19px;line-height:1}
+details.help[open] summary::after{content:'–'}
+details.help ol{margin:0 0 14px;padding-left:20px;color:#5c6372;font-size:13.5px}
+details.help li{margin:5px 0}
+details.help code{font:12.5px ui-monospace,Menlo,Consolas,monospace;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.copy{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.copy code{flex:1;min-width:220px;padding:7px 10px!important;overflow-wrap:anywhere}
+.msg{font-size:12.5px;color:var(--ok)}
+footer{max-width:1080px;margin:0 auto;padding:0 20px 26px;color:var(--gray);font-size:11.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:640px){.hero{padding:20px 16px 26px}.main{padding:20px 14px 40px}.search .hint{display:none}.wk .nums{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script src="supabase-config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="auth.js" data-acces="public" data-chip="non"></script>
+</head>
+<body>
+<header class="hero">
+  <div class="top">
+    <a class="brand" href="index.html" title="Espace outils"><div class="mark">DOMINO</div><div class="brand-name">DOMINO RH<span>PAGE DE DÉMARRAGE</span></div></a>
+    <div class="who" id="who"></div>
+  </div>
+  <div class="clock"><span class="h" id="hh">--:--</span><span class="d" id="dd"></span></div>
+  <div class="hello" id="hello">Bonjour</div>
+  <div class="search" role="search">
+    <input id="q" type="search" placeholder="Rechercher sur le web…" aria-label="Rechercher sur le web" autocomplete="off">
+    <span class="hint">Brave Search</span>
+    <button type="button" id="go">Rechercher</button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="sec" id="weekSec" hidden>
+    <h2 id="weekTitle">Cette semaine</h2>
+    <div class="weeks" id="weeks"></div>
+  </section>
+
+  <section class="sec">
+    <h2>Outils DOMINO RH</h2>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="sec">
+    <h2>Mes liens</h2>
+    <div class="links" id="links"></div>
+    <form class="addlk" id="addLk" autocomplete="off">
+      <input id="lkName" placeholder="Nom (ex. Tempo)" maxlength="40" required style="width:170px">
+      <input id="lkUrl" placeholder="https://…" required style="flex:1;min-width:200px">
+      <button type="submit">+ Ajouter</button>
+    </form>
+  </section>
+
+  <details class="help" id="help">
+    <summary>Faire de cette page la page de démarrage de Brave</summary>
+    <div class="copy"><code id="myUrl"></code><button class="btn ghost" type="button" id="copyUrl">Copier l'adresse</button><span class="msg" id="copied"></span></div>
+    <ol>
+      <li><b>À l'ouverture de Brave</b> : <code>brave://settings/getStarted</code> → « Au démarrage » → <b>Ouvrir une page ou un ensemble de pages spécifiques</b> → « Ajouter une page » → coller l'adresse.</li>
+      <li><b>Bouton Accueil</b> : <code>brave://settings/appearance</code> → <b>Afficher le bouton Accueil</b> → choisir l'adresse personnalisée et la coller.</li>
+      <li><b>Nouvel onglet</b> : <code>brave://settings/getStarted</code> → « Page Nouvel onglet » → <b>La page Nouvel onglet affiche : Page d'accueil</b> (elle reprend l'adresse du bouton Accueil réglée au point 2).</li>
+    </ol>
+    <ol start="4"><li>Les adresses <code>brave://</code> se collent dans la barre d'adresse (un lien ne peut pas les ouvrir). La page fonctionne aussi dans Edge ou Chrome (Paramètres → Au démarrage).</li></ol>
+  </details>
+</main>
+<footer><span><strong style="color:var(--blue)">DOMINO RH</strong> · Page de démarrage</span><span>Vos liens personnels restent dans ce navigateur</span></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nf1 = new Intl.NumberFormat('fr-FR', {maximumFractionDigits: 1});
+const nf2 = new Intl.NumberFormat('fr-FR', {minimumFractionDigits: 1, maximumFractionDigits: 2});
+const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} };
+const JOURS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+
+/* ---------- horloge, date, semaine ---------- */
+function isoWeek(d){
+  const x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())), day = x.getUTCDay() || 7;
+  x.setUTCDate(x.getUTCDate() + 4 - day);
+  const y = x.getUTCFullYear(); return {y, w: Math.ceil(((x - Date.UTC(y, 0, 1)) / 864e5 + 1) / 7)};
+}
+function tick(){
+  const n = new Date(), wk = isoWeek(n);
+  $('hh').textContent = n.toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit'});
+  $('dd').innerHTML = `${esc(n.toLocaleDateString('fr-FR', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}))} · <b>semaine ${wk.w}</b>`;
+}
+tick(); setInterval(tick, 15000);
+const salut = () => { const h = new Date().getHours(); return h < 5 || h >= 18 ? 'Bonsoir' : 'Bonjour'; };
+
+/* ---------- recherche (Brave Search) ---------- */
+function search(){ const q = $('q').value.trim(); if (q) location.href = 'https://search.brave.com/search?q=' + encodeURIComponent(q); }
+$('go').onclick = search;
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') search(); });
+
+/* ---------- outils ---------- */
+const TOOLS = [
+  {href: 'planning-base.html', ic: '▦', t: 'Planning partagé', s: 'Heures et contrats', acces: 'membre'},
+  {href: 'marges.html', ic: '↗', t: 'Marges & ETP', s: 'Exports CSV', acces: 'responsable'},
+  {href: 'actions.html', ic: '▥', t: 'Actions commerciales', s: 'Exports Tempo', acces: 'responsable'},
+  {href: 'planning.html', ic: '▤', t: 'Planning (Excel)', s: 'Fichier de l’agence', acces: 'responsable'},
+  {href: 'proposition_commerciale_domino.html', ic: '✎', t: 'Propositions commerciales', s: 'PDF signé', acces: 'membre', or: 1},
+  {href: 'calculateur_marge_pedagogique.html', ic: '€', t: 'Calculateur de marge', s: 'Simulation', acces: 'membre', or: 1},
+  {href: 'comparateur_remuneration_chauffeur_TP.html', ic: '€', t: 'Comparateur PL / TP', s: 'Simulation', acces: 'membre', or: 1},
+  {href: 'comptes.html', ic: '⚙', t: 'Comptes', s: 'Administration', acces: 'admin'},
+  {href: 'agences.html', ic: '⌂', t: 'Agences', s: 'Administration', acces: 'admin'},
+  {href: 'index.html', ic: '☰', t: 'Espace outils', s: 'Tous les outils', acces: 'public'},
+];
+function renderTiles(info){
+  const ok = a => a === 'public' || !info.user || (a === 'admin' ? info.isAdmin : a === 'responsable' ? info.isManager : info.memberships.length > 0);
+  $('tiles').innerHTML = TOOLS.filter(t => ok(t.acces)).map(t =>
+    `<a class="tile ${t.or ? 'or' : ''}" href="${t.href}"><span class="ic" aria-hidden="true">${t.ic}</span><b>${esc(t.t)}</b><small>${esc(t.s)}</small></a>`).join('');
+}
+
+/* ---------- semaine en cours, par agence ---------- */
+async function renderWeeks(info){
+  if (!info.user || !info.memberships.length) return;
+  const n = new Date(), wk = isoWeek(n), ti = (n.getDay() + 6) % 7;
+  const {data, error} = await info.sb.from('v_totaux_semaine')
+    .select('agence_id, numero, heures, etp, clients, interimaires, fins_cette_semaine, fins_depassees, lun, mar, mer, jeu, ven, sam, dim')
+    .eq('annee', wk.y).eq('numero', wk.w);
+  if (error) return;
+  const byAg = new Map((data || []).map(r => [r.agence_id, r]));
+  $('weekTitle').textContent = `Cette semaine · S${wk.w}`;
+  $('weeks').innerHTML = info.memberships.map(m => {
+    const r = byAg.get(m.agence_id), nom = esc(m.agences?.nom || m.agences?.code || 'Agence');
+    if (!r) return `<a class="wk" href="planning-base.html"><div class="t"><b>${nom}</b><span>pas encore de planning S${wk.w}</span></div><div class="l">Ouvrir le planning partagé →</div></a>`;
+    const days = ['lun','mar','mer','jeu','ven','sam','dim'].map(k => Number(r[k]) || 0), max = Math.max(1, ...days);
+    const fins = Number(r.fins_cette_semaine) || 0, dep = Number(r.fins_depassees) || 0;
+    return `<a class="wk" href="planning-base.html" title="Ouvrir le planning partagé"><div class="t"><b>${nom}</b><span>clients suivis (1)</span></div>
+      <div class="nums"><div><div class="n">${nf1.format(Number(r.heures) || 0)}</div><div class="l">heures</div></div>
+        <div><div class="n">${nf2.format(Number(r.etp) || 0)}</div><div class="l">ETP</div></div>
+        <div><div class="n">${r.interimaires}</div><div class="l">intérimaires</div></div>
+        <div><div class="n ${dep ? 'late' : fins ? 'warn' : ''}">${fins + dep}</div><div class="l">fins de contrat</div></div></div>
+      <div class="bars" aria-label="Heures par jour">${days.map((v, i) => `<i class="${i > 4 ? 'we' : ''} ${i === ti ? 'today' : ''}" style="height:${Math.round(v / max * 100)}%" title="${JOURS[i]} : ${nf1.format(v)} h"></i>`).join('')}</div></a>`;
+  }).join('');
+  $('weekSec').hidden = false;
+}
+
+/* ---------- mes liens (gardés dans ce navigateur) ---------- */
+let LK_KEY = 'demarrage-liens';
+function renderLinks(){
+  const L = lsGet(LK_KEY, []);
+  $('links').innerHTML = L.length ? L.map((l, i) => `<a class="lk" href="${esc(l.url)}" rel="noopener noreferrer">${esc(l.name)}<button class="x" type="button" data-del="${i}" title="Retirer ce lien" aria-label="Retirer ${esc(l.name)}">×</button></a>`).join('')
+    : '<span style="color:var(--muted);font-size:13px">Ajoute ici tes raccourcis du quotidien : Tempo, SharePoint, messagerie…</span>';
+}
+$('addLk').onsubmit = e => {
+  e.preventDefault();
+  let url = $('lkUrl').value.trim(); if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  try { const u = new URL(url); if (!/^https?:$/.test(u.protocol)) throw 0; url = u.href; } catch(_){ $('lkUrl').focus(); return; }
+  const L = lsGet(LK_KEY, []); L.push({name: $('lkName').value.trim(), url}); lsSet(LK_KEY, L);
+  $('addLk').reset(); renderLinks();
+};
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-del]'); if (!b) return;
+  e.preventDefault(); const L = lsGet(LK_KEY, []); L.splice(+b.dataset.del, 1); lsSet(LK_KEY, L); renderLinks();
+});
+
+/* ---------- aide : adresse à copier ---------- */
+$('myUrl').textContent = location.href.split('#')[0].split('?')[0];
+$('copyUrl').onclick = async () => { try { await navigator.clipboard.writeText($('myUrl').textContent); $('copied').textContent = 'Adresse copiée'; } catch(_){ $('copied').textContent = 'Sélectionne l’adresse puis Ctrl+C'; } setTimeout(() => $('copied').textContent = '', 4000); };
+
+/* ---------- connexion ---------- */
+window.PilotageAuth.ready.then(async info => {
+  if (info.user){
+    LK_KEY = 'demarrage-liens:' + info.user.id;           // liens propres à chaque compte sur ce poste
+    const {data: p} = await info.sb.from('profils').select('nom_affiche').eq('id', info.user.id).maybeSingle();
+    const prenom = ((p && p.nom_affiche) || info.user.email.split('@')[0]).split(/[\s.]/)[0];
+    $('hello').textContent = `${salut()} ${prenom.charAt(0).toUpperCase() + prenom.slice(1)}`;
+    $('who').innerHTML = `<b>${esc(info.user.email)}</b><button class="pillbtn" type="button" id="out">Se déconnecter</button>`;
+    $('out').onclick = async () => { await info.sb.auth.signOut(); location.reload(); };
+    if (!lsGet('demarrage-aide-vue', false)){ $('help').open = true; lsSet('demarrage-aide-vue', true); }   // aide dépliée à la première visite
+  } else {
+    $('hello').textContent = `${salut()} — connecte-toi pour voir ta semaine et tes outils`;
+    $('who').innerHTML = `<a class="pillbtn primary" href="index.html?suite=demarrage.html">Se connecter</a>`;
+    $('help').open = true;
+  }
+  renderTiles(info); renderLinks(); renderWeeks(info);
+});
+</script>
+</body>
+</html>

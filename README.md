@@ -24,6 +24,7 @@ vers la page de garde, puis ramène à l'outil après la connexion.
 | **Planning (Excel)** | [`planning.html`](./planning.html) | planning Excel de l'agence, lu sur le poste | responsables, administrateurs |
 | **Gestion des comptes** | [`comptes.html`](./comptes.html) | comptes et rôles (base de données) | administrateurs |
 | **Gestion des agences** | [`agences.html`](./agences.html) | agences et bases ETP (base de données) | administrateurs |
+| **Page de démarrage** | [`demarrage.html`](./demarrage.html) | horloge, semaine en cours par agence, outils selon le rôle, liens personnels, recherche Brave | tous (connexion facultative) |
 | **Générateur de propositions commerciales** | [`proposition_commerciale_domino.html`](./proposition_commerciale_domino.html) | saisie dans la page | tous les comptes |
 | **Calculateur pédagogique de marge** | [`calculateur_marge_pedagogique.html`](./calculateur_marge_pedagogique.html) | saisie dans la page | tous les comptes |
 | **Comparateur chauffeur PL / TP** | [`comparateur_remuneration_chauffeur_TP.html`](./comparateur_remuneration_chauffeur_TP.html) | saisie dans la page | tous les comptes |
@@ -193,6 +194,7 @@ et, pour `actions.html`, `marges.html` et `planning.html`, remettre `connect-src
 ## Structure
 
 ```
+demarrage.html              page de démarrage pour Brave (ou Edge / Chrome) : semaine en cours, outils, liens personnels
 index.html                  page de garde : connexion, outils selon le rôle, aide, liens pour SharePoint
 accueil.html                ancienne adresse de l'accueil → redirige vers index.html
 reporting_marges.html       ancien reporting des marges → redirige vers marges.html
