@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<script>try{var t=localStorage.getItem('stats-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
@@ -65,13 +66,43 @@
 .copied{color:#14865d;font-size:12px}
 .banner{border-radius:12px;padding:10px 14px;margin-bottom:18px;font-size:13.5px;background:#fff;border:1px solid var(--line)}
 .banner.ok b{color:#14865d}.banner.warn b{color:#b25e00}
+
+/* ---------- thème sombre (bouton « Thème », ou réglage sombre de l'ordinateur) ---------- */
+.themebtn{position:absolute;top:0;right:0;font:inherit;font-size:12.5px;color:#fff;background:#ffffff14;border:1px solid #ffffff40;border-radius:999px;padding:6px 12px;cursor:pointer;z-index:2}
+.themebtn:hover{background:#ffffff26}
+.hero-inner{position:relative}
+@media(max-width:680px){.themebtn{position:static;margin-top:14px}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#121211;--white:#1a1a19;--ink:#f0efec;--muted:#a3a29b;--line:#2f2f2c;--blue:#8494dd;color-scheme:dark}
+:root:not([data-theme="light"]) .card p,:root:not([data-theme="light"]) .help p,:root:not([data-theme="light"]) .help li,:root:not([data-theme="light"]) .quick,:root:not([data-theme="light"]) .panel label,:root:not([data-theme="light"]) .copyrow .lbl{color:#b8b7b0}
+:root:not([data-theme="light"]) .icon{background:#232842}
+:root:not([data-theme="light"]) .tag{background:#3a1f17}
+:root:not([data-theme="light"]) .card:hover,:root:not([data-theme="light"]) .card:focus-visible{border-color:#3a4fae}
+:root:not([data-theme="light"]) .quick,:root:not([data-theme="light"]) .panel,:root:not([data-theme="light"]) .note,:root:not([data-theme="light"]) .banner,:root:not([data-theme="light"]) .help,:root:not([data-theme="light"]) .copyrow button{background:var(--white)}
+:root:not([data-theme="light"]) .panel input{background:#121211;color:var(--ink);border-color:var(--line)}
+:root:not([data-theme="light"]) .btn{background:var(--white);color:var(--blue)}
+:root:not([data-theme="light"]) .btn.primary{background:#4b5fbf;border-color:#4b5fbf;color:#fff}
+:root:not([data-theme="light"]) .copyrow button{color:var(--ink)}
+:root:not([data-theme="light"]) .help details summary,:root:not([data-theme="light"]) .help h3{color:var(--ink)}
+:root:not([data-theme="light"]) .footer strong{color:var(--blue)}}
+:root[data-theme="dark"]{--paper:#121211;--white:#1a1a19;--ink:#f0efec;--muted:#a3a29b;--line:#2f2f2c;--blue:#8494dd;color-scheme:dark}
+:root[data-theme="dark"] .card p,:root[data-theme="dark"] .help p,:root[data-theme="dark"] .help li,:root[data-theme="dark"] .quick,:root[data-theme="dark"] .panel label,:root[data-theme="dark"] .copyrow .lbl{color:#b8b7b0}
+:root[data-theme="dark"] .icon{background:#232842}
+:root[data-theme="dark"] .tag{background:#3a1f17}
+:root[data-theme="dark"] .card:hover,:root[data-theme="dark"] .card:focus-visible{border-color:#3a4fae}
+:root[data-theme="dark"] .quick,:root[data-theme="dark"] .panel,:root[data-theme="dark"] .note,:root[data-theme="dark"] .banner,:root[data-theme="dark"] .help,:root[data-theme="dark"] .copyrow button{background:var(--white)}
+:root[data-theme="dark"] .panel input{background:#121211;color:var(--ink);border-color:var(--line)}
+:root[data-theme="dark"] .btn{background:var(--white);color:var(--blue)}
+:root[data-theme="dark"] .btn.primary{background:#4b5fbf;border-color:#4b5fbf;color:#fff}
+:root[data-theme="dark"] .copyrow button{color:var(--ink)}
+:root[data-theme="dark"] .help details summary,:root[data-theme="dark"] .help h3{color:var(--ink)}
+:root[data-theme="dark"] .footer strong{color:var(--blue)}
 </style>
 <script src="supabase-config.js"></script>
 <script src="vendor/supabase.js"></script>
 <script src="auth.js" data-acces="public" data-chip="non"></script>
 </head>
 <body>
-<header class="hero"><div class="hero-inner"><a class="brand" href="index.html" title="Retour à la page de garde" style="text-decoration:none;color:inherit;display:inline-flex"><div class="mark">DOMINO</div><div class="brand-name">DOMINO RH<span>ESPACE OUTILS · PILOTAGE ET DÉVELOPPEMENT</span></div></a><div class="eyebrow">Outils opérationnels</div><h1>Accéder aux outils de l’agence</h1><p class="intro" id="intro">Connecte-toi avec le compte que l’agence t’a créé : tu verras les outils auxquels ton rôle donne accès.</p><div class="hero-meta"><span class="pill" id="pillCount" hidden></span><span class="pill">Accès direct · sans installation</span></div>
+<header class="hero"><div class="hero-inner"><button class="themebtn" type="button" id="themeBtn" title="Thème clair / sombre">◐ Thème</button><a class="brand" href="index.html" title="Retour à la page de garde" style="text-decoration:none;color:inherit;display:inline-flex"><div class="mark">DOMINO</div><div class="brand-name">DOMINO RH<span>ESPACE OUTILS · PILOTAGE ET DÉVELOPPEMENT</span></div></a><div class="eyebrow">Outils opérationnels</div><h1>Accéder aux outils de l’agence</h1><p class="intro" id="intro">Connecte-toi avec le compte que l’agence t’a créé : tu verras les outils auxquels ton rôle donne accès.</p><div class="hero-meta"><span class="pill" id="pillCount" hidden></span><span class="pill">Accès direct · sans installation</span></div>
 <div class="userbar" id="userbar" hidden><span id="who"></span><button type="button" id="pwdBtn">Changer mon mot de passe</button><button type="button" id="logoutBtn">Se déconnecter</button></div></div></header>
 <main class="main">
   <section class="panel" id="loginSec" hidden>
@@ -285,5 +316,13 @@ document.addEventListener('click', async e => {
     });
   };
 })();
+
+// thème clair / sombre (mémorisé, commun à toutes les pages)
+try{ const t = localStorage.getItem('stats-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){}
+document.getElementById('themeBtn').onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+  try{ localStorage.setItem('stats-theme', document.documentElement.dataset.theme); }catch(e){}
+};
 </script>
 </body></html>

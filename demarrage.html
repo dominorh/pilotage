@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<script>try{var t=localStorage.getItem('stats-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://twzahlgorauretfhiban.supabase.co; form-action 'none'; base-uri 'none'">
 <meta name="referrer" content="no-referrer">
@@ -83,6 +84,32 @@ details.help code{font:12.5px ui-monospace,Menlo,Consolas,monospace;background:v
 .msg{font-size:12.5px;color:var(--ok)}
 footer{max-width:1080px;margin:0 auto;padding:0 20px 26px;color:var(--gray);font-size:11.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 @media(max-width:640px){.hero{padding:20px 16px 26px}.main{padding:20px 14px 40px}.search .hint{display:none}.wk .nums{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#121211;--ink:#f0efec;--muted:#a3a29b;--line:#2f2f2c;--blue:#8494dd;color-scheme:dark}
+:root:not([data-theme="light"]) .tile,:root:not([data-theme="light"]) .wk,:root:not([data-theme="light"]) .lk,:root:not([data-theme="light"]) .empty,:root:not([data-theme="light"]) details.help,:root:not([data-theme="light"]) .search{background:#1a1a19}
+:root:not([data-theme="light"]) .search input{background:#1a1a19;color:var(--ink)}
+:root:not([data-theme="light"]) .tile .ic{background:#232842}
+:root:not([data-theme="light"]) .tile.or .ic{background:#3a1f17}
+:root:not([data-theme="light"]) .wk .bars i{background:#8494dd}
+:root:not([data-theme="light"]) .wk .n{color:var(--ink)}
+:root:not([data-theme="light"]) .tile:hover,:root:not([data-theme="light"]) .wk:hover,:root:not([data-theme="light"]) .lk:hover{border-color:#3a4fae}
+:root:not([data-theme="light"]) .addlk input{background:#1a1a19;color:var(--ink);border-color:var(--line)}
+:root:not([data-theme="light"]) details.help ol{color:#b8b7b0}
+:root:not([data-theme="light"]) .btn{background:#4b5fbf;border-color:#4b5fbf}
+:root:not([data-theme="light"]) .btn.ghost{background:#1a1a19;color:var(--ink);border-color:var(--line)}
+:root:not([data-theme="light"]) .addlk button{background:#4b5fbf;border-color:#4b5fbf}}
+:root[data-theme="dark"]{--paper:#121211;--ink:#f0efec;--muted:#a3a29b;--line:#2f2f2c;--blue:#8494dd;color-scheme:dark}
+:root[data-theme="dark"] .tile,:root[data-theme="dark"] .wk,:root[data-theme="dark"] .lk,:root[data-theme="dark"] .empty,:root[data-theme="dark"] details.help,:root[data-theme="dark"] .search{background:#1a1a19}
+:root[data-theme="dark"] .search input{background:#1a1a19;color:var(--ink)}
+:root[data-theme="dark"] .tile .ic{background:#232842}
+:root[data-theme="dark"] .tile.or .ic{background:#3a1f17}
+:root[data-theme="dark"] .wk .bars i{background:#8494dd}
+:root[data-theme="dark"] .wk .n{color:var(--ink)}
+:root[data-theme="dark"] .tile:hover,:root[data-theme="dark"] .wk:hover,:root[data-theme="dark"] .lk:hover{border-color:#3a4fae}
+:root[data-theme="dark"] .addlk input{background:#1a1a19;color:var(--ink);border-color:var(--line)}
+:root[data-theme="dark"] details.help ol{color:#b8b7b0}
+:root[data-theme="dark"] .btn{background:#4b5fbf;border-color:#4b5fbf}
+:root[data-theme="dark"] .btn.ghost{background:#1a1a19;color:var(--ink);border-color:var(--line)}
+:root[data-theme="dark"] .addlk button{background:#4b5fbf;border-color:#4b5fbf}
 </style>
 <script src="supabase-config.js"></script>
 <script src="vendor/supabase.js"></script>
@@ -92,7 +119,7 @@ footer{max-width:1080px;margin:0 auto;padding:0 20px 26px;color:var(--gray);font
 <header class="hero">
   <div class="top">
     <a class="brand" href="index.html" title="Espace outils"><div class="mark">DOMINO</div><div class="brand-name">DOMINO RH<span>PAGE DE DÉMARRAGE</span></div></a>
-    <div class="who" id="who"></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="who" id="who"></div><button class="pillbtn" type="button" id="themeBtn" title="Thème clair / sombre">◐ Thème</button></div>
   </div>
   <div class="clock"><span class="h" id="hh">--:--</span><span class="d" id="dd"></span></div>
   <div class="hello" id="hello">Bonjour</div>
@@ -249,6 +276,14 @@ window.PilotageAuth.ready.then(async info => {
   }
   renderTiles(info); renderLinks(); renderWeeks(info);
 });
+
+// thème clair / sombre (mémorisé, commun à toutes les pages)
+try{ const t = localStorage.getItem('stats-theme'); if (t) document.documentElement.dataset.theme = t; }catch(e){}
+document.getElementById('themeBtn').onclick = () => {
+  const cur = document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+  try{ localStorage.setItem('stats-theme', document.documentElement.dataset.theme); }catch(e){}
+};
 </script>
 </body>
 </html>
