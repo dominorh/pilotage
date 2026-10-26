@@ -1,0 +1,33 @@
+LICENCE PROPRIÉTAIRE — TOUS DROITS RÉSERVÉS
+
+Copyright © 2026 Jérôme Desvaux
+
+Le présent logiciel (pages, scripts, feuilles de style, scripts de base de données, fonctions serveur,
+outils et documentation, ci-après « le Logiciel ») est la propriété exclusive de son auteur, protégée par le
+Code de la propriété intellectuelle.
+
+Aucune licence n'est accordée par la simple mise à disposition, la consultation ou le téléchargement du Logiciel,
+y compris lorsque son code source est visible.
+
+Sauf accord écrit et préalable de l'auteur (contrat de licence), il est interdit :
+  - d'utiliser le Logiciel, en tout ou partie ;
+  - de le reproduire, de le copier ou de l'héberger ;
+  - de le modifier, de l'adapter, de le traduire ou d'en créer des œuvres dérivées ;
+  - de le distribuer, de le vendre, de le louer, de le prêter ou de le communiquer à un tiers ;
+  - de supprimer ou de modifier les mentions de propriété qu'il contient.
+
+Les clients titulaires d'un contrat de licence utilisent le Logiciel dans les seules conditions prévues
+par ce contrat.
+
+COMPOSANTS TIERS
+Le dossier vendor/ contient des bibliothèques de tiers, distribuées sous leurs propres licences, qui
+restent applicables (fichiers LICENSE-* du même dossier) :
+  - supabase-js (licence MIT)
+  - SheetJS Community Edition (licence Apache-2.0)
+  - PptxGenJS (licence MIT)
+  - JSZip (licence MIT)
+Les pages proposition_commerciale_domino.html, calculateur_marge_pedagogique.html et
+comparateur_remuneration_chauffeur_TP.html proviennent du dépôt DOMINOSO et restent soumises aux droits
+de leurs auteurs respectifs.
+
+Contact : jerome.desvaux24@gmail.com

@@ -1,3 +1,4 @@
+/* © 2026 Jérôme Desvaux — Tous droits réservés. Logiciel propriétaire : toute utilisation, copie, modification ou diffusion est soumise à licence (voir LICENSE). */
 /* ============================================================
    Suppression d'un fichier importé, depuis la liste des fichiers.
    Utilisé par actions.html (Actions commerciales) et marges.html (Marges & ETP).

@@ -1,3 +1,4 @@
+/* © 2026 Jérôme Desvaux — Tous droits réservés. Logiciel propriétaire : toute utilisation, copie, modification ou diffusion est soumise à licence (voir LICENSE). */
 /* ============================================================
    Export PowerPoint du reporting Marges & ETP (PptxGenJS, dans le navigateur).
    Reprend la vue filtrée de marges.html : filtered, agg, dimRows, groups,

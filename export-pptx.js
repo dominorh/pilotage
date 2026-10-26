@@ -1,3 +1,4 @@
+/* © 2026 Jérôme Desvaux — Tous droits réservés. Logiciel propriétaire : toute utilisation, copie, modification ou diffusion est soumise à licence (voir LICENSE). */
 /* ============================================================
    Export PowerPoint (.pptx) — généré entièrement dans le navigateur
    avec PptxGenJS. Reprend la vue filtrée affichée à l'écran.

@@ -1,3 +1,4 @@
+/* © 2026 Jérôme Desvaux — Tous droits réservés. Logiciel propriétaire : toute utilisation, copie, modification ou diffusion est soumise à licence (voir LICENSE). */
 /* Contrôle d'accès commun à toutes les pages (connexion Supabase).
  *
  * À charger dans le <head>, après supabase-config.js et vendor/supabase.js :

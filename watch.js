@@ -1,3 +1,4 @@
+/* © 2026 Jérôme Desvaux — Tous droits réservés. Logiciel propriétaire : toute utilisation, copie, modification ou diffusion est soumise à licence (voir LICENSE). */
 /* ============================================================
    Surveillance renforcée des fichiers (dossiers synchronisés OneDrive / SharePoint)
    Commun à actions.html, marges.html et planning.html.

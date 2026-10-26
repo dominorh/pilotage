@@ -244,3 +244,9 @@ gardent leur sens. Les présentations PowerPoint exportées utilisent les mêmes
 La nouvelle version est en ligne en une ou deux minutes après chaque mise à jour de `main` (Ctrl+F5 pour la recharger).
 
 Les outils de simulation et de développement commercial (propositions, calculateur, comparateur) et la page de garde viennent du dépôt **DOMINOSO** (afkfeclope/DOMINOSO), réunis ici avec les outils de pilotage.
+
+## Propriété et licence
+
+© 2026 Jérôme Desvaux — tous droits réservés. Ce logiciel est **propriétaire** : son utilisation, sa copie, sa
+modification ou sa diffusion nécessitent un contrat de licence (voir [`LICENSE`](./LICENSE)). Les bibliothèques
+du dossier `vendor/` gardent leurs propres licences (MIT, Apache-2.0).
