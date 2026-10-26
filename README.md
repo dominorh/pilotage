@@ -92,6 +92,8 @@ Réservée aux administrateurs, pour les agences qu'ils administrent :
 - **✎ Modifier** (commercial, responsable, administrateur) : heures par jour, métier, contrat, VM, commentaire, dates de
   début et de fin, case « Compté (1) » des clients. Chaque saisie est enregistrée dans la base dès qu'on quitte la case
   (ou Entrée) ; 0 à 24 h par jour.
+  On peut aussi **ajouter un client** à la semaine (existant ou nouveau, compté ou non), **ajouter un intérimaire**
+  chez un client (existant ou nouveau, avec métier, contrat et dates), **retirer une ligne** ou **retirer un client**.
 - **Modifications simultanées** : si un collègue a modifié la même ligne entre-temps, la saisie est refusée avec un
   message et le planning est rechargé (rien n'est écrasé).
 - **Mise à jour en direct** des modifications des collègues (« En direct ») ou, à défaut, toutes les 30 s.
@@ -99,8 +101,10 @@ Réservée aux administrateurs, pour les agences qu'ils administrent :
 - **+ Préparer la semaine suivante** (depuis la dernière semaine) : copie les clients et les intérimaires encore
   en mission, heures à saisir.
 - **Exports** : Excel de la semaine affichée, PDF (impression).
-- Pas encore possible depuis la page : créer la première semaine d'une agence, ajouter un client, un intérimaire ou
-  une ligne (la reprise initiale se fait avec le script du paquet de déploiement).
+- **Nouvelle agence** : la page propose « Démarrer le planning » (semaine vide ou import Excel).
+- **⇪ Importer Excel** (commercial, responsable, administrateur) : lit le planning Excel de l'agence dans le navigateur
+  (un onglet par semaine : S42, S43…), affiche un aperçu par semaine avec les anomalies, puis importe les semaines
+  choisies. Une semaine déjà présente n'est pas écrasée : seules les lignes manquantes sont ajoutées.
 
 ## Planning (Excel) (`planning.html`)
 
